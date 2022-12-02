@@ -1,6 +1,4 @@
-"""
-Implemented from https://github.com/pieterdavid/bamboo-opendata-examples/blob/6dc6993c30403c60d20bdb78df082d202137b458/HHWWbb_tutorial_CMSOpenData.py
-"""
+
 from bamboo.analysismodules import NanoAODHistoModule
 
 from bamboo.treedecorators import NanoAODDescription
@@ -10,13 +8,13 @@ from bamboo.plots import Plot, SummedPlot
 from bamboo.plots import EquidistantBinning as EqBin
 from bamboo import treefunctions as op
 
-class HHWWbb(NanoAODHistoModule):
+class NanoBaseHHWWbb(NanoAODHistoModule):
     def mergeCounters(self, outF, infileNames, sample=None):
         pass ## disabled because the test file is not a full NanoAOD
     def isMC(self, sampleName):
         return sampleName.split("_")[0] not in ("DoubleMuParked", "DoubleElectron")
     def prepareTree(self, tree, sample=None, sampleCfg=None):
-        return super(HHWWbb, self).prepareTree(tree, sample=sample, sampleCfg=sampleCfg, description=description_CMSRun1OpenData_ROOT_H4ltutorial)
+        return super(NanoBaseHHWWbb, self).prepareTree(tree, sample=sample, sampleCfg=sampleCfg, description=description_CMSRun1OpenData_ROOT_H4ltutorial)
     def definePlots(self, tree, noSel, sample=None, sampleCfg=None):
         plots = []
 
