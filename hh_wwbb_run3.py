@@ -1,5 +1,6 @@
 
 from bamboo.analysismodules import NanoAODModule, HistogramsModule
+from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
 
 from bamboo.treedecorators import NanoAODDescription
 
@@ -41,11 +42,6 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                     getattr(tree.HLT, HLT))
             except AttributeError:
                 print("Couldn't find branch tree.HLT.%s, will omit it!" % HLT)
-            print(self.triggersPerPrimaryDataset)
-        if era == "2022":
-            # MuonEG
-            addHLTPath('MuonEG', 'Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL')
-            addHLTPath('MuonEG', 'Mu20')
         tree, noSel, backend, lumiArgs = super(NanoBaseHHWWbb, self).prepareTree(tree=tree,
                                                                                  sample=sample,
                                                                                  sampleCfg=sampleCfg,
@@ -55,11 +51,26 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                                                                                      isMC=self.is_MC,
                                                                                      systVariations=None),
                                                                                  backend="lazy")
+        if era == "2022":
+            # MuonEG
+            addHLTPath('MuonEG', 'Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL')
+            # EGamma
+            addHLTPath('EGamma', 'Ele32_WPTight_Gsf')
+            addHLTPath('EGamma', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
+            # SingleMuon
+            addHLTPath('SingleMuon', 'IsoMu24')
+            addHLTPath('SingleMuon', 'IsoMu27')
+            # Tau
+            # addHLTPath('Tau', '')
+
         return tree, noSel, backend, lumiArgs
 
     def definePlots(self, tree, noSel, sample=None, sampleCfg=None):
         plots = []
 
+        #############################################################################
+        #                                 Muons                                     #
+        #############################################################################
         muons = op.sort(op.select(tree.Muon, lambda mu: op.AND(
             mu.pt >= 5.,
             op.abs(mu.eta) <= 2.4,
@@ -69,6 +80,9 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             mu.sip3d <= 8,
             mu.tightId
         )), lambda mu: -mu.pt)
+        #############################################################################
+        #                                 Electrons                                 #
+        #############################################################################
         electrons = op.sort(op.select(tree.Electron, lambda el: op.AND(
             el.pt >= 7.,
             op.abs(el.eta) <= 2.5,
@@ -79,27 +93,33 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             # el.mvaNoIso_WPL,
             el.lostHits <= 1
         )), lambda el: -el.pt)
-
-        ########################### AK8 Jets ###########################
+        #############################################################################
+        #                                 AK8 Jets                                  #
+        #############################################################################
         ak8Jets = op.sort(op.select(tree.FatJet, lambda j: op.AND(
             j.jetId & 2,  # tight
             j.pt > 200.,
             op.abs(j.eta) <= 2.4
         )), lambda jet: -jet.pt)
-
         ak8BJets = op.select(
             ak8Jets, lambda fatjet: fatjet.btagDeepB > 0.4184)  # 2018 WP
 
-        ########################### AK4 Jets ###########################
+        #############################################################################
+        #                                 AK4 Jets                                  #
+        #############################################################################
         ak4Jets = op.sort(op.select(tree.Jet, lambda j: op.AND(
             j.jetId & 2,  # tight
             j.pt >= 25.,
             op.abs(j.eta) < 2.4
         )), lambda jet: -jet.pt)
-
         ak4BJets = op.select(
             ak4Jets, lambda jet: jet.btagDeepB > 0.2770)  # 2018 WP
-
+        #############################################################################
+        #                                 Triggers                                  #
+        #############################################################################
+        if not self.is_MC:
+            noSel = noSel.refine('Triggers', cut=[makeMultiPrimaryDatasetTriggerSelection(
+                sample, self.triggersPerPrimaryDataset)])
         plots += self.controlPlots_2l(noSel, muons,
                                       electrons, ak4Jets, ak4BJets)
         return plots
