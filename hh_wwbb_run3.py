@@ -130,33 +130,34 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
 
     def controlPlots_2l(self, noSel, muons, electrons, jets, bjets):
         hasElEl = noSel.refine("hasOSElEl", cut=[op.rng_len(electrons) >= 2,
-                                                   electrons[0].charge != electrons[1].charge, electrons[0].pt > 20., electrons[1].pt > 10.])
+                                                 electrons[0].charge != electrons[1].charge, electrons[0].pt > 20., electrons[1].pt > 10.])
 
         hasJetsElEl = hasElEl.refine(
             "hasJetsElEl", cut=[op.rng_len(jets) >= 2])
         hasMuMu = noSel.refine("hasOSMuMu", cut=[op.rng_len(muons) >= 2,
-                                                   muons[0].charge != muons[1].charge, muons[0].pt > 20., muons[1].pt > 10.])
+                                                 muons[0].charge != muons[1].charge, muons[0].pt > 20., muons[1].pt > 10.])
 
-        hasJetsMuMu = hasMuMu.refine('hasJetsMuMu', cut=[op.rng_len(jets) >= 2])
+        hasJetsMuMu = hasMuMu.refine(
+            'hasJetsMuMu', cut=[op.rng_len(jets) >= 2])
         plots = [
-            Plot.make1D("nElNoSel", op.rng_len(electrons), noSel, EqBin(
+            Plot.make1D("nEl_NoSel", op.rng_len(electrons), noSel, EqBin(
                 10, 0., 10.), xTitle="Number of good electrons"),
-            Plot.make1D("nElHasElEl", op.rng_len(electrons), hasElEl, EqBin(
+            Plot.make1D("nEl_HasElEl", op.rng_len(electrons), hasElEl, EqBin(
                 10, 0., 10.), xTitle="Number of good electrons"),
-            Plot.make1D("nElHasJetsElEl", op.rng_len(electrons), hasJetsElEl, EqBin(
+            Plot.make1D("nEl_HasJetsElEl", op.rng_len(electrons), hasJetsElEl, EqBin(
                 10, 0., 10.), xTitle="Number of good electrons"),
-            Plot.make1D("nMuNoSel", op.rng_len(muons), noSel, EqBin(
+            Plot.make1D("nMu_NoSel", op.rng_len(muons), noSel, EqBin(
                 10, 0., 10.), xTitle="Number of good muons"),
-            Plot.make1D("nMuHasMuMu", op.rng_len(muons), hasMuMu, EqBin(
+            Plot.make1D("nMu_HasMuMu", op.rng_len(muons), hasMuMu, EqBin(
                 10, 0., 10.), xTitle="Number of good muons"),
-            Plot.make1D("nMuHasJetsMuMu", op.rng_len(muons), hasJetsMuMu, EqBin(
+            Plot.make1D("nMu_HasJetsMuMu", op.rng_len(muons), hasJetsMuMu, EqBin(
                 10, 0., 10.), xTitle="Number of good muons"),
-            Plot.make1D("nJetHasJetsMuMu", op.rng_len(jets), hasJetsMuMu, EqBin(
+            Plot.make1D("nJet_NoSel", op.rng_len(jets), noSel, EqBin(
                 10, 0., 10.), xTitle="Number of good jets"),
-            Plot.make1D("nJetHasElEl", op.rng_len(jets), hasElEl, EqBin(
+            Plot.make1D("nJet_HasElEl", op.rng_len(jets), hasElEl, EqBin(
                 10, 0., 10.), xTitle="Number of good jets"),
-            Plot.make1D("nJetHasMuMu", op.rng_len(jets), hasJetsElEl, EqBin(
-                10, 0., 10.), xTitle="Number of good jets")
+            Plot.make1D("nJet_HasMuMu", op.rng_len(jets), hasMuMu, EqBin(
+                10, 0., 10.), xTitle="Number of good jets"),
         ]
 
         plots.append(Plot.make1D("massZto2e", op.invariant_mass(electrons[0].p4, electrons[1].p4),
