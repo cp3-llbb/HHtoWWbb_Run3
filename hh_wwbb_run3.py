@@ -137,19 +137,27 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         hasOSElEl = noSel.refine("hasOSElEl", cut=[op.rng_len(electrons) >= 2,
                                                    electrons[0].charge != electrons[1].charge, electrons[0].pt > 20., electrons[1].pt > 10.])
 
-        hasJets = hasOSElEl.refine(
-            "hasJets", cut=[op.rng_len(jets) >= 2])
+        hasJetsElEl = hasOSElEl.refine(
+            "hasJetsElEl", cut=[op.rng_len(jets) >= 2])
 
         plots.append(Plot.make1D("massZto2e", op.invariant_mass(electrons[0].p4, electrons[1].p4),
                                  hasOSElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
                                  xTitle="Invariant Mass of Nelectrons=2 (in GeV/c^2)"))
 
         plots.append(Plot.make1D("massZto2e_hasJets", op.invariant_mass(electrons[0].p4, electrons[1].p4),
-                                 hasJets, EqBin(120, 40., 120.), title="mass of Z to 2e",
+                                 hasJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
                                  xTitle="Invariant Mass of Nelectrons=2 (in GeV/c^2)"))
-        hasOSMuMu = noSel.refine("hasOSMuMu", cut=[op.rng_len(muons) >= 2, op.rng_len(jets) >= 2, op.rng_len(bjets) >= 2,
+
+        hasOSMuMu = noSel.refine("hasOSMuMu", cut=[op.rng_len(muons) >= 2,
                                                    muons[0].charge != muons[1].charge, muons[0].pt > 20., muons[1].pt > 10.])
+
+        hasJetsMuMu = hasOSMuMu.refine('hasJetsMuMu', cut=[op.rng_len(jets) >= 2])
+
         plots.append(Plot.make1D("massZto2mu", op.invariant_mass(muons[0].p4, muons[1].p4),
                                  hasOSMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
+                                 xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"))
+
+        plots.append(Plot.make1D("massZto2mu_hasJets", op.invariant_mass(muons[0].p4, muons[1].p4),
+                                 hasJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
                                  xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"))
         return plots
