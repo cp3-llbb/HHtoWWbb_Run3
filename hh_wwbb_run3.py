@@ -124,37 +124,51 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                                       electrons, ak4Jets, ak4BJets)
         return plots
 
-    def controlPlots_2l(self, noSel, muons, electrons, jets, bjets):
-        plots = [
-            Plot.make1D("nEl", op.rng_len(electrons), noSel, EqBin(
-                10, 0., 10.), xTitle="Number of good electrons"),
-            Plot.make1D("nMu", op.rng_len(muons), noSel, EqBin(
-                10, 0., 10.), xTitle="Number of good muons"),
-            Plot.make1D("nJet", op.rng_len(jets), noSel, EqBin(
-                10, 0., 10.), xTitle="Number of good jets"),
-        ]
+    #############################################################################
+    #                                 Plots                                     #
+    #############################################################################
 
-        hasOSElEl = noSel.refine("hasOSElEl", cut=[op.rng_len(electrons) >= 2,
+    def controlPlots_2l(self, noSel, muons, electrons, jets, bjets):
+        hasElEl = noSel.refine("hasOSElEl", cut=[op.rng_len(electrons) >= 2,
                                                    electrons[0].charge != electrons[1].charge, electrons[0].pt > 20., electrons[1].pt > 10.])
 
-        hasJetsElEl = hasOSElEl.refine(
+        hasJetsElEl = hasElEl.refine(
             "hasJetsElEl", cut=[op.rng_len(jets) >= 2])
+        hasMuMu = noSel.refine("hasOSMuMu", cut=[op.rng_len(muons) >= 2,
+                                                   muons[0].charge != muons[1].charge, muons[0].pt > 20., muons[1].pt > 10.])
+
+        hasJetsMuMu = hasMuMu.refine('hasJetsMuMu', cut=[op.rng_len(jets) >= 2])
+        plots = [
+            Plot.make1D("nElNoSel", op.rng_len(electrons), noSel, EqBin(
+                10, 0., 10.), xTitle="Number of good electrons"),
+            Plot.make1D("nElHasElEl", op.rng_len(electrons), hasElEl, EqBin(
+                10, 0., 10.), xTitle="Number of good electrons"),
+            Plot.make1D("nElHasJetsElEl", op.rng_len(electrons), hasJetsElEl, EqBin(
+                10, 0., 10.), xTitle="Number of good electrons"),
+            Plot.make1D("nMuNoSel", op.rng_len(muons), noSel, EqBin(
+                10, 0., 10.), xTitle="Number of good muons"),
+            Plot.make1D("nMuHasMuMu", op.rng_len(muons), hasMuMu, EqBin(
+                10, 0., 10.), xTitle="Number of good muons"),
+            Plot.make1D("nMuHasJetsMuMu", op.rng_len(muons), hasJetsMuMu, EqBin(
+                10, 0., 10.), xTitle="Number of good muons"),
+            Plot.make1D("nJetHasJetsMuMu", op.rng_len(jets), hasJetsMuMu, EqBin(
+                10, 0., 10.), xTitle="Number of good jets"),
+            Plot.make1D("nJetHasElEl", op.rng_len(jets), hasElEl, EqBin(
+                10, 0., 10.), xTitle="Number of good jets"),
+            Plot.make1D("nJetHasMuMu", op.rng_len(jets), hasJetsElEl, EqBin(
+                10, 0., 10.), xTitle="Number of good jets")
+        ]
 
         plots.append(Plot.make1D("massZto2e", op.invariant_mass(electrons[0].p4, electrons[1].p4),
-                                 hasOSElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
+                                 hasElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
                                  xTitle="Invariant Mass of Nelectrons=2 (in GeV/c^2)"))
 
         plots.append(Plot.make1D("massZto2e_hasJets", op.invariant_mass(electrons[0].p4, electrons[1].p4),
                                  hasJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
                                  xTitle="Invariant Mass of Nelectrons=2 (in GeV/c^2)"))
 
-        hasOSMuMu = noSel.refine("hasOSMuMu", cut=[op.rng_len(muons) >= 2,
-                                                   muons[0].charge != muons[1].charge, muons[0].pt > 20., muons[1].pt > 10.])
-
-        hasJetsMuMu = hasOSMuMu.refine('hasJetsMuMu', cut=[op.rng_len(jets) >= 2])
-
         plots.append(Plot.make1D("massZto2mu", op.invariant_mass(muons[0].p4, muons[1].p4),
-                                 hasOSMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
+                                 hasMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
                                  xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"))
 
         plots.append(Plot.make1D("massZto2mu_hasJets", op.invariant_mass(muons[0].p4, muons[1].p4),
