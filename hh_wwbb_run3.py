@@ -1,10 +1,10 @@
 
 from bamboo.analysismodules import NanoAODModule, HistogramsModule
-from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
+from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection, printCutFlowReports
 
 from bamboo.treedecorators import NanoAODDescription
 
-from bamboo.plots import Plot
+from bamboo.plots import Plot, CutFlowReport
 from bamboo.plots import EquidistantBinning as EqBin
 from bamboo import treefunctions as op
 
@@ -64,6 +64,13 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             # addHLTPath('Tau', '')
 
         return tree, noSel, backend, lumiArgs
+    
+    def postProcess(self, tasklist,  config=None, workdir='.', resultsdir='.'):
+        plotList_cutflowreport = [ ap for ap in self.plotList if isinstance(ap, CutFlowReport) ]
+        print(self.plotlist)
+        printCutFlowReports(config, plotList_cutflowreport)
+
+
 
     def definePlots(self, tree, noSel, sample=None, sampleCfg=None):
         plots = []
@@ -131,12 +138,11 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
     def controlPlots_2l(self, noSel, muons, electrons, jets, bjets):
         hasElEl = noSel.refine("hasOSElEl", cut=[op.rng_len(electrons) >= 2,
                                                  electrons[0].charge != electrons[1].charge, electrons[0].pt > 20., electrons[1].pt > 10.])
-
         hasJetsElEl = hasElEl.refine(
             "hasJetsElEl", cut=[op.rng_len(jets) >= 2])
+
         hasMuMu = noSel.refine("hasOSMuMu", cut=[op.rng_len(muons) >= 2,
                                                  muons[0].charge != muons[1].charge, muons[0].pt > 20., muons[1].pt > 10.])
-
         hasJetsMuMu = hasMuMu.refine(
             'hasJetsMuMu', cut=[op.rng_len(jets) >= 2])
         plots = [
@@ -175,4 +181,11 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         plots.append(Plot.make1D("massZto2mu_hasJets", op.invariant_mass(muons[0].p4, muons[1].p4),
                                  hasJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
                                  xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"))
+
+        yields = CutFlowReport("yields")
+        plots.append(yields)
+        yields.add(noSel, 'Trigger sel')
+        yields.add(hasElEl, 'two electrons')
+        yields.add(noSel, 'two el. two jets')
+
         return plots
