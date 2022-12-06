@@ -1,4 +1,4 @@
-#
+
 from bamboo.analysismodules import NanoAODModule, HistogramsModule
 from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
 
