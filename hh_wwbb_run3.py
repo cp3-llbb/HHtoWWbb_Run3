@@ -134,11 +134,11 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 10, 0., 10.), xTitle="Number of good jets"),
         ]
 
-        hasOSElEl = noSel.refine("hasOSElEl", cut=[op.rng_len(electrons) >= 2,  # op.rng_len(muons) >= 1, # for MuonEG dataset
+        hasOSElEl = noSel.refine("hasOSElEl", cut=[op.rng_len(electrons) >= 2,
                                                    electrons[0].charge != electrons[1].charge, electrons[0].pt > 20., electrons[1].pt > 10.])
 
         hasJets = hasOSElEl.refine(
-            "hasJets", cut=[op.rng_len(jets) >= 2, op.rng_len(bjets) >= 2])
+            "hasJets", cut=[op.rng_len(jets) >= 2])
 
         plots.append(Plot.make1D("massZto2e", op.invariant_mass(electrons[0].p4, electrons[1].p4),
                                  hasOSElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
