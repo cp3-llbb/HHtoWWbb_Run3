@@ -8,25 +8,25 @@ samples:
     type: data
     group: "data"
     files:
-      - /afs/cern.ch/work/a/aguzel/private/HHWWbb/data/MuonEG/55dfef50-3397-4c6a-a3d8-8d3d6ec5feb5.root
+      - data/MuonEG/55dfef50-3397-4c6a-a3d8-8d3d6ec5feb5.root
   EGamma:
     era: "2022"
     type: data
     group: "data"
     files:
-      - /afs/cern.ch/work/a/aguzel/private/HHWWbb/data/EGamma/41d53e82-7df7-4ddd-b4e0-45282baefc1d.root
+      - data/EGamma/41d53e82-7df7-4ddd-b4e0-45282baefc1d.root
   SingleMuon:
     era: "2022"
     type: data
     group: "data"
     files:
-      - /afs/cern.ch/work/a/aguzel/private/HHWWbb/data/SingleMuon/488e74c8-d09f-4724-ae30-99ab7c516d93.root
-  Tau:
-    era: "2022"
-    type: data
-    group: "data"
-    files:
-      - /afs/cern.ch/work/a/aguzel/private/HHWWbb/data/Tau/3b2e5579-a03a-4175-8203-368df2e85b5b.root
+      - data/SingleMuon/488e74c8-d09f-4724-ae30-99ab7c516d93.root
+  # Tau:
+  #   era: "2022"
+  #   type: data
+  #   group: "data"
+  #   files:
+  #     - data/Tau/3b2e5579-a03a-4175-8203-368df2e85b5b.root
   TTbar:
     era: "2022"
     group: "TTbar"
@@ -34,7 +34,7 @@ samples:
     cross-section: 880
     generated-events: 99000
     files:
-      - /afs/cern.ch/work/a/aguzel/private/HHWWbb/data/TTbar/7c06dffd-839c-411d-9630-4ba84a197b42.root
+      - data/TTbar/7c06dffd-839c-411d-9630-4ba84a197b42.root
   DY:
     era: "2022"
     group: "DY"
@@ -42,7 +42,7 @@ samples:
     cross-section: 5711
     generated-events: 108000
     files:
-      - /afs/cern.ch/work/a/aguzel/private/HHWWbb/data/DY/238D3F8E-234B-AC41-A221-F943653E40DC.root
+      - data/DY/238D3F8E-234B-AC41-A221-F943653E40DC.root
 plotIt:
   configuration:
     width: 800
