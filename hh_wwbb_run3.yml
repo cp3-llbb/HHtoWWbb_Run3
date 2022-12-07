@@ -21,12 +21,6 @@ samples:
     group: "data"
     files:
       - ../data/SingleMuon/488e74c8-d09f-4724-ae30-99ab7c516d93.root
-  # Tau:
-  #   era: "2022"
-  #   type: data
-  #   group: "data"
-  #   files:
-  #     - ../data/Tau/3b2e5579-a03a-4175-8203-368df2e85b5b.root
   TTbar:
     era: "2022"
     group: "TTbar"
