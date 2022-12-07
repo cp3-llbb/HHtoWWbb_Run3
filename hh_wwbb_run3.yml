@@ -53,7 +53,7 @@ plotIt:
     margin-bottom: 0.15
     luminosity-label: '%1$.2f fb^{-1} (8 TeV)'
     experiment: CMS
-    # extra-label: MuonEG
+    extra-label: Run 3
     error-fill-style: 3154
     error-fill-color: "#ee556270"
     ratio-fit-error-fill-style: 1001
