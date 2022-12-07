@@ -65,10 +65,10 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
 
         return tree, noSel, backend, lumiArgs
     
-    def postProcess(self, tasklist,  config=None, workdir='.', resultsdir='.'):
-        plotList_cutflowreport = [ ap for ap in self.plotList if isinstance(ap, CutFlowReport) ]
-        print(self.plotlist)
-        printCutFlowReports(config, plotList_cutflowreport)
+    # def postProcess(self, tasklist,  config=None, workdir='.', resultsdir='.'):
+    #     plotList_cutflowreport = [ ap for ap in self.plotList if isinstance(ap, CutFlowReport) ]
+    #     print(self.plotlist)
+    #     printCutFlowReports(config, plotList_cutflowreport)
 
 
 
@@ -135,16 +135,16 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
     #                                 Plots                                     #
     #############################################################################
 
-    def controlPlots_2l(self, noSel, muons, electrons, jets, bjets):
+    def controlPlots_2l(self, noSel, muons, electrons, jet, bjets):
         hasElEl = noSel.refine("hasOSElEl", cut=[op.rng_len(electrons) >= 2,
                                                  electrons[0].charge != electrons[1].charge, electrons[0].pt > 20., electrons[1].pt > 10.])
         hasJetsElEl = hasElEl.refine(
-            "hasJetsElEl", cut=[op.rng_len(jets) >= 2])
+            "hasJetsElEl", cut=[op.rng_len(jet) >= 2])
 
         hasMuMu = noSel.refine("hasOSMuMu", cut=[op.rng_len(muons) >= 2,
                                                  muons[0].charge != muons[1].charge, muons[0].pt > 20., muons[1].pt > 10.])
         hasJetsMuMu = hasMuMu.refine(
-            'hasJetsMuMu', cut=[op.rng_len(jets) >= 2])
+            'hasJetsMuMu', cut=[op.rng_len(jet) >= 2])
         plots = [
             Plot.make1D("nEl_NoSel", op.rng_len(electrons), noSel, EqBin(
                 10, 0., 10.), xTitle="Number of good electrons"),
@@ -158,11 +158,11 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 10, 0., 10.), xTitle="Number of good muons"),
             Plot.make1D("nMu_HasJetsMuMu", op.rng_len(muons), hasJetsMuMu, EqBin(
                 10, 0., 10.), xTitle="Number of good muons"),
-            Plot.make1D("nJet_NoSel", op.rng_len(jets), noSel, EqBin(
+            Plot.make1D("nJet_NoSel", op.rng_len(jet), noSel, EqBin(
                 10, 0., 10.), xTitle="Number of good jets"),
-            Plot.make1D("nJet_HasElEl", op.rng_len(jets), hasElEl, EqBin(
+            Plot.make1D("nJet_HasElEl", op.rng_len(jet), hasElEl, EqBin(
                 10, 0., 10.), xTitle="Number of good jets"),
-            Plot.make1D("nJet_HasMuMu", op.rng_len(jets), hasMuMu, EqBin(
+            Plot.make1D("nJet_HasMuMu", op.rng_len(jet), hasMuMu, EqBin(
                 10, 0., 10.), xTitle="Number of good jets"),
         ]
 
@@ -181,6 +181,26 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         plots.append(Plot.make1D("massZto2mu_hasJets", op.invariant_mass(muons[0].p4, muons[1].p4),
                                  hasJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
                                  xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"))
+
+        plots.append(Plot.make1D("leadingJetPt_NoSel", jet[0].pt,
+                                 noSel, EqBin(250, 0., 250.), title="leading jet p_T",
+                                 xTitle="Leading Jet p_T (GeV/c^2)"))
+        plots.append(Plot.make1D("leadingJetPt_HasElEl", jet[0].pt,
+                                 hasElEl, EqBin(250, 0., 250.), title="leading jet p_T",
+                                 xTitle="Leading Jet p_T (GeV/c^2)"))
+        plots.append(Plot.make1D("leadingJetPt_HasMuMu", jet[0].pt,
+                                 hasMuMu, EqBin(250, 0., 250.), title="leading jet p_T",
+                                 xTitle="Leading Jet p_T (GeV/c^2)"))
+
+        plots.append(Plot.make1D("subleadingJetPt_NoSel", jet[1].pt,
+                                 noSel, EqBin(250, 0., 250.), title="subleading jet p_T",
+                                 xTitle="Leading Jet p_T (GeV/c^2)"))
+        plots.append(Plot.make1D("subleadingJetPt_hasElEl", jet[1].pt,
+                                 hasElEl, EqBin(250, 0., 250.), title="subleading jet p_T",
+                                 xTitle="Leading Jet p_T (GeV/c^2)"))
+        plots.append(Plot.make1D("subleadingJetPt_hasMuMu", jet[1].pt,
+                                 hasMuMu, EqBin(250, 0., 250.), title="subleading jet p_T",
+                                 xTitle="Leading Jet p_T (GeV/c^2)"))
 
         yields = CutFlowReport("yields")
         plots.append(yields)
