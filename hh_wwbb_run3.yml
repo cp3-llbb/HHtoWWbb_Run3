@@ -28,7 +28,7 @@ samples:
     cross-section: 880
     generated-events: 99000
     files:
-      - ../data/TTbar/7c06dffd-839c-411d-9630-4ba84a197b42.root
+      - ../data/TTbar/a870ad04-4e1e-42e9-9fa5-10402f3e01d1.root
   DY:
     era: "2022"
     group: "DY"
