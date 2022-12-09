@@ -36,7 +36,7 @@ samples:
     cross-section: 5711
     generated-events: 108000
     files:
-      - ../data/DY/238D3F8E-234B-AC41-A221-F943653E40DC.root
+      - ../data/DY/C4465203-C5DB-B848-A601-CB396449051A.root
 plotIt:
   configuration:
     width: 800
