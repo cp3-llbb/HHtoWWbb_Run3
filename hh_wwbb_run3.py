@@ -125,6 +125,10 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         if not self.is_MC:
             noSel = noSel.refine('Triggers', cut=[makeMultiPrimaryDatasetTriggerSelection(
                 sample, self.triggersPerPrimaryDataset)])
+        
+        if self.is_MC:
+            noSel = noSel.refine('genWeight', weight=tree.genWeight)
+
         plots += self.controlPlots_2l(noSel, muons,
                                       electrons, ak4Jets, ak4BJets)
         return plots
