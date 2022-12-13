@@ -1,9 +1,6 @@
-# HHWWbb
-Run3
-
-Run with:
-
-` bambooRun -m hh_wwbb_run3.py:NanoBaseHHWWbb hh_wwbb_run3.yml -o output-test `
+**Bamboo**
+Start with:
+<!-- bambooRun -m hh_wwbb_run3.py:NanoBaseHHWWbb hh_wwbb_run3.yml -o output-test -->
 
 **DATA**
 <!-- dasgoclient -query "dataset dataset=/MuonEG/\*2022\*/NANOAOD" -->
@@ -12,7 +9,6 @@ Run with:
 - /store/data/Run2022C/EGamma/NANOAOD/PromptNanoAODv10-v2/50000/41d53e82-7df7-4ddd-b4e0-45282baefc1d.root
 
 **MC**
-
 **TTbar**
 <!-- dataset dataset=/*TTbarToDilepton*/*mcRun3*2022*/NANOAOD* -->
 /store/relval/CMSSW\_12\_4\_0/RelValTTbarToDilepton\_14TeV/NANOAODSIM/124X\_mcRun3\_2022\_realistic\_v5-v1/2580000/7c06dffd-839c-411d-9630-4ba84a197b42.root
@@ -23,6 +19,3 @@ Run with:
 changed to **/store/mc/Run3Summer19NanoAOD/DYJets\_incl\_MLL-50\_TuneCP5\_14TeV-madgraphMLM-pythia8/NANOAODSIM/2021Scenario\_106X\_mcRun3\_2021\_realistic_v3-v1/50000/C4465203-C5DB-B848-A601-CB396449051A.root**
 
 <!-- xrdcp root://cms-xrd-global.cern.ch////store....... -->
-
-McM tutorials:
-https://twiki.cern.ch/twiki/bin/view/CMS/PdmVMcMTutorials
