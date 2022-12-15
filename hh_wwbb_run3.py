@@ -60,8 +60,6 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             # SingleMuon
             addHLTPath('SingleMuon', 'IsoMu24')
             addHLTPath('SingleMuon', 'IsoMu27')
-            # Tau
-            # addHLTPath('Tau', '')
 
         return tree, noSel, backend, lumiArgs
 
