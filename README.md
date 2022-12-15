@@ -1,6 +1,6 @@
 **Bamboo**
 Start with:
-<!-- bambooRun -m hh_wwbb_run3.py:NanoBaseHHWWbb hh_wwbb_run3.yml -o output-test -->
+<!-- bambooRun -m hh_wwbb_run3.py:NanoBaseHHWWbb config/hh_wwbb_run3.yml -o output-test -->
 
 **DATA**
 <!-- dasgoclient -query "dataset dataset=/MuonEG/\*2022\*/NANOAOD" -->
