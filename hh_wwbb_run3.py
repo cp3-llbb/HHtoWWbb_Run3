@@ -14,7 +14,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         super(NanoBaseHHWWbb, self).__init__(args)
         self.plotDefaults = {"show-ratio": True,
                              "y-axis-show-zero": True,
-                             # "normalized": True,
+                             "normalized": True,
                              "y-axis": "Events",
                              "log-y": "both",
                              "ratio-y-axis-range": [0.8, 1.2],
