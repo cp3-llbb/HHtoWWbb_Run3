@@ -8,19 +8,19 @@ samples:
     type: data
     group: "data"
     files:
-      - ../data/MuonEG/55dfef50-3397-4c6a-a3d8-8d3d6ec5feb5.root
+      - ../../data/MuonEG/55dfef50-3397-4c6a-a3d8-8d3d6ec5feb5.root
   EGamma:
     era: "2022"
     type: data
     group: "data"
     files:
-      - ../data/EGamma/41d53e82-7df7-4ddd-b4e0-45282baefc1d.root
+      - ../../data/EGamma/41d53e82-7df7-4ddd-b4e0-45282baefc1d.root
   SingleMuon:
     era: "2022"
     type: data
     group: "data"
     files:
-      - ../data/SingleMuon/488e74c8-d09f-4724-ae30-99ab7c516d93.root
+      - ../../data/SingleMuon/488e74c8-d09f-4724-ae30-99ab7c516d93.root
   TTbar:
     era: "2022"
     group: "TTbar"
@@ -28,7 +28,7 @@ samples:
     cross-section: 880
     generated-events: 'genEventSumw'
     files:
-      - ../data/TTbar/a870ad04-4e1e-42e9-9fa5-10402f3e01d1.root
+      - ../../data/TTbar/a870ad04-4e1e-42e9-9fa5-10402f3e01d1.root
   DY:
     era: "2022"
     group: "DY"
@@ -36,8 +36,8 @@ samples:
     cross-section: 5711
     generated-events: 'genEventSumw'
     files:
-      - ../data/DY/C4465203-C5DB-B848-A601-CB396449051A.root
-      - ../data/DY/B154D990-5925-7F43-8DE8-7BDC6449AD68.root
+      - ../../data/DY/C4465203-C5DB-B848-A601-CB396449051A.root
+      - ../../data/DY/B154D990-5925-7F43-8DE8-7BDC6449AD68.root
 plotIt:
   configuration:
     width: 800
