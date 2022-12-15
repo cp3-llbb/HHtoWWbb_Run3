@@ -26,7 +26,7 @@ samples:
     group: "TTbar"
     type: mc
     cross-section: 880
-    generated-events: 'genEventSumw'
+    generated-events: genEventSumw
     files:
       - ../../data/TTbar/a870ad04-4e1e-42e9-9fa5-10402f3e01d1.root
   DY:
@@ -34,7 +34,7 @@ samples:
     group: "DY"
     type: mc
     cross-section: 5711
-    generated-events: 'genEventSumw'
+    generated-events: genEventSumw
     files:
       - ../../data/DY/C4465203-C5DB-B848-A601-CB396449051A.root
       - ../../data/DY/B154D990-5925-7F43-8DE8-7BDC6449AD68.root
