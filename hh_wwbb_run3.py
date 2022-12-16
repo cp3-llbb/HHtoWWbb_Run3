@@ -34,6 +34,12 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         self.is_MC = self.isMC(sample)
         self.triggersPerPrimaryDataset = {}
 
+        def getNanoAODDescription(): # implemented from Sebastien's analysis
+            groups = ["PV_", "Flag_", "HLT_", "MET_"]
+            collections = ["nElectron", "nJet", "nMuon", "nFatJet"]
+            varReaders = []
+            return NanoAODDescription(groups=groups, collections=collections, systVariations=varReaders)
+
         def addHLTPath(PD, HLT):
             if PD not in self.triggersPerPrimaryDataset.keys():
                 self.triggersPerPrimaryDataset[PD] = []
@@ -45,11 +51,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         tree, noSel, backend, lumiArgs = super(NanoBaseHHWWbb, self).prepareTree(tree=tree,
                                                                                  sample=sample,
                                                                                  sampleCfg=sampleCfg,
-                                                                                 description=NanoAODDescription.get(
-                                                                                     tag="v1",
-                                                                                     year=era,
-                                                                                     isMC=self.is_MC,
-                                                                                     systVariations=None),
+                                                                                 description=getNanoAODDescription(),
                                                                                  backend="lazy")
         if era == "2022":
             # MuonEG
@@ -204,7 +206,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         plots.append(Plot.make1D("subleadingJetPt_hasMuMu", ak4Jets[1].pt,
                                  hasTwoJetsMuMu, EqBin(250, 0., 250.), title="subleading jet p_T",
                                  xTitle="Leading Jet p_T (GeV/c^2)"))
-        
+
         yields.add(hasElEl, 'two electrons')
         yields.add(hasTwoJetsElEl, 'two el. two jets')
         yields.add(hasMuMu, 'two muons')
