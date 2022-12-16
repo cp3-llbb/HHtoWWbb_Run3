@@ -8,6 +8,8 @@ from bamboo.plots import Plot, CutFlowReport
 from bamboo.plots import EquidistantBinning as EqBin
 from bamboo import treefunctions as op
 
+import time
+
 
 class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
     def __init__(self, args):
@@ -67,6 +69,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         return tree, noSel, backend, lumiArgs
 
     def definePlots(self, tree, noSel, sample=None, sampleCfg=None):
+        st = time.time()
         plots = []
         yields = CutFlowReport("yields")
         plots.append(yields)
@@ -123,28 +126,32 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         if self.is_MC:
             noSel = noSel.refine('genWeight', weight=tree.genWeight)
         else:
-            noSel = noSel.refine('Triggers', cut=[makeMultiPrimaryDatasetTriggerSelection(
+            noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
                 sample, self.triggersPerPrimaryDataset)])
         #############################################################################
         #                               Selections                                  #
         #############################################################################
 
+        # has at least one electron pair
         hasElEl = noSel.refine("hasOSElEl", cut=[op.rng_len(electrons) >= 2,
                                                  electrons[0].charge != electrons[1].charge, electrons[0].pt > 20., electrons[1].pt > 10.])
-
+        # and at least two ak4 jets
         hasTwoJetsElEl = hasElEl.refine(
             "hasTwoJetsElEl", cut=[op.rng_len(ak4Jets) >= 2])
-
+        # has at least one muon pair
         hasMuMu = noSel.refine("hasOSMuMu", cut=[op.rng_len(muons) >= 2,
                                                  muons[0].charge != muons[1].charge, muons[0].pt > 20., muons[1].pt > 10.])
-
+        # and at least two ak4 jets
         hasTwoJetsMuMu = hasMuMu.refine(
             'hasTwoJetsMuMu', cut=[op.rng_len(ak4Jets) >= 2])
-
+        # has at least one ak4 jet
+        hasOneJet = noSel.refine('hasOneJet', cut=[op.rng_len(ak4Jets) >= 1])
+        # has at least two ak4 jets
+        hasTwoJets = noSel.refine('hasTwoJets', cut=[op.rng_len(ak4Jets) >= 2])
+        
         #############################################################################
         #                                 Plots                                     #
         #############################################################################
-
         plots.extend([
             Plot.make1D("nEl_NoSel", op.rng_len(electrons), noSel, EqBin(
                 10, 0., 10.), xTitle="Number of electrons"),
@@ -179,38 +186,39 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                         xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"),
             Plot.make1D("massZto2mu_hasTwoJets", op.invariant_mass(muons[0].p4, muons[1].p4),
                         hasTwoJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
-                        xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)")
+                        xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"),
+            Plot.make1D("leadingJetPt_hasOneJet", ak4Jets[0].pt,
+                        hasOneJet, EqBin(250, 0., 250.), title="leading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            Plot.make1D("leadingJetPt_hasTwoJets", ak4Jets[0].pt,
+                        hasTwoJets, EqBin(250, 0., 250.), title="leading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            Plot.make1D("leadingJetPt_hasTwoJetsElEl", ak4Jets[0].pt,
+                        hasTwoJetsElEl, EqBin(250, 0., 250.), title="leading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            Plot.make1D("leadingJetPt_hasTwoJetsMuMu", ak4Jets[0].pt,
+                        hasTwoJetsMuMu, EqBin(250, 0., 250.), title="leading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            Plot.make1D("subleadingJetPt_NoSel", ak4Jets[1].pt,
+                        hasTwoJets, EqBin(250, 0., 250.), title="subleading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            Plot.make1D("subleadingJetPt_hasElEl", ak4Jets[1].pt,
+                        hasTwoJetsElEl, EqBin(250, 0., 250.), title="subleading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            Plot.make1D("subleadingJetPt_hasMuMu", ak4Jets[1].pt,
+                        hasTwoJetsMuMu, EqBin(250, 0., 250.), title="subleading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)")
         ])
-
-        hasOneJet = noSel.refine('hasOneJet', cut=[op.rng_len(ak4Jets) >= 1])
-        hasTwoJets = noSel.refine('hasTwoJets', cut=[op.rng_len(ak4Jets) >= 2])
-
-        plots.append(Plot.make1D("leadingJetPt_hasOneJet", ak4Jets[0].pt,
-                                 hasOneJet, EqBin(250, 0., 250.), title="leading jet p_T",
-                                 xTitle="Leading Jet p_T (GeV/c^2)"))
-        plots.append(Plot.make1D("leadingJetPt_hasTwoJets", ak4Jets[0].pt,
-                                 hasTwoJets, EqBin(250, 0., 250.), title="leading jet p_T",
-                                 xTitle="Leading Jet p_T (GeV/c^2)"))
-        plots.append(Plot.make1D("leadingJetPt_hasTwoJetsElEl", ak4Jets[0].pt,
-                                 hasTwoJetsElEl, EqBin(250, 0., 250.), title="leading jet p_T",
-                                 xTitle="Leading Jet p_T (GeV/c^2)"))
-        plots.append(Plot.make1D("leadingJetPt_hasTwoJetsMuMu", ak4Jets[0].pt,
-                                 hasTwoJetsMuMu, EqBin(250, 0., 250.), title="leading jet p_T",
-                                 xTitle="Leading Jet p_T (GeV/c^2)"))
-
-        plots.append(Plot.make1D("subleadingJetPt_NoSel", ak4Jets[1].pt,
-                                 hasTwoJets, EqBin(250, 0., 250.), title="subleading jet p_T",
-                                 xTitle="Leading Jet p_T (GeV/c^2)"))
-        plots.append(Plot.make1D("subleadingJetPt_hasElEl", ak4Jets[1].pt,
-                                 hasTwoJetsElEl, EqBin(250, 0., 250.), title="subleading jet p_T",
-                                 xTitle="Leading Jet p_T (GeV/c^2)"))
-        plots.append(Plot.make1D("subleadingJetPt_hasMuMu", ak4Jets[1].pt,
-                                 hasTwoJetsMuMu, EqBin(250, 0., 250.), title="subleading jet p_T",
-                                 xTitle="Leading Jet p_T (GeV/c^2)"))
 
         yields.add(hasElEl, 'two electrons')
         yields.add(hasTwoJetsElEl, 'two el. two jets')
         yields.add(hasMuMu, 'two muons')
         yields.add(hasTwoJetsMuMu, 'two muons two jets')
 
+        et = time.time()
+        elapsed_time = et - st
+        print("""
+        XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+         Execution time: """, elapsed_time, """
+        XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX""")
         return plots
