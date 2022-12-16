@@ -34,12 +34,6 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         self.is_MC = self.isMC(sample)
         self.triggersPerPrimaryDataset = {}
 
-        def getNanoAODDescription(): # implemented from Sebastien's analysis
-            groups = ["PV_", "Flag_", "HLT_", "MET_"]
-            collections = ["nElectron", "nJet", "nMuon", "nFatJet"]
-            varReaders = []
-            return NanoAODDescription(groups=groups, collections=collections, systVariations=varReaders)
-
         def addHLTPath(PD, HLT):
             if PD not in self.triggersPerPrimaryDataset.keys():
                 self.triggersPerPrimaryDataset[PD] = []
@@ -48,6 +42,13 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                     getattr(tree.HLT, HLT))
             except AttributeError:
                 print("Couldn't find branch tree.HLT.%s, will omit it!" % HLT)
+
+        def getNanoAODDescription():  # implemented from Sebastien's analysis
+            groups = ["HLT_", "MET_"]
+            collections = ["nElectron", "nJet", "nMuon", "nFatJet"]
+            varReaders = []
+            return NanoAODDescription(groups=groups, collections=collections, systVariations=varReaders)
+
         tree, noSel, backend, lumiArgs = super(NanoBaseHHWWbb, self).prepareTree(tree=tree,
                                                                                  sample=sample,
                                                                                  sampleCfg=sampleCfg,
