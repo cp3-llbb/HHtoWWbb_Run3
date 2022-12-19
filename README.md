@@ -1,4 +1,4 @@
-**Bamboo**
+**HH->WWbb Run-3 analysis**
 
 Start with:
 ` bambooRun -m hh_wwbb_run3.py:NanoBaseHHWWbb config/hh_wwbb_run3.yml -o output-test `
