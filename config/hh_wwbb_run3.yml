@@ -8,7 +8,7 @@ samples:
     era: "2022C"
     type: data
     group: "data"
-    db: das:/MuonEG/Run2022C-PromptNanoAODv10-v1/NANOAOD
+    db: das:/MuonEG/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
 
