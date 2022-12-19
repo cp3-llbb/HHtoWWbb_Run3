@@ -2,31 +2,40 @@ tree: Events
 eras:
   "2022C":
     luminosity: 4840 # pb^-1
+dbcache: dascache
 samples:
   MuonEG:
     era: "2022C"
     type: data
     group: "data"
+    db: das:/MuonEG/Run2022C-PromptNanoAODv10-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    files:
-      - ../../data/MuonEG/55dfef50-3397-4c6a-a3d8-8d3d6ec5feb5.root
+
   EGamma:
     era: "2022C"
     type: data
     group: "data"
+    db: das:/EGamma/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    files:
-      - ../../data/EGamma/41d53e82-7df7-4ddd-b4e0-45282baefc1d.root
+
+  DoubleMuon:
+    era: "2022C"
+    type: data
+    group: "data"
+    db: das:/DoubleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
+    run_range: [355794, 357486]
+    certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
+
   SingleMuon:
     era: "2022C"
     type: data
     group: "data"
+    db: das:/SingleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    files:
-      - ../../data/SingleMuon/488e74c8-d09f-4724-ae30-99ab7c516d93.root
+
   TTbar:
     era: "2022C"
     group: "TTbar"
