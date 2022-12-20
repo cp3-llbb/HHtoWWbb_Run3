@@ -44,7 +44,7 @@ samples:
     group: "TTbar"
     db: das:/TTTo2L2Nu_CP5_13p6TeV_powheg-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
     type: mc
-    cross-section: 880
+    cross-section: 88.4
     generated-events: genEventSumw
     split: 25
 
@@ -53,7 +53,7 @@ samples:
     group: "DY"
     db: das:/DYtoLL_NoTau_CP5_13p6TeV_amcatnloFXFX-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
     type: mc
-    cross-section: 5711
+    cross-section: 4515
     generated-events: genEventSumw
     split: 27
 
