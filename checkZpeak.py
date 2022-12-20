@@ -8,8 +8,6 @@ from bamboo.plots import Plot, CutFlowReport
 from bamboo.plots import EquidistantBinning as EqBin
 from bamboo import treefunctions as op
 
-import time
-
 
 class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
     def __init__(self, args):
