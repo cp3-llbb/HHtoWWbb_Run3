@@ -54,7 +54,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                                                                                  sampleCfg=sampleCfg,
                                                                                  description=getNanoAODDescription(),
                                                                                  backend="lazy")
-        if era == "2022":
+        if era == "2022C":
             # MuonEG
             addHLTPath('MuonEG', 'Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL')
             # EGamma
