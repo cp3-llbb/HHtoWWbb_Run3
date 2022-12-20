@@ -74,7 +74,6 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         plots = []
         yields = CutFlowReport("yields")
         plots.append(yields)
-        yields.add(noSel, 'No Selection')
         #############################################################################
         #                                 Muons                                     #
         #############################################################################
@@ -129,6 +128,8 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         else:
             noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
                 sample, self.triggersPerPrimaryDataset)])
+        
+        yields.add(noSel, 'No Selection')
         #############################################################################
         #                               Selections                                  #
         #############################################################################
