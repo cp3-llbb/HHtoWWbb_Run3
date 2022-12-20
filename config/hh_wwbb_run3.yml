@@ -39,20 +39,19 @@ samples:
   TTbar:
     era: "2022C"
     group: "TTbar"
+    db: das:/TTTo2L2Nu_CP5_13p6TeV_powheg-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
     type: mc
     cross-section: 880
     generated-events: genEventSumw
-    files:
-      - ../../data/TTbar/a870ad04-4e1e-42e9-9fa5-10402f3e01d1.root
+
   DY:
     era: "2022C"
     group: "DY"
+    db: das:/DYtoLL_NoTau_CP5_13p6TeV_amcatnloFXFX-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
     type: mc
     cross-section: 5711
     generated-events: genEventSumw
-    files:
-      - ../../data/DY/C4465203-C5DB-B848-A601-CB396449051A.root
-      - ../../data/DY/B154D990-5925-7F43-8DE8-7BDC6449AD68.root
+
 plotIt:
   configuration:
     width: 800
