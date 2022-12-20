@@ -69,7 +69,6 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         return tree, noSel, backend, lumiArgs
 
     def definePlots(self, tree, noSel, sample=None, sampleCfg=None):
-        st = time.time()
         plots = []
         yields = CutFlowReport("yields")
         plots.append(yields)
@@ -215,10 +214,4 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         yields.add(hasMuMu, 'two muons')
         yields.add(hasTwoJetsMuMu, 'two muons two jets')
 
-        et = time.time()
-        elapsed_time = et - st
-        print("""
-        XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-         Execution time: """, elapsed_time, """
-        XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX""")
         return plots
