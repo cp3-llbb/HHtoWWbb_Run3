@@ -145,7 +145,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         hasOneJet = noSel.refine('hasOneJet', cut=[op.rng_len(ak4Jets) >= 1])
         # has at least two ak4 jets
         hasTwoJets = noSel.refine('hasTwoJets', cut=[op.rng_len(ak4Jets) >= 2])
-        
+
         #############################################################################
         #                                 Plots                                     #
         #############################################################################
