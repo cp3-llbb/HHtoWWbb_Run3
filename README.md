@@ -10,6 +10,8 @@ For data and background samples, see ` config/hh_wwbb_run3.yml `
 
 Execute followings before submitting to a batch system
 
+`mkdir -p ~/private/gridproxy`
+
 `$ voms-proxy-init --voms cms -rfc --valid 96:00  --out ~/private/gridproxy/x509`
 
 `$ export X509_USER_PROXY=$HOME/private/gridproxy/x509`
