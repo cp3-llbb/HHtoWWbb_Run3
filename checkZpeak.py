@@ -144,12 +144,18 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         # and at least two ak4 jets
         hasTwoJetsElEl = hasElEl.refine(
             "hasTwoJetsElEl", cut=[op.rng_len(ak4Jets) >= 2])
+        # and two b jets
+        hasTwoBJetsElEl = hasTwoJetsElEl.refine(
+            "hasTwoBJetsElEl", cut=[op.rng_len(ak4BJets) >= 2])
         # has at least one muon pair
         hasMuMu = noSel.refine("hasOSMuMu", cut=[op.rng_len(muons) >= 2,
                                                  muons[0].charge != muons[1].charge, muons[0].pt > 20., muons[1].pt > 10.])
         # and at least two ak4 jets
         hasTwoJetsMuMu = hasMuMu.refine(
             'hasTwoJetsMuMu', cut=[op.rng_len(ak4Jets) >= 2])
+        # and two b jets
+        hasTwoBJetsMuMu = hasTwoJetsMuMu.refine(
+            'hasTwoBJetsMuMu', cut=[op.rng_len(ak4BJets) >= 2])
         # has at least one ak4 jet
         hasOneJet = noSel.refine('hasOneJet', cut=[op.rng_len(ak4Jets) >= 1])
         # has at least two ak4 jets
@@ -187,11 +193,17 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             Plot.make1D("massZto2e_hasTwoJets", op.invariant_mass(electrons[0].p4, electrons[1].p4),
                         hasTwoJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
                         xTitle="Invariant Mass of Nelectrons=2 (in GeV/c^2)"),
+            Plot.make1D("massZto2e_hasTwoBJets", op.invariant_mass(electrons[0].p4, electrons[1].p4),
+                        hasTwoBJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
+                        xTitle="Invariant Mass of Nelectrons=2 (in GeV/c^2)"),
             Plot.make1D("massZto2mu", op.invariant_mass(muons[0].p4, muons[1].p4),
                         hasMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
                         xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"),
             Plot.make1D("massZto2mu_hasTwoJets", op.invariant_mass(muons[0].p4, muons[1].p4),
                         hasTwoJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
+                        xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"),
+            Plot.make1D("massZto2mu_hasTwoBJets", op.invariant_mass(muons[0].p4, muons[1].p4),
+                        hasTwoBJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
                         xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"),
             Plot.make1D("leadingJetPt_hasOneJet", ak4Jets[0].pt,
                         hasOneJet, EqBin(250, 0., 250.), title="leading jet p_T",
