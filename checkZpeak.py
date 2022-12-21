@@ -1,6 +1,6 @@
 
 from bamboo.analysismodules import NanoAODModule, HistogramsModule
-from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection, printCutFlowReports
+from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
 
 from bamboo.treedecorators import NanoAODDescription
 
@@ -30,8 +30,18 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                             help='It has no use right now')
 
     def prepareTree(self, tree, sample=None, sampleCfg=None):
+
+        def isMC():
+            if sampleCfg['type'] == 'data':
+                return False
+            elif sampleCfg['type'] == 'mc':
+                return True
+            else:
+                print(f"Please specify the type of {sample} dataset in the configuration file (data or mc) and run again.")
+                exit()
+
         era = sampleCfg['era']
-        self.is_MC = self.isMC(sample)
+        self.is_MC = isMC()
         self.triggersPerPrimaryDataset = {}
 
         def addHLTPath(PD, HLT):
@@ -56,8 +66,10 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                                                                                  backend="lazy")
         if era == "2022C":
             # MuonEG
-            addHLTPath("MuonEG", "Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ")
-            addHLTPath('MuonEG', 'Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ')
+            addHLTPath(
+                "MuonEG", "Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ")
+            addHLTPath(
+                'MuonEG', 'Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ')
             addHLTPath('MuonEG', 'Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL')
             # EGamma
             addHLTPath('EGamma', 'Ele32_WPTight_Gsf')
@@ -132,7 +144,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         else:
             noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
                 sample, self.triggersPerPrimaryDataset)])
-        
+
         yields.add(noSel, 'No Selection')
         #############################################################################
         #                               Selections                                  #
