@@ -53,7 +53,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             except AttributeError:
                 print("Couldn't find branch tree.HLT.%s, will omit it!" % HLT)
 
-        def getNanoAODDescription():  # implemented from Sebastien's analysis
+        def getNanoAODDescription():  # implemented from Sebastien's analysis (mentioned on issue #101 on bamboo gitlab page)
             groups = ["HLT_", "MET_"]
             collections = ["nElectron", "nJet", "nMuon", "nFatJet"]
             varReaders = []
@@ -241,7 +241,9 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
 
         yields.add(hasElEl, 'two electrons')
         yields.add(hasTwoJetsElEl, 'two el. two jets')
+        yields.add(hasTwoBJetsElEl, 'two el. two Bjets')
         yields.add(hasMuMu, 'two muons')
         yields.add(hasTwoJetsMuMu, 'two muons two jets')
+        yields.add(hasTwoBJetsMuMu, 'two muons two Bjets')
 
         return plots
