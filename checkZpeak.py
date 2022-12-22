@@ -37,7 +37,8 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             elif sampleCfg['type'] == 'mc':
                 return True
             else:
-                print(f"Please specify the type of {sample} dataset in the configuration file (data or mc) and run again.")
+                print(
+                    f"Please specify the type of {sample} dataset in the configuration file (data or mc) and run again.")
                 exit()
 
         era = sampleCfg['era']
