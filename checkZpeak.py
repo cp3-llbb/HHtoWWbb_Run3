@@ -89,7 +89,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
 
     def definePlots(self, tree, noSel, sample=None, sampleCfg=None):
         plots = []
-        yields = CutFlowReport("yields")
+        yields = CutFlowReport("yields", printInLog=True, recursive=True)
         plots.append(yields)
         yields.add(noSel, 'No Selection')
         #############################################################################
