@@ -27,7 +27,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                             action='store',
                             type=str,
                             default='2022D',
-                            help='It has no use right now')
+                            help='Indicate era')
 
     def prepareTree(self, tree, sample=None, sampleCfg=None):
 
@@ -38,7 +38,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 return True
             else:
                 print(
-                    f"Please specify the type of {sample} dataset in the configuration file (data or mc) and run again.")
+                    f"Please specify the type of {sample} dataset in the configuration file (data or mc) and re-run.")
                 exit()
 
         era = sampleCfg['era']
@@ -65,6 +65,15 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                                                                                  sampleCfg=sampleCfg,
                                                                                  description=getNanoAODDescription(),
                                                                                  backend="lazy")
+        ### Triggers ###
+        # Muon
+        addHLTPath('Muon', 'IsoMu24')
+        addHLTPath('Muon', 'IsoMu27')
+        addHLTPath('Muon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
+        # EGamma
+        addHLTPath('EGamma', 'Ele32_WPTight_Gsf')
+        addHLTPath('EGamma', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
+            
         if era == "2022C":
             # MuonEG
             addHLTPath(
@@ -72,27 +81,11 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             addHLTPath(
                 'MuonEG', 'Mu12_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ')
             addHLTPath('MuonEG', 'Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL')
-            # EGamma
-            addHLTPath('EGamma', 'Ele32_WPTight_Gsf')
-            addHLTPath('EGamma', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
             # SingleMuon
             addHLTPath('SingleMuon', 'IsoMu24')
             addHLTPath('SingleMuon', 'IsoMu27')
             # DoubleMuon
             addHLTPath('DoubleMuon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
-            # Muon
-            addHLTPath('Muon', 'IsoMu24')
-            addHLTPath('Muon', 'IsoMu27')
-            addHLTPath('Muon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
-           
-        if era == "2022D":
-            # Muon
-            addHLTPath('Muon', 'IsoMu24')
-            addHLTPath('Muon', 'IsoMu27')
-            addHLTPath('Muon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
-            # EGamma
-            addHLTPath('EGamma', 'Ele32_WPTight_Gsf')
-            addHLTPath('EGamma', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
 
         return tree, noSel, backend, lumiArgs
 
