@@ -91,7 +91,41 @@ EGamma_2022E:
 
 # Era F
 
+Muon_2022E:
+  era: "2022"
+  type: data
+  group: "data"
+  db: das:/Muon/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
+  run_range: [357734, 358219]
+  certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
+  split: 100
+  
+EGamma_2022E:
+  era: "2022"
+  type: data
+  group: "data"
+  db: das:/EGamma/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
+  run_range: [357734, 358219]
+  certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
+  split: 130
 
 # Era G
 
+Muon_2022E:
+  era: "2022"
+  type: data
+  group: "data"
+  db: das:/Muon/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
+  run_range: [357734, 358219]
+  certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
+  split: 15
+  
+EGamma_2022E:
+  era: "2022"
+  type: data
+  group: "data"
+  db: das:/EGamma/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
+  run_range: [357734, 358219]
+  certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
+  split: 20
 
