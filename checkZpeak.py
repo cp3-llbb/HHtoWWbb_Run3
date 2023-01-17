@@ -25,8 +25,8 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         super(NanoBaseHHWWbb, self).addArgs(parser)
         parser.add_argument("--era",
                             action='store',
-                            type=int,
-                            default=2022,
+                            type=str,
+                            default='2022D',
                             help='It has no use right now')
 
     def prepareTree(self, tree, sample=None, sampleCfg=None):
