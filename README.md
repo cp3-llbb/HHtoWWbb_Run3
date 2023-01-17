@@ -4,7 +4,7 @@ Start with:
 ` bambooRun -m checkZpeak.py:NanoBaseHHWWbb config/hh_wwbb_run3.yml -o output-test `
 
 or use the following if running on slurm (batch):
-` bambooRun -m checkZpeak.py:NanoBaseHHWWbb config/hh_wwbb_run3.yml -o output-test --envConfig path-to-your-bamboo-build/bamboo/examples/ingrid.ini --distributed=driver `
+` bambooRun -m checkZpeak.py:NanoBaseHHWWbb config/datasets_2022D.yml -o output-Run_2022D --envConfig path-to-your-bamboo-build/bamboo/examples/ingrid.ini --distributed=driver `
 
 For data and background samples, see ` config/hh_wwbb_run3.yml `
 
