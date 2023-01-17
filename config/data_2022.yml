@@ -51,7 +51,7 @@ SingleMuon_2022C:
 # Era D
 
 Muon_2022D:
-  era: "2022D"
+  era: "2022"
   type: data
   group: "data"
   db: das:/Muon/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD
@@ -60,7 +60,7 @@ Muon_2022D:
   split: 15
 
 EGamma_2022D:
-  era: "2022D"
+  era: "2022"
   type: data
   group: "data"
   db: das:/EGamma/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD
@@ -71,6 +71,23 @@ EGamma_2022D:
 
 # Era E
 
+Muon_2022E:
+  era: "2022"
+  type: data
+  group: "data"
+  db: das:/Muon/Run2022E-PromptNanoAODv10_v1-v3/NANOAOD
+  run_range: [357734, 358219]
+  certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
+  split: 40
+  
+EGamma_2022E:
+  era: "2022"
+  type: data
+  group: "data"
+  db: das:/EGamma/Run2022E-PromptNanoAODv10_v1-v2/NANOAOD
+  run_range: [357734, 358219]
+  certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
+  split: 50
 
 # Era F
 
