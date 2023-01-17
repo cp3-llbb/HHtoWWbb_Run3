@@ -1,0 +1,81 @@
+tree: Events
+eras:
+  "2022D":
+    luminosity: 2922 # pb^-1
+dbcache: dascache
+samples:
+
+  Muon:
+    era: "2022D"
+    type: data
+    group: "data"
+    db: das:/Muon/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD
+    run_range: [357734, 358219]
+    certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
+    split: 15
+
+  EGamma:
+    era: "2022D"
+    type: data
+    group: "data"
+    db: das:/EGamma/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD
+    run_range: [357734, 358219]
+    certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
+    split: 30
+
+  TTbar:
+    era: "2022D"
+    group: "TTbar"
+    db: das:/TTTo2L2Nu_CP5_13p6TeV_powheg-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
+    type: mc
+    cross-section: 88.4
+    generated-events: genEventSumw
+    split: 25
+
+  DY:
+    era: "2022D"
+    group: "DY"
+    db: das:/DYtoLL_NoTau_CP5_13p6TeV_amcatnloFXFX-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
+    type: mc
+    cross-section: 4515
+    generated-events: genEventSumw
+    split: 27
+
+plotIt:
+  configuration:
+    width: 800
+    height: 600
+    margin-left: 0.2
+    margin-right: 0.03
+    margin-top: 0.05
+    margin-bottom: 0.15
+    luminosity-label: '%1$.2f fb^{-1} (8 TeV)'
+    experiment: CMS
+    extra-label: Run 3 (2022D)
+    error-fill-style: 3154
+    error-fill-color: "#ee556270"
+    ratio-fit-error-fill-style: 1001
+    ratio-fit-error-fill-color: "#aa556270"
+    ratio-fit-line-color: "#0B486B"
+    yields-table-align: v
+  legend:
+    position: [0.7, 0.6, 0.91, 0.91]
+  groups:
+    data:
+      legend: data
+      order: 2
+    TTbar:
+      legend: TTbar
+      fill-color: "#99ccff"
+      order: 3
+    DY:
+      legend: DY
+      fill-color: "#9FFF33"
+      order: 1
+  plotdefaults:
+    y-axis: Events
+    log-y: both
+    y-axis-show-zero: True
+    save-extensions: [pdf]
+    show-ratio: False
+    sort-by-yields: False

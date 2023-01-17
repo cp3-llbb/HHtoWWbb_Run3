@@ -1,7 +1,7 @@
 tree: Events
 eras:
   "2022C":
-    luminosity: 4840 # pb^-1
+    luminosity: 4943 # pb^-1
 dbcache: dascache
 samples:
   MuonEG:
