@@ -65,19 +65,14 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                                                                                  sampleCfg=sampleCfg,
                                                                                  description=getNanoAODDescription(),
                                                                                  backend="lazy")
-        # ### Triggers ###
-        # # Muon
-        # addHLTPath('Muon_v1', 'IsoMu24')
-        # addHLTPath('Muon_v1', 'IsoMu27')
-        # addHLTPath('Muon_v1', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
-        # addHLTPath('Muon_v2', 'IsoMu24')
-        # addHLTPath('Muon_v2', 'IsoMu27')
-        # addHLTPath('Muon_v2', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
-        # # EGamma
-        # addHLTPath('EGamma_v1', 'Ele32_WPTight_Gsf')
-        # addHLTPath('EGamma_v1', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
-        # addHLTPath('EGamma_v2', 'Ele32_WPTight_Gsf')
-        # addHLTPath('EGamma_v2', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
+        ### Triggers ###
+        # Muon
+        addHLTPath('Muon', 'IsoMu24')
+        addHLTPath('Muon', 'IsoMu27')
+        addHLTPath('Muon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
+        # EGamma
+        addHLTPath('EGamma', 'Ele32_WPTight_Gsf')
+        addHLTPath('EGamma', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
             
         if era == "2022C":
             # MuonEG
