@@ -1,30 +1,30 @@
 tree: Events
 eras:
-  "2022D":
-    luminosity: 2922 # pb^-1
+  "2022F":
+    luminosity: 17610 # pb^-1
 dbcache: dascache
 samples:
 
   Muon:
-    era: "2022D"
+    era: "2022F"
     type: data
     group: "data"
-    db: ['das:/Muon/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/Muon/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
-    run_range: [357487, 358219]
+    db: das:/Muon/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
+    run_range: [360332, 362180]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 25
+    split: 60
     
   EGamma:
-    era: "2022D"
+    era: "2022F"
     type: data
     group: "data"
-    db: ['das:/EGamma/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD','das:/EGamma/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
-    run_range: [357487, 358219]
+    db: das:/EGamma/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
+    run_range: [360332, 362180]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 40
+    split: 80
 
   TTbar:
-    era: "2022D"
+    era: "2022F"
     group: "TTbar"
     db: das:/TTTo2L2Nu_CP5_13p6TeV_powheg-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
     type: mc
@@ -33,7 +33,7 @@ samples:
     split: 25
 
   DY:
-    era: "2022D"
+    era: "2022F"
     group: "DY"
     db: das:/DYtoLL_NoTau_CP5_13p6TeV_amcatnloFXFX-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
     type: mc
@@ -51,7 +51,7 @@ plotIt:
     margin-bottom: 0.15
     luminosity-label: '%1$.2f fb^{-1} (13.6 TeV)'
     experiment: CMS
-    extra-label: Run 3 (2022D)
+    extra-label: Run 3 (2022F)
     error-fill-style: 3154
     error-fill-color: "#ee556270"
     ratio-fit-error-fill-style: 1001

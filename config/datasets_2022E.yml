@@ -49,7 +49,7 @@ plotIt:
     margin-right: 0.03
     margin-top: 0.05
     margin-bottom: 0.15
-    luminosity-label: '%1$.2f fb^{-1} (8 TeV)'
+    luminosity-label: '%1$.2f fb^{-1} (13.6 TeV)'
     experiment: CMS
     extra-label: Run 3 (2022E)
     error-fill-style: 3154
