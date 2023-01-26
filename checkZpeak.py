@@ -1,12 +1,12 @@
 
 from bamboo.analysismodules import NanoAODModule, HistogramsModule
 from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
-
 from bamboo.treedecorators import NanoAODDescription
-
 from bamboo.plots import Plot, CutFlowReport
 from bamboo.plots import EquidistantBinning as EqBin
 from bamboo import treefunctions as op
+
+from itertools import chain
 
 
 class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
