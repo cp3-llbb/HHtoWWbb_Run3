@@ -73,7 +73,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         # EGamma
         addHLTPath('EGamma', 'Ele32_WPTight_Gsf')
         addHLTPath('EGamma', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
-            
+
         if era == "2022C":
             # MuonEG
             addHLTPath(
@@ -144,7 +144,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         #                          Gen Weight and Triggers                          #
         #############################################################################
         if self.is_MC:
-            noSel = noSel.refine('genWeight', weight=tree.genWeight)
+            noSel = noSel.refine('genWeight', weight=tree.genWeight, cut=(*chain.from_iterable(triggersPerPrimaryDataset.values())))
         else:
             noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
                 sample, self.triggersPerPrimaryDataset)])
