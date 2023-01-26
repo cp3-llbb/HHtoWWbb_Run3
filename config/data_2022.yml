@@ -4,7 +4,7 @@
 
 # Era C
 
-MuonEG_2022C:
+MuonEG_C:
   era: "2022"
   type: data
   group: "data"
@@ -13,7 +13,7 @@ MuonEG_2022C:
   certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
   split: 10
   
-Muon_2022C:
+Muon_C:
   era: "2022"
   type: data
   group: "data"
@@ -22,7 +22,7 @@ Muon_2022C:
   certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
   split: 50
 
-EGamma_2022C:
+EGamma_C:
   era: "2022"
   type: data
   group: "data"
@@ -31,7 +31,7 @@ EGamma_2022C:
   certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
   split: 100
 
-DoubleMuon_2022C:
+DoubleMuon_C:
   era: "2022"
   type: data
   group: "data"
@@ -39,7 +39,7 @@ DoubleMuon_2022C:
   run_range: [355794, 357486]
   certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
 
-SingleMuon_2022C:
+SingleMuon_C:
   era: "2022"
   type: data
   group: "data"
@@ -50,7 +50,7 @@ SingleMuon_2022C:
 
 # Era D
 
-Muon_2022D:
+Muon_D:
   era: "2022"
   type: data
   group: "data"
@@ -59,7 +59,7 @@ Muon_2022D:
   certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
   split: 15
 
-EGamma_2022D:
+EGamma_D:
   era: "2022"
   type: data
   group: "data"
@@ -71,7 +71,7 @@ EGamma_2022D:
 
 # Era E
 
-Muon_2022E:
+Muon_E:
   era: "2022"
   type: data
   group: "data"
@@ -80,7 +80,7 @@ Muon_2022E:
   certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
   split: 40
   
-EGamma_2022E:
+EGamma_E:
   era: "2022"
   type: data
   group: "data"
@@ -91,7 +91,7 @@ EGamma_2022E:
 
 # Era F
 
-Muon_2022F:
+Muon_F:
   era: "2022"
   type: data
   group: "data"
@@ -100,7 +100,7 @@ Muon_2022F:
   certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
   split: 100
   
-EGamma_2022F:
+EGamma_F:
   era: "2022"
   type: data
   group: "data"
@@ -111,7 +111,7 @@ EGamma_2022F:
 
 # Era G
 
-Muon_2022G:
+Muon_G:
   era: "2022"
   type: data
   group: "data"
@@ -120,7 +120,7 @@ Muon_2022G:
   certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
   split: 15
   
-EGamma_2022G:
+EGamma_G:
   era: "2022"
   type: data
   group: "data"
