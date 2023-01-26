@@ -4,49 +4,6 @@ eras:
     luminosity: 4943 # pb^-1
 dbcache: dascache
 samples:
-  MuonEG:
-    era: "2022C"
-    type: data
-    group: "data"
-    db: das:/MuonEG/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
-    run_range: [355794, 357486]
-    certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 10
-    
-  Muon:
-    era: "2022C"
-    type: data
-    group: "data"
-    db: das:/Muon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
-    run_range: [355794, 357486]
-    certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 50
-
-  EGamma:
-    era: "2022C"
-    type: data
-    group: "data"
-    db: das:/EGamma/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
-    run_range: [355794, 357486]
-    certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 100
-
-  DoubleMuon:
-    era: "2022C"
-    type: data
-    group: "data"
-    db: das:/DoubleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
-    run_range: [355794, 357486]
-    certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-
-  SingleMuon:
-    era: "2022C"
-    type: data
-    group: "data"
-    db: das:/SingleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
-    run_range: [355794, 357486]
-    certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 10
 
   TTbar:
     era: "2022C"
