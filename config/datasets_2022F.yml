@@ -99,15 +99,18 @@ plotIt:
   groups:
     data:
       legend: data
-      order: 2
     TTbar:
       legend: TTbar
       fill-color: "#99ccff"
-      order: 3
     DY:
       legend: DY
       fill-color: "#9FFF33"
-      order: 1
+    WJets:
+      legend: WJets
+      fill-color: "#FFC300"
+    VV:
+      legend: VV
+      fill-color: "#C900FF"
   plotdefaults:
     y-axis: Events
     log-y: both

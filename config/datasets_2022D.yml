@@ -110,7 +110,7 @@ plotIt:
       fill-color: "#FFC300"
     VV:
       legend: VV
-      fill-color: "C900FF"
+      fill-color: "#C900FF"
   plotdefaults:
     y-axis: Events
     log-y: both
