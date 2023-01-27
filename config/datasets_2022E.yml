@@ -40,7 +40,15 @@ samples:
     cross-section: 4515
     generated-events: genEventSumw
     split: 27
-
+    
+  DY10to50:
+    era: "2022E"
+    group: "DY"
+    db: das:/DYJetsToLL_M-10to50_TuneCP5_13p6TeV-madgraphMLM-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
+    type: mc
+    cross-section: 19317.5
+    generated-events: genEventSumw
+    split: 10
 
   WJets:
     era: "2022E"
