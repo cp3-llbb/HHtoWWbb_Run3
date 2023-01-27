@@ -19,7 +19,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                              "log-y": "both",
                              "ratio-y-axis-range": [0.8, 1.2],
                              "ratio-y-axis": '#frac{Data}{MC}',
-                             "sort-by-yields": False}
+                             "sort-by-yields": True}
 
     def addArgs(self, parser):
         super(NanoBaseHHWWbb, self).addArgs(parser)
