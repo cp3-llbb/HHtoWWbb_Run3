@@ -6,8 +6,10 @@ dbcache: dascache
 samples:
   # data #
   - config: data_2022.yml
+    keys: data
   # bkg #
   - config: bkg_2022.yml
+  keys: mc
 
 plotIt:
   configuration:
