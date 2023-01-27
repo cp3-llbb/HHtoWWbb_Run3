@@ -41,8 +41,17 @@ samples:
     generated-events: genEventSumw
     split: 27
 
+  WJets:
+    era: "2022F"
+    group: "WJets"
+    db: das:/WJetsToLNu_TuneCP5_13p6TeV-madgraphMLM-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
+    type: mc
+    cross-section: 63199.9
+    generated-events: genEventSumw
+    split: 30
+
   WW:
-    era: "2022C"
+    era: "2022F"
     group: "VV"
     db: das:/WW_TuneCP5_13p6TeV-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
     type: mc
@@ -51,7 +60,7 @@ samples:
     split: 10
 
   WZ:
-    era: "2022C"
+    era: "2022F"
     group: "VV"
     db: das:/WZ_TuneCP5_13p6TeV-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
     type: mc
@@ -60,7 +69,7 @@ samples:
     split: 10
 
   ZZ:
-    era: "2022C"
+    era: "2022F"
     group: "VV"
     db: das:/ZZ_TuneCP5_13p6TeV-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
     type: mc
