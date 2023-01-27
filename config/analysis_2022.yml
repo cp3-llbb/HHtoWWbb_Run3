@@ -5,11 +5,9 @@ eras:
 dbcache: dascache
 samples:
   # data #
-  - config: data_2022.yml
-    keys: data
+  !include data_2022.yml
   # bkg #
-  - config: bkg_2022.yml
-    keys: mc
+  !include bkg_2022.yml
 
 plotIt:
   configuration:
