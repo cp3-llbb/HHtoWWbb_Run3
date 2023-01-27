@@ -9,7 +9,7 @@ samples:
     keys: data
   # bkg #
   - config: bkg_2022.yml
-  keys: mc
+    keys: mc
 
 plotIt:
   configuration:
