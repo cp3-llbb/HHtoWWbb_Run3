@@ -4,15 +4,6 @@ eras:
     luminosity: 34202 # pb^-1
 dbcache: dascache
 samples:
-  MuonEG_C:
-    era: "2022C"
-    type: data
-    group: "data"
-    db: das:/MuonEG/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
-    run_range: [355794, 357486]
-    certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 10
-
   Muon_C:
     era: "2022C"
     type: data
@@ -51,7 +42,7 @@ samples:
   # Era D
 
   Muon_D:
-    era: "2022"
+    era: "2022D"
     type: data
     group: "data"
     db: ['das:/Muon/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/Muon/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
@@ -60,7 +51,7 @@ samples:
     split: 15
 
   EGamma_D:
-    era: "2022"
+    era: "2022D"
     type: data
     group: "data"
     db: ['das:/EGamma/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD','das:/EGamma/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
@@ -72,7 +63,7 @@ samples:
   # Era E
 
   Muon_E:
-    era: "2022"
+    era: "2022E"
     type: data
     group: "data"
     db: das:/Muon/Run2022E-PromptNanoAODv10_v1-v3/NANOAOD
@@ -81,7 +72,7 @@ samples:
     split: 40
 
   EGamma_E:
-    era: "2022"
+    era: "2022E"
     type: data
     group: "data"
     db: das:/EGamma/Run2022E-PromptNanoAODv10_v1-v2/NANOAOD
@@ -92,7 +83,7 @@ samples:
   # Era F
 
   Muon_F:
-    era: "2022"
+    era: "2022F"
     type: data
     group: "data"
     db: das:/Muon/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
@@ -101,7 +92,7 @@ samples:
     split: 100
 
   EGamma_F:
-    era: "2022"
+    era: "2022F"
     type: data
     group: "data"
     db: das:/EGamma/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
@@ -112,7 +103,7 @@ samples:
   # Era G
 
   Muon_G:
-    era: "2022"
+    era: "2022G"
     type: data
     group: "data"
     db: das:/Muon/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
@@ -121,14 +112,15 @@ samples:
     split: 15
 
   EGamma_G:
-    era: "2022"
+    era: "2022G"
     type: data
     group: "data"
     db: das:/EGamma/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [357734, 358219]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
     split: 20
-    # bkg #
+    
+  # bkg #
   TTbar:
     era: "2022"
     group: "TTbar"
