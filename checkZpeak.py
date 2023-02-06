@@ -55,7 +55,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 print("Couldn't find branch tree.HLT.%s, will omit it!" % HLT)
 
         def getNanoAODDescription():  # implemented from Sebastien's analysis (mentioned on issue #101 on bamboo gitlab page)
-            groups = ["HLT_", "MET_"]
+            groups = ["HLT_", "MET_", "Pileup_"]
             collections = ["nElectron", "nJet", "nMuon", "nFatJet"]
             varReaders = []
             return NanoAODDescription(groups=groups, collections=collections, systVariations=varReaders)
@@ -231,7 +231,10 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                         xTitle="Leading Jet p_T (GeV/c^2)"),
             Plot.make1D("subleadingJetPt_hasMuMu", ak4Jets[1].pt,
                         hasTwoJetsMuMu, EqBin(250, 0., 250.), title="subleading jet p_T",
-                        xTitle="Leading Jet p_T (GeV/c^2)")
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            Plot.make2D("el_eta_vs_phi", [el[0].eta, el[0].phi], hasElEl, [EqBin(50, -2.5, 2.5), EqBin(60, 0, 6.29)], title="electron eta vs phi"),
+            Plot.make1D("nPU", tree.Pileup.nPU, hasElEl, EqBin(100, 0, 100), title="number of PU"),
+            Plot.make1D("nPU", tree.Pileup.nPU, hasMuMu, EqBin(100, 0, 100), title="number of PU")
         ])
 
         yields.add(hasElEl, 'two electrons')
