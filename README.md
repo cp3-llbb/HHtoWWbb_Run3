@@ -12,6 +12,6 @@ Execute followings before submitting to the batch system:
 
 Use the following command line (replace X):
 
-`$ bambooRun -m checkZpeak.py:NanoBaseHHWWbb config/datasets_2022<X>.yml -o output-Run_2022<X> --envConfig path-to-your-bamboo-build/bamboo/examples/ingrid.ini --distributed=driver --era 2022<X> `
+`$ bambooRun -m checkZpeak.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig path-to-your-bamboo-build/bamboo/examples/ingrid.ini --distributed=driver `
 
 For data and background samples, see `config` folder
