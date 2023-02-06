@@ -53,8 +53,6 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                     getattr(tree.HLT, HLT))
             except AttributeError:
                 print("Couldn't find branch tree.HLT.%s, will omit it!" % HLT)
-        
-        print(self.triggersPerPrimaryDataset)
 
         def getNanoAODDescription():  # implemented from Sebastien's analysis (mentioned on issue #101 on bamboo gitlab page)
             groups = ["HLT_", "MET_"]
