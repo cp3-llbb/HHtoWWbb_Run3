@@ -233,8 +233,8 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                         hasTwoJetsMuMu, EqBin(250, 0., 250.), title="subleading jet p_T",
                         xTitle="Leading Jet p_T (GeV/c^2)"),
             Plot.make2D("el_eta_vs_phi", [electrons[0].eta, electrons[0].phi], hasElEl, [EqBin(50, -2.5, 2.5), EqBin(60, 0, 6.29)], title="electron eta vs phi"),
-            Plot.make1D("nPU", tree.Pileup.nPU, hasElEl, EqBin(100, 0, 100), title="number of PU"),
-            Plot.make1D("nPU", tree.Pileup.nPU, hasMuMu, EqBin(100, 0, 100), title="number of PU")
+            Plot.make1D("nPU", tree.Pileup_nPU, hasElEl, EqBin(100, 0, 100), title="number of PU"),
+            Plot.make1D("nPU", tree.Pileup_nPU, hasMuMu, EqBin(100, 0, 100), title="number of PU")
         ])
 
         yields.add(hasElEl, 'two electrons')
