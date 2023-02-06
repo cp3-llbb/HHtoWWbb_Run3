@@ -75,13 +75,11 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         # EGamma
         addHLTPath('EGamma', 'Ele32_WPTight_Gsf')
         addHLTPath('EGamma', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
-
-        if era == "2022C":
-            # SingleMuon
-            addHLTPath('SingleMuon', 'IsoMu24')
-            addHLTPath('SingleMuon', 'IsoMu27')
-            # DoubleMuon
-            addHLTPath('DoubleMuon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
+        # SingleMuon
+        addHLTPath('SingleMuon', 'IsoMu24')
+        addHLTPath('SingleMuon', 'IsoMu27')
+        # DoubleMuon
+        addHLTPath('DoubleMuon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
 
         return tree, noSel, backend, lumiArgs
 
