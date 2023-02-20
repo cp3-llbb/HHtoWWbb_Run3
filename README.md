@@ -16,12 +16,10 @@ Execute followings before submitting to the batch system:
 
 `$ export X509_USER_PROXY=$HOME/private/gridproxy/x509`
 
-Then start the analysis using the following command line:
+Then check the Z peak and various control plots via the following command line:
 
 `$ bambooRun -m checkZpeak.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig ../examples/ingrid.ini --distributed=driver `
 
-For data and background samples, see `config` folder
-
-Check ecal endcap issue in the era E-F-G data only:
+You can also check the Ecal Endcap issue happened during the era E-F-G data only:
 
 `bambooRun -m checkZpeak.py:checkEE config/data_2022_erasEFG.yml -o test --envConfig ../bamboo/examples/cern.ini --distributed=driver`
