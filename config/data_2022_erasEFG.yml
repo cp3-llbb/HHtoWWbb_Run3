@@ -4,15 +4,6 @@ eras:
     luminosity: 26337 # pb^-1
 dbcache: dascache
 samples:
-  Muon:
-    era: "2022"
-    type: data
-    group: "data"
-    db: ['das:/Muon/Run2022E-PromptNanoAODv10_v1-v3/NANOAOD', 'das:/Muon/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD', 'das:/Muon/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD']
-    run_range: [355794, 362760]
-    certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 75
-
   EGamma:
     era: "2022"
     type: data
