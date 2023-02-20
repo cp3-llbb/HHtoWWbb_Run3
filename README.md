@@ -6,8 +6,7 @@ Install bamboo with the instructions here: https://bamboo-hep.readthedocs.io/en/
 
 Then clone this repository inside the directory containing the bamboo installation:
 
-`git clone https://github.com/Oguz-Guzel/HHWWbb.git`
-`cd HHWWbb`
+`git clone https://github.com/Oguz-Guzel/HHWWbb.git && cd HHWWbb`
 
 Execute followings before submitting to the batch system:
 
