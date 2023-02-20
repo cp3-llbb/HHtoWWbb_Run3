@@ -172,69 +172,67 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         #                                 Plots                                     #
         #############################################################################
         plots.extend([
-            # Plot.make1D("nEl_NoSel", op.rng_len(electrons), noSel, EqBin(
-            #     10, 0., 10.), xTitle="Number of electrons"),
-            # Plot.make1D("nEl_HasElEl", op.rng_len(electrons), hasElEl, EqBin(
-            #     10, 0., 10.), xTitle="Number of electrons"),
-            # Plot.make1D("nEl_hasTwoJetsElEl", op.rng_len(electrons), hasTwoJetsElEl, EqBin(
-            #     10, 0., 10.), xTitle="Number of electrons"),
-            # Plot.make1D("nMu_NoSel", op.rng_len(muons), noSel, EqBin(
-            #     10, 0., 10.), xTitle="Number of muons"),
-            # Plot.make1D("nMu_HasMuMu", op.rng_len(muons), hasMuMu, EqBin(
-            #     10, 0., 10.), xTitle="Number of muons"),
-            # Plot.make1D("nMu_hasTwoJetsMuMu", op.rng_len(muons), hasTwoJetsMuMu, EqBin(
-            #     10, 0., 10.), xTitle="Number of muons"),
-            # Plot.make1D("nJet_NoSel", op.rng_len(ak4Jets), noSel, EqBin(
-            #     10, 0., 10.), xTitle="Number of jets"),
-            # Plot.make1D("nJet_HasElEl", op.rng_len(ak4Jets), hasElEl, EqBin(
-            #     10, 0., 10.), xTitle="Number of jets"),
-            # Plot.make1D("nJet_HasMuMu", op.rng_len(ak4Jets), hasMuMu, EqBin(
-            #     10, 0., 10.), xTitle="Number of jets"),
-            # Plot.make1D("nJet_hasTwoJetsElEl", op.rng_len(ak4Jets), hasTwoJetsElEl, EqBin(
-            #     10, 0., 10.), xTitle="Number of jets"),
-            # Plot.make1D("nJet_hasTwoJetsMuMu", op.rng_len(ak4Jets), hasTwoJetsMuMu, EqBin(
-            #     10, 0., 10.), xTitle="Number of jets"),
-            # Plot.make1D("massZto2e", op.invariant_mass(electrons[0].p4, electrons[1].p4),
-            #             hasElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
-            #             xTitle="Invariant Mass of Nelectrons=2 (in GeV/c^2)"),
-            # Plot.make1D("massZto2e_hasTwoJets", op.invariant_mass(electrons[0].p4, electrons[1].p4),
-            #             hasTwoJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
-            #             xTitle="Invariant Mass of Nelectrons=2 (in GeV/c^2)"),
-            # Plot.make1D("massZto2e_hasTwoBJets", op.invariant_mass(electrons[0].p4, electrons[1].p4),
-            #             hasTwoBJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
-            #             xTitle="Invariant Mass of Nelectrons=2 (in GeV/c^2)"),
-            # Plot.make1D("massZto2mu", op.invariant_mass(muons[0].p4, muons[1].p4),
-            #             hasMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
-            #             xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"),
-            # Plot.make1D("massZto2mu_hasTwoJets", op.invariant_mass(muons[0].p4, muons[1].p4),
-            #             hasTwoJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
-            #             xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"),
-            # Plot.make1D("massZto2mu_hasTwoBJets", op.invariant_mass(muons[0].p4, muons[1].p4),
-            #             hasTwoBJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
-            #             xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"),
-            # Plot.make1D("leadingJetPt_hasOneJet", ak4Jets[0].pt,
-            #             hasOneJet, EqBin(250, 0., 250.), title="leading jet p_T",
-            #             xTitle="Leading Jet p_T (GeV/c^2)"),
-            # Plot.make1D("leadingJetPt_hasTwoJets", ak4Jets[0].pt,
-            #             hasTwoJets, EqBin(250, 0., 250.), title="leading jet p_T",
-            #             xTitle="Leading Jet p_T (GeV/c^2)"),
-            # Plot.make1D("leadingJetPt_hasTwoJetsElEl", ak4Jets[0].pt,
-            #             hasTwoJetsElEl, EqBin(250, 0., 250.), title="leading jet p_T",
-            #             xTitle="Leading Jet p_T (GeV/c^2)"),
-            # Plot.make1D("leadingJetPt_hasTwoJetsMuMu", ak4Jets[0].pt,
-            #             hasTwoJetsMuMu, EqBin(250, 0., 250.), title="leading jet p_T",
-            #             xTitle="Leading Jet p_T (GeV/c^2)"),
-            # Plot.make1D("subleadingJetPt_NoSel", ak4Jets[1].pt,
-            #             hasTwoJets, EqBin(250, 0., 250.), title="subleading jet p_T",
-            #             xTitle="Leading Jet p_T (GeV/c^2)"),
-            # Plot.make1D("subleadingJetPt_hasElEl", ak4Jets[1].pt,
-            #             hasTwoJetsElEl, EqBin(250, 0., 250.), title="subleading jet p_T",
-            #             xTitle="Leading Jet p_T (GeV/c^2)"),
-            # Plot.make1D("subleadingJetPt_hasMuMu", ak4Jets[1].pt,
-            #             hasTwoJetsMuMu, EqBin(250, 0., 250.), title="subleading jet p_T",
-            #             xTitle="Leading Jet p_T (GeV/c^2)"),
-            Plot.make2D("el_eta_vs_phi", [electrons[0].eta, electrons[0].phi], hasElEl, [
-                        EqBin(50, -2.5, 2.5), EqBin(60, 0, 6.29)], title="electron eta vs phi")#,
+            Plot.make1D("nEl_NoSel", op.rng_len(electrons), noSel, EqBin(
+                10, 0., 10.), xTitle="Number of electrons"),
+            Plot.make1D("nEl_HasElEl", op.rng_len(electrons), hasElEl, EqBin(
+                10, 0., 10.), xTitle="Number of electrons"),
+            Plot.make1D("nEl_hasTwoJetsElEl", op.rng_len(electrons), hasTwoJetsElEl, EqBin(
+                10, 0., 10.), xTitle="Number of electrons"),
+            Plot.make1D("nMu_NoSel", op.rng_len(muons), noSel, EqBin(
+                10, 0., 10.), xTitle="Number of muons"),
+            Plot.make1D("nMu_HasMuMu", op.rng_len(muons), hasMuMu, EqBin(
+                10, 0., 10.), xTitle="Number of muons"),
+            Plot.make1D("nMu_hasTwoJetsMuMu", op.rng_len(muons), hasTwoJetsMuMu, EqBin(
+                10, 0., 10.), xTitle="Number of muons"),
+            Plot.make1D("nJet_NoSel", op.rng_len(ak4Jets), noSel, EqBin(
+                10, 0., 10.), xTitle="Number of jets"),
+            Plot.make1D("nJet_HasElEl", op.rng_len(ak4Jets), hasElEl, EqBin(
+                10, 0., 10.), xTitle="Number of jets"),
+            Plot.make1D("nJet_HasMuMu", op.rng_len(ak4Jets), hasMuMu, EqBin(
+                10, 0., 10.), xTitle="Number of jets"),
+            Plot.make1D("nJet_hasTwoJetsElEl", op.rng_len(ak4Jets), hasTwoJetsElEl, EqBin(
+                10, 0., 10.), xTitle="Number of jets"),
+            Plot.make1D("nJet_hasTwoJetsMuMu", op.rng_len(ak4Jets), hasTwoJetsMuMu, EqBin(
+                10, 0., 10.), xTitle="Number of jets"),
+            Plot.make1D("massZto2e", op.invariant_mass(electrons[0].p4, electrons[1].p4),
+                        hasElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
+                        xTitle="Invariant Mass of Nelectrons=2 (in GeV/c^2)"),
+            Plot.make1D("massZto2e_hasTwoJets", op.invariant_mass(electrons[0].p4, electrons[1].p4),
+                        hasTwoJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
+                        xTitle="Invariant Mass of Nelectrons=2 (in GeV/c^2)"),
+            Plot.make1D("massZto2e_hasTwoBJets", op.invariant_mass(electrons[0].p4, electrons[1].p4),
+                        hasTwoBJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
+                        xTitle="Invariant Mass of Nelectrons=2 (in GeV/c^2)"),
+            Plot.make1D("massZto2mu", op.invariant_mass(muons[0].p4, muons[1].p4),
+                        hasMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
+                        xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"),
+            Plot.make1D("massZto2mu_hasTwoJets", op.invariant_mass(muons[0].p4, muons[1].p4),
+                        hasTwoJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
+                        xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"),
+            Plot.make1D("massZto2mu_hasTwoBJets", op.invariant_mass(muons[0].p4, muons[1].p4),
+                        hasTwoBJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
+                        xTitle="Invariant Mass of Nmuons=2 (in GeV/c^2)"),
+            Plot.make1D("leadingJetPt_hasOneJet", ak4Jets[0].pt,
+                        hasOneJet, EqBin(250, 0., 250.), title="leading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            Plot.make1D("leadingJetPt_hasTwoJets", ak4Jets[0].pt,
+                        hasTwoJets, EqBin(250, 0., 250.), title="leading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            Plot.make1D("leadingJetPt_hasTwoJetsElEl", ak4Jets[0].pt,
+                        hasTwoJetsElEl, EqBin(250, 0., 250.), title="leading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            Plot.make1D("leadingJetPt_hasTwoJetsMuMu", ak4Jets[0].pt,
+                        hasTwoJetsMuMu, EqBin(250, 0., 250.), title="leading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            Plot.make1D("subleadingJetPt_NoSel", ak4Jets[1].pt,
+                        hasTwoJets, EqBin(250, 0., 250.), title="subleading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            Plot.make1D("subleadingJetPt_hasElEl", ak4Jets[1].pt,
+                        hasTwoJetsElEl, EqBin(250, 0., 250.), title="subleading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            Plot.make1D("subleadingJetPt_hasMuMu", ak4Jets[1].pt,
+                        hasTwoJetsMuMu, EqBin(250, 0., 250.), title="subleading jet p_T",
+                        xTitle="Leading Jet p_T (GeV/c^2)"),
             # Plot.make1D("nPU", tree.Pileup_nPU, hasElEl, EqBin(100, 0, 100), title="number of PU"),
             # Plot.make1D("nPU", tree.Pileup_nPU, hasMuMu, EqBin(100, 0, 100), title="number of PU")
         ])
@@ -245,5 +243,115 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         yields.add(hasMuMu, 'two muons')
         yields.add(hasTwoJetsMuMu, 'two muons two jets')
         yields.add(hasTwoBJetsMuMu, 'two muons two Bjets')
+
+        return plots
+
+class checkEE(NanoAODModule, HistogramsModule):
+    def __init__(self, args):
+        super(checkEE, self).__init__(args)
+        self.plotDefaults = {"show-ratio": True,
+                             "y-axis-show-zero": True,
+                             "normalized": False,
+                             "y-axis": "Events",
+                             "log-y": "both",
+                             "ratio-y-axis-range": [0.8, 1.2],
+                             "ratio-y-axis": '#frac{Data}{MC}',
+                             "sort-by-yields": True}
+
+    def addArgs(self, parser):
+        super(checkEE, self).addArgs(parser)
+        parser.add_argument("--era",
+                            action='store',
+                            type=str,
+                            default=None,
+                            help='This has no use right now!')
+
+    def prepareTree(self, tree, sample=None, sampleCfg=None):
+
+        def isMC():
+            if sampleCfg['type'] == 'data':
+                return False
+            elif sampleCfg['type'] == 'mc':
+                return True
+            else:
+                print(
+                    f"Please specify the type of {sample} dataset in the configuration file (data or mc) and re-run.")
+                exit()
+
+        era = sampleCfg['era']
+        self.is_MC = isMC()
+        self.triggersPerPrimaryDataset = {}
+
+        def addHLTPath(PD, HLT):
+            if PD not in self.triggersPerPrimaryDataset.keys():
+                self.triggersPerPrimaryDataset[PD] = []
+            try:
+                self.triggersPerPrimaryDataset[PD].append(
+                    getattr(tree.HLT, HLT))
+            except AttributeError:
+                print("Couldn't find branch tree.HLT.%s, will omit it!" % HLT)
+
+        def getNanoAODDescription():  # implemented from Sebastien's analysis (mentioned on issue #101 on bamboo gitlab page)
+            groups = ["HLT_", "MET_", "Pileup_"]
+            collections = ["nElectron", "nJet", "nMuon", "nFatJet"]
+            varReaders = []
+            return NanoAODDescription(groups=groups, collections=collections, systVariations=varReaders)
+
+        tree, noSel, backend, lumiArgs = super(checkEE, self).prepareTree(tree=tree,
+                                                                                 sample=sample,
+                                                                                 sampleCfg=sampleCfg,
+                                                                                 description=getNanoAODDescription(),
+                                                                                 backend="lazy")
+        ### Triggers ###
+        # EGamma
+        addHLTPath('EGamma', 'Ele32_WPTight_Gsf')
+        addHLTPath('EGamma', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
+
+
+        return tree, noSel, backend, lumiArgs
+
+    def definePlots(self, tree, noSel, sample=None, sampleCfg=None):
+        plots = []
+        yields = CutFlowReport("yields", printInLog=True, recursive=True)
+        plots.append(yields)
+        yields.add(noSel, 'No Selection')
+        #############################################################################
+        #                                 Electrons                                 #
+        #############################################################################
+        electrons = op.sort(op.select(tree.Electron, lambda el: op.AND(
+            el.pt >= 7.,
+            op.abs(el.eta) <= 2.5,
+            op.abs(el.dxy) <= 0.05,
+            op.abs(el.dz) <= 1.,
+            el.miniPFRelIso_all <= 0.4,
+            el.sip3d <= 8,
+            # el.mvaNoIso_WPL,
+            el.lostHits <= 1
+        )), lambda el: -el.pt)
+
+        #############################################################################
+        #                          Gen Weight and Triggers                          #
+        #############################################################################
+        if self.is_MC:
+            noSel = noSel.refine('genWeight', weight=tree.genWeight, cut=(
+                op.OR(*chain.from_iterable(self.triggersPerPrimaryDataset.values()))))
+        else:
+            noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
+                sample, self.triggersPerPrimaryDataset)])
+        #############################################################################
+        #                               Selections                                  #
+        #############################################################################
+
+        # has at least one electron pair
+        hasElEl = noSel.refine("hasOSElEl", cut=[op.rng_len(electrons) >= 2,
+                                                 electrons[0].charge != electrons[1].charge, electrons[0].pt > 20., electrons[1].pt > 10.])
+
+        #############################################################################
+        #                                 Plots                                     #
+        #############################################################################
+        plots.extend([
+            Plot.make2D("el_eta_vs_phi", [electrons[0].eta, electrons[0].phi], hasElEl, [
+                        EqBin(50, -2.5, 2.5), EqBin(60, -4, 4)], title="electron eta vs phi")
+        ])
 
         return plots
