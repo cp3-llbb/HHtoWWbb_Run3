@@ -2,7 +2,7 @@
 
 **HH->WWbb Run-3 analysis**
 
-Install bamboo using the instructions here: https://bamboo-hep.readthedocs.io/en/latest/install.html
+Install bamboo with the instructions here: https://bamboo-hep.readthedocs.io/en/latest/install.html
 
 Then clone this repository inside the directory containing the bamboo installation:
 
