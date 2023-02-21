@@ -113,7 +113,7 @@ plotIt:
     margin-bottom: 0.15
     luminosity-label: '%1$.2f fb^{-1} (13.6 TeV)'
     experiment: CMS
-    extra-label: Run 3 (2022)
+    extra-label: Run 3 (2022) - Work in progress
     error-fill-style: 3154
     error-fill-color: "#ee556270"
     ratio-fit-error-fill-style: 1001
@@ -142,5 +142,9 @@ plotIt:
     log-y: both
     y-axis-show-zero: True
     save-extensions: [pdf]
-    show-ratio: False
+    show-ratio: True
     sort-by-yields: True
+    legend-columns: 2
+    ratio-y-axis: '#frac{Data}{MC}'
+    ratio-y-axis-range: [0.8, 1.2]
+    normalized: False
