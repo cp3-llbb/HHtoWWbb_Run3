@@ -18,7 +18,7 @@ Execute followings before submitting to the batch system:
 
 Then check the Z peak and various control plots via the following command line:
 
-`$ bambooRun -m checkZpeak.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig ../examples/ingrid.ini --distributed=driver `
+`$ bambooRun -m checkZpeak.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig ../bamboo/examples/ingrid.ini --distributed=driver `
 
 You can check also the Ecal Endcap issue (a pipe leak) happened during the era E-F-G data only or before (eras C and D):
 
