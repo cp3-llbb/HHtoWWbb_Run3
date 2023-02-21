@@ -12,14 +12,6 @@ from itertools import chain
 class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
     def __init__(self, args):
         super(NanoBaseHHWWbb, self).__init__(args)
-        self.plotDefaults = {"show-ratio": True,
-                             "y-axis-show-zero": True,
-                             "normalized": False,
-                             "y-axis": "Events",
-                             "log-y": "both",
-                             "ratio-y-axis-range": [0.8, 1.2],
-                             "ratio-y-axis": '#frac{Data}{MC}',
-                             "sort-by-yields": True}
 
     def addArgs(self, parser):
         super(NanoBaseHHWWbb, self).addArgs(parser)
