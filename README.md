@@ -22,4 +22,4 @@ Then check the Z peak and various control plots via the following command line:
 
 You can check also the Ecal Endcap issue happened during the era E-F-G data only:
 
-`bambooRun -m checkZpeak.py:checkEE config/data_2022_erasEFG.yml -o test --envConfig ../bamboo/examples/cern.ini --distributed=driver`
+`bambooRun -m checkZpeak.py:checkEE config/data_2022_splitErasCDandEFG.yml -o test --envConfig ../bamboo/examples/cern.ini --distributed=driver --era 2022<CD or EFG>`
