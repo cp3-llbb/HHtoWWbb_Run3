@@ -20,6 +20,6 @@ Then check the Z peak and various control plots via the following command line:
 
 `$ bambooRun -m checkZpeak.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig ../examples/ingrid.ini --distributed=driver `
 
-You can check also the Ecal Endcap issue happened during the era E-F-G data only:
+You can check also the Ecal Endcap issue (a pipe leak) happened during the era E-F-G data only or before (eras C and D):
 
 `bambooRun -m checkZpeak.py:checkEE config/data_2022_splitErasCDandEFG.yml -o test --envConfig ../bamboo/examples/cern.ini --distributed=driver --era 2022<CD or EFG>`
