@@ -5,7 +5,7 @@ eras:
 dbcache: dascache
 samples:
   EGamma:
-    era: "2022CD"
+    era: "2022"
     type: data
     group: "data"
     db: ['das:/EGamma/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/EGamma/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD','das:/EGamma/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
