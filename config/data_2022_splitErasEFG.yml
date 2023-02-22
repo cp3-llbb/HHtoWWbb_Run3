@@ -1,27 +1,17 @@
 tree: Events
 eras:
-  "2022CD":
-    luminosity: 7865 # pb^-1
-  "2022EFG":
+  "2022":
     luminosity: 26337 # pb^-1
 dbcache: dascache
 samples:
   EGamma:
-    era: "2022CD"
-    type: data
-    group: "data"
-    db: ['das:/EGamma/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/EGamma/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD','das:/EGamma/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
-    run_range: [355794, 362760]
-    certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 75
-  EGamma:
-    era: "2022EFG"
+    era: "2022"
     type: data
     group: "data"
     db: ['das:/EGamma/Run2022E-PromptNanoAODv10_v1-v2/NANOAOD', 'das:/EGamma/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD', 'das:/EGamma/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD']
-    run_range: [355794, 362760]
+    run_range: [359022, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 75
+    split: 175
 
 plotIt:
   configuration:
@@ -33,7 +23,7 @@ plotIt:
     margin-bottom: 0.15
     luminosity-label: '%1$.2f fb^{-1} (13.6 TeV)'
     experiment: CMS
-    extra-label: Run 3 (2022)
+    extra-label: Run 3 (2022) - Work in progress
     error-fill-style: 3154
     error-fill-color: "#ee556270"
     yields-table-align: v
