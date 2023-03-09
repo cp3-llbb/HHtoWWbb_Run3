@@ -12,9 +12,7 @@ Execute followings before submitting to the batch system:
 
 `$ mkdir -p ~/private/gridproxy`
 
-`$ voms-proxy-init --voms cms -rfc --valid 96:00  --out ~/private/gridproxy/x509`
-
-`$ export X509_USER_PROXY=$HOME/private/gridproxy/x509`
+`$ voms-proxy-init --voms cms -rfc --valid 96:00`
 
 Then check the Z peak and various control plots via the following command line:
 
