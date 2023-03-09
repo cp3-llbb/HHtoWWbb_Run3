@@ -1,0 +1,5 @@
+# ignore output directories
+output*
+
+# ignore some others
+__pycache__/
