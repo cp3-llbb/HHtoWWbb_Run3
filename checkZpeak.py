@@ -1,4 +1,3 @@
-
 from bamboo.analysismodules import NanoAODModule, HistogramsModule
 from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
 from bamboo.treedecorators import NanoAODDescription
@@ -24,16 +23,16 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
     def prepareTree(self, tree, sample=None, sampleCfg=None):
 
         def isMC():
-            if sampleCfg['type'] == 'data':
-                return False
-            elif sampleCfg['type'] == 'mc':
-                return True
-            else:
+            try:
+                if sampleCfg['type'] == 'data':
+                    return False
+                elif sampleCfg['type'] == 'mc':
+                    return True
+            except:
                 print(
                     f"Please specify the type of {sample} dataset in the configuration file (data or mc) and re-run.")
-                exit()
 
-        era = sampleCfg['era']
+        era = sampleCfg['era']  # reserved for future use
         self.is_MC = isMC()
         self.triggersPerPrimaryDataset = {}
 
