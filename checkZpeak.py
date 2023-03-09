@@ -23,14 +23,14 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
     def prepareTree(self, tree, sample=None, sampleCfg=None):
 
         def isMC():
-            try:
-                if sampleCfg['type'] == 'data':
-                    return False
-                elif sampleCfg['type'] == 'mc':
-                    return True
-            except:
-                print(
-                    f"Please specify the type of {sample} dataset in the configuration file (data or mc) and re-run.")
+
+            if sampleCfg['type'] == 'data':
+                return False
+            elif sampleCfg['type'] == 'mc':
+                return True
+            else:
+                raise Exception(
+                    f"Please specify correctly the type of {sample} dataset in the configuration file (data or mc) and re-run.")
 
         era = sampleCfg['era']  # reserved for future use
         self.is_MC = isMC()
