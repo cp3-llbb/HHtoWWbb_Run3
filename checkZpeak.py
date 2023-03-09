@@ -23,7 +23,6 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
     def prepareTree(self, tree, sample=None, sampleCfg=None):
 
         def isMC():
-
             if sampleCfg['type'] == 'data':
                 return False
             elif sampleCfg['type'] == 'mc':
