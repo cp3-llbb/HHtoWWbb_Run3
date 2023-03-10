@@ -21,7 +21,6 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                             help='This has no use right now!')
 
     def prepareTree(self, tree, sample=None, sampleCfg=None):
-
         def isMC():
             if sampleCfg['type'] == 'data':
                 return False
@@ -29,7 +28,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 return True
             else:
                 raise Exception(
-                    f"Please specify correctly the type of {sample} dataset in the configuration file (data or mc) and re-run.")
+                    f"Please specify correctly the type (data or mc) of {sample} dataset in the configuration file and re-run.")
 
         era = sampleCfg['era']  # reserved for future use
         self.is_MC = isMC()
@@ -44,7 +43,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             except AttributeError:
                 print("Couldn't find branch tree.HLT.%s, will omit it!" % HLT)
 
-        def getNanoAODDescription():  # implemented from Sebastien's analysis (mentioned on issue #101 on bamboo gitlab page)
+        def getNanoAODDescription():
             groups = ["HLT_", "MET_", "Pileup_"]
             collections = ["nElectron", "nJet", "nMuon", "nFatJet"]
             varReaders = []
