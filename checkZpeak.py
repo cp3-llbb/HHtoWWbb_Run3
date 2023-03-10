@@ -27,7 +27,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             elif sampleCfg['type'] == 'mc':
                 return True
             else:
-                raise Exception(
+                raise RuntimeError(
                     f"Please specify correctly the type (data or mc) of {sample} dataset in the configuration file and re-run.")
 
         era = sampleCfg['era']  # reserved for future use
