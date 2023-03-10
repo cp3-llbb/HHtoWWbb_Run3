@@ -28,7 +28,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 return True
             else:
                 raise RuntimeError(
-                    f"Please specify correctly the type (data or mc) of {sample} dataset in the configuration file and re-run.")
+                    f"The type '{sampleCfg['type']}' of {sample} dataset not understood.")
 
         era = sampleCfg['era']  # reserved for future use
         self.is_MC = isMC()
@@ -157,6 +157,14 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         # has at least two ak4 jets
         hasTwoJets = noSel.refine('hasTwoJets', cut=[op.rng_len(ak4Jets) >= 2])
 
+	# has at least two leptons
+	# hasTwoLeptons = noSel.refine('hasTwoLeptons', cut[op.rng_len(leptons] >= 2)
+        #############################################################################
+        #                            Categorisations                                #
+        #############################################################################
+	# DL channel
+	# boosted
+	## DLboosted = 
         #############################################################################
         #                                 Plots                                     #
         #############################################################################
