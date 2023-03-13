@@ -157,14 +157,51 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         # has at least two ak4 jets
         hasTwoJets = noSel.refine('hasTwoJets', cut=[op.rng_len(ak4Jets) >= 2])
 
-	# has at least two leptons
-	# hasTwoLeptons = noSel.refine('hasTwoLeptons', cut[op.rng_len(leptons] >= 2)
-        #############################################################################
-        #                            Categorisations                                #
-        #############################################################################
-	# DL channel
-	# boosted
-	## DLboosted = 
+        ### Di-leptonic channel ###
+
+        # has exactly two leptons
+        hasTwoL = noSel.refine('hasTwoL', cut=(
+            op.OR(
+                op.AND(op.rng_len(electrons) == 2,
+                       electrons[0].charge != electrons[1].charge, electrons[0].pt > 25., electrons[1].pt > 15.),
+                op.AND(op.rng_len(muons) == 2,
+                       muons[0].charge != muons[1].charge, muons[0].pt > 25., muons[1].pt > 15.),
+                op.AND(op.rng_len(electrons) == 1, op.rng_len(muons)
+                       == 1, electrons[0].charge != muons[0].charge, op.OR(op.AND(electrons[0].pt > 25., muons[0].pt > 15.), op.AND(electrons[0].pt > 15., muons[0].pt > 25.)))
+            )
+        ))
+
+        leptons = op.combine((electrons, muons), N=2,
+                             pred=lambda l1, l2: l1.charge != l2.charge)
+        firstLeptonPair = leptons[0]
+        # boosted -> and at least one b-tagged ak8 jet
+        DL_boosted = hasTwoL.refine(
+            'DL_boosted', cut=(op.rng_len(ak8BJets) >= 1))
+
+        # resolved -> and at least two ak4 jets with at least one b-tagged and no ak8 jets
+        DL_resolved = hasTwoL.refine('DL_resolved', cut=(op.AND(op.rng_len(
+            ak4Jets) >= 2, op.rng_len(ak4BJets) >= 1, op.rng_len(ak8Jets) == 0)))
+
+        ### Single-leptonic channel ###
+        # has exactly one lepton
+        hasOneL = noSel.refine('hasOneL', cut=(op.OR(op.AND(op.rng_len(
+            electrons) == 1, electrons[0].pt > 32.), op.AND(op.rng_len(muons) == 1, muons[0].pt > 25.))))
+
+        ak4jetPair = op.combine((ak4Jets, ak4BJets), N=2, pred=lambda j1, j2: op.AND(
+            op.deltaR(j1.p4, j2.p4) > 0.8, op.AND(j1.pt > 25., j2.pt > 25.)))
+        firstJetPair = ak4jetPair[0]
+
+        ak4ak8jetPair = op.combine((ak4Jets, ak8Jets), N=2, pred=lambda j1, j2: op.AND(
+            op.deltaR(j1.p4, j2.p4) > 1.2, op.AND(j1.pt > 25., j2.pt > 200.)))
+        firstAK4AK8Pair = ak4ak8jetPair[0]
+
+        # boosted -> and at least one b-tagged ak8 jet and at least one ak4 jet outside the b-tagged ak8 jet
+        SL_boosted = hasOneL.refine('SL_boosted', cut=(op.AND(op.rng_len(ak8BJets) >= 1, op.AND(
+            op.rng_len(ak4Jets) >= 1, op.deltaR(firstAK4AK8Pair[0].p4, firstAK4AK8Pair[1].p4) > 1.2))))
+        # resolved -> and at least three ak4 jets with at least one b-tagged and no ak8 jets
+        SL_resolved = hasOneL.refine('SL_resolved', cut=(op.AND(op.rng_len(
+            ak4Jets) >= 3, op.rng_len(ak4BJets) >= 1, op.rng_len(ak8Jets) == 0)))
+
         #############################################################################
         #                                 Plots                                     #
         #############################################################################
@@ -232,6 +269,16 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                         xTitle="Leading Jet p_T (GeV/c^2)"),
             # Plot.make1D("nPU", tree.Pileup_nPU, hasElEl, EqBin(100, 0, 100), title="number of PU"),
             # Plot.make1D("nPU", tree.Pileup_nPU, hasMuMu, EqBin(100, 0, 100), title="number of PU")
+            Plot.make1D("DL_InvM_ll", op.invariant_mass(firstLeptonPair[0].p4, firstLeptonPair[1].p4), hasTwoL, EqBin(
+                120, 40., 120.), title="InvM(ll)", xTitle="Invariant Mass of leptons (GeV/c^2)"),
+            Plot.make1D("DL_InvM_ll_boosted", op.invariant_mass(firstLeptonPair[0].p4, firstLeptonPair[1].p4), DL_boosted, EqBin(
+                120, 40., 120.), title="InvM(ll)", xTitle="Invariant Mass of leptons (boosted) (GeV/c^2)"),
+            Plot.make1D("DL_InvM_ll_resolved", op.invariant_mass(firstLeptonPair[0].p4, firstLeptonPair[1].p4), DL_resolved, EqBin(
+                120, 40., 120.), title="InvM(ll)", xTitle="Invariant Mass of leptons (resolved) (GeV/c^2)"),
+            Plot.make1D("SL_InvM_jj_resolved", op.invariant_mass(firstJetPair[0].p4, firstJetPair[1].p4), SL_resolved, EqBin(
+                120, 40., 120.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
+            Plot.make1D("SL_InvM_jj_boosted", op.invariant_mass(firstAK4AK8Pair[0].p4, firstAK4AK8Pair[1].p4), SL_boosted, EqBin(
+                120, 40., 120.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)")
         ])
 
         yields.add(hasElEl, 'two electrons')
@@ -240,5 +287,8 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         yields.add(hasMuMu, 'two muons')
         yields.add(hasTwoJetsMuMu, 'two muons two jets')
         yields.add(hasTwoBJetsMuMu, 'two muons two Bjets')
+        yields.add(hasTwoL, 'two leptons')
+        yields.add(DL_boosted, 'DL boosted')
+        yields.add(DL_resolved, 'DL resolved')
 
         return plots
