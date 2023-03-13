@@ -17,6 +17,7 @@ Execute followings before submitting to the batch system:
 Optinally:
 
 `$ voms-proxy-init --voms cms -rfc --valid 96:00  --out ~/private/gridproxy/x509`
+
 `$ export X509_USER_PROXY=$HOME/private/gridproxy/x509`
 
 Then check various control plots via the following command line:
