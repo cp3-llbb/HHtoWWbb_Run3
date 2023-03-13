@@ -6,13 +6,19 @@ Install **bamboo analysis framework** with the instructions here: https://bamboo
 
 Then clone this repository inside the directory containing the bamboo installation:
 
-```git clone https://github.com/Oguz-Guzel/HHWWbb.git && cd HHWWbb```
+```
+git clone https://github.com/Oguz-Guzel/HHWWbb.git && cd HHWWbb
+```
 
 Execute followings before submitting to the batch system:
 
-`$ mkdir -p ~/private/gridproxy`
+```
+mkdir -p ~/private/gridproxy
+```
 
-`$ voms-proxy-init --voms cms -rfc --valid 96:00`
+```
+voms-proxy-init --voms cms -rfc --valid 96:00
+```
 
 Optinally:
 
@@ -22,7 +28,9 @@ export X509_USER_PROXY=$HOME/private/gridproxy/x509
 ```
 Then check various control plots via the following command line:
 
-`$ bambooRun -m analysis.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig ../bamboo/examples/ingrid.ini --distributed=driver `
+```
+bambooRun -m analysis.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig ../bamboo/examples/ingrid.ini --distributed=driver
+```
 
 versioning
 **v1**: first succesful run on all eras
