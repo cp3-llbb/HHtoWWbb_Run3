@@ -14,6 +14,6 @@ Execute followings before submitting to the batch system:
 
 `$ voms-proxy-init --voms cms -rfc --valid 96:00`
 
-Then check the Z peak and various control plots via the following command line:
+Then check various control plots via the following command line:
 
-`$ bambooRun -m checkZpeak.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig ../bamboo/examples/ingrid.ini --distributed=driver `
+`$ bambooRun -m analysis.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig ../bamboo/examples/ingrid.ini --distributed=driver `

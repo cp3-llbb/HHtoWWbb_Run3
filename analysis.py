@@ -270,15 +270,15 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             # Plot.make1D("nPU", tree.Pileup_nPU, hasElEl, EqBin(100, 0, 100), title="number of PU"),
             # Plot.make1D("nPU", tree.Pileup_nPU, hasMuMu, EqBin(100, 0, 100), title="number of PU")
             Plot.make1D("DL_InvM_ll", op.invariant_mass(firstLeptonPair[0].p4, firstLeptonPair[1].p4), hasTwoL, EqBin(
-                120, 40., 120.), title="InvM(ll)", xTitle="Invariant Mass of leptons (GeV/c^2)"),
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of leptons (GeV/c^2)"),
             Plot.make1D("DL_InvM_ll_boosted", op.invariant_mass(firstLeptonPair[0].p4, firstLeptonPair[1].p4), DL_boosted, EqBin(
-                120, 40., 120.), title="InvM(ll)", xTitle="Invariant Mass of leptons (boosted) (GeV/c^2)"),
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of leptons (boosted) (GeV/c^2)"),
             Plot.make1D("DL_InvM_ll_resolved", op.invariant_mass(firstLeptonPair[0].p4, firstLeptonPair[1].p4), DL_resolved, EqBin(
-                120, 40., 120.), title="InvM(ll)", xTitle="Invariant Mass of leptons (resolved) (GeV/c^2)"),
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of leptons (resolved) (GeV/c^2)"),
             Plot.make1D("SL_InvM_jj_resolved", op.invariant_mass(firstJetPair[0].p4, firstJetPair[1].p4), SL_resolved, EqBin(
-                120, 40., 120.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
+                160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
             Plot.make1D("SL_InvM_jj_boosted", op.invariant_mass(firstAK4AK8Pair[0].p4, firstAK4AK8Pair[1].p4), SL_boosted, EqBin(
-                120, 40., 120.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)")
+                160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)")
         ])
 
         yields.add(hasElEl, 'two electrons')
