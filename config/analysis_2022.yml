@@ -11,7 +11,7 @@ samples:
     db: ['das:/Muon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/Muon/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/Muon/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD', 'das:/Muon/Run2022E-PromptNanoAODv10_v1-v3/NANOAOD', 'das:/Muon/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD', 'das:/Muon/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD']
     run_range: [355794, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 220
+    split: 200
 
   EGamma:
     era: "2022"
@@ -20,7 +20,16 @@ samples:
     db: ['das:/EGamma/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/EGamma/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD','das:/EGamma/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD', 'das:/EGamma/Run2022E-PromptNanoAODv10_v1-v2/NANOAOD', 'das:/EGamma/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD', 'das:/EGamma/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD']
     run_range: [355794, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 330
+    split: 300
+
+  MuonEG:
+    era: "2022"
+    type: data
+    group: "data"
+    db: ['das:/MuonEG/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/MuonEG/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/MuonEG/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD', 'das:/MuonEG/Run2022E-PromptNanoAODv10_v1-v3/NANOAOD', 'das:/MuonEG/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD', 'das:/MuonEG/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD']
+    run_range: [355794, 362760]
+    certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
+    split: 100
 
   DoubleMuon:
     era: "2022"
@@ -29,6 +38,7 @@ samples:
     db: das:/DoubleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
+    split: 10
 
   SingleMuon:
     era: "2022"
