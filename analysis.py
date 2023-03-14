@@ -171,9 +171,16 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             )
         ))
 
-        leptons = op.combine((electrons, muons), N=2,
+        emuPair = op.combine((electrons, muons), N=2,
                              pred=lambda l1, l2: l1.charge != l2.charge)
-        firstLeptonPair = leptons[0]
+        eePair = op.combine(electrons, N=2, pred=lambda l1,
+                            l2: l1.charge != l2.charge)
+        mumuPair = op.combine(muons, N=2, pred=lambda l1,
+                              l2: l1.charge != l2.charge)
+
+        firstEMUpair = emuPair[0]
+        firstEEpair = eePair[0]
+        firstMUMUpair = mumuPair[0]
         # boosted -> and at least one b-tagged ak8 jet
         DL_boosted = hasTwoL.refine(
             'DL_boosted', cut=(op.rng_len(ak8BJets) >= 1))
@@ -191,13 +198,13 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             op.deltaR(j1.p4, j2.p4) > 0.8, op.AND(j1.pt > 25., j2.pt > 25.)))
         firstJetPair = ak4jetPair[0]
 
-        ak4ak8jetPair = op.combine((ak4Jets, ak8Jets), N=2, pred=lambda j1, j2: op.AND(
+        ak4ak8Bpair = op.combine((ak4Jets, ak8BJets), N=2, pred=lambda j1, j2: op.AND(
             op.deltaR(j1.p4, j2.p4) > 1.2, op.AND(j1.pt > 25., j2.pt > 200.)))
-        firstAK4AK8Pair = ak4ak8jetPair[0]
+        firstAK4AK8Bpair = ak4ak8Bpair[0]
 
         # boosted -> and at least one b-tagged ak8 jet and at least one ak4 jet outside the b-tagged ak8 jet
         SL_boosted = hasOneL.refine('SL_boosted', cut=(op.AND(op.rng_len(ak8BJets) >= 1, op.AND(
-            op.rng_len(ak4Jets) >= 1, op.deltaR(firstAK4AK8Pair[0].p4, firstAK4AK8Pair[1].p4) > 1.2))))
+            op.rng_len(ak4Jets) >= 1, op.deltaR(firstAK4AK8Bpair[0].p4, firstAK4AK8Bpair[1].p4) > 1.2))))
         # resolved -> and at least three ak4 jets with at least one b-tagged and no ak8 jets
         SL_resolved = hasOneL.refine('SL_resolved', cut=(op.AND(op.rng_len(
             ak4Jets) >= 3, op.rng_len(ak4BJets) >= 1, op.rng_len(ak8Jets) == 0)))
@@ -269,15 +276,23 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                         xTitle="Leading Jet p_T (GeV/c^2)"),
             # Plot.make1D("nPU", tree.Pileup_nPU, hasElEl, EqBin(100, 0, 100), title="number of PU"),
             # Plot.make1D("nPU", tree.Pileup_nPU, hasMuMu, EqBin(100, 0, 100), title="number of PU")
-            Plot.make1D("DL_InvM_ll", op.invariant_mass(firstLeptonPair[0].p4, firstLeptonPair[1].p4), hasTwoL, EqBin(
-                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of leptons (GeV/c^2)"),
-            Plot.make1D("DL_InvM_ll_boosted", op.invariant_mass(firstLeptonPair[0].p4, firstLeptonPair[1].p4), DL_boosted, EqBin(
-                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of leptons (boosted) (GeV/c^2)"),
-            Plot.make1D("DL_InvM_ll_resolved", op.invariant_mass(firstLeptonPair[0].p4, firstLeptonPair[1].p4), DL_resolved, EqBin(
-                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of leptons (resolved) (GeV/c^2)"),
+            Plot.make1D("DL_InvM_emu_boosted", op.invariant_mass(firstEMUpair[0].p4, firstEMUpair[1].p4), DL_boosted, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pair (boosted) (GeV/c^2)"),
+            Plot.make1D("DL_InvM_ee_boosted", op.invariant_mass(firstEEpair[0].p4, firstEEpair[1].p4), DL_boosted, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electrons (boosted) (GeV/c^2)"),
+            Plot.make1D("DL_InvM_mumu_boosted", op.invariant_mass(firstMUMUpair[0].p4, firstMUMUpair[1].p4), DL_boosted, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of muons (boosted) (GeV/c^2)"),
+
+            Plot.make1D("DL_InvM_emu_resolved", op.invariant_mass(firstEMUpair[0].p4, firstEMUpair[1].p4), DL_resolved, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pair (boosted) (GeV/c^2)"),
+            Plot.make1D("DL_InvM_ee_resolved", op.invariant_mass(firstEEpair[0].p4, firstEEpair[1].p4), DL_resolved, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electrons (boosted) (GeV/c^2)"),
+            Plot.make1D("DL_InvM_mumu_resolved", op.invariant_mass(firstMUMUpair[0].p4, firstMUMUpair[1].p4), DL_resolved, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of muons (boosted) (GeV/c^2)"),
+
             Plot.make1D("SL_InvM_jj_resolved", op.invariant_mass(firstJetPair[0].p4, firstJetPair[1].p4), SL_resolved, EqBin(
                 160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
-            Plot.make1D("SL_InvM_jj_boosted", op.invariant_mass(firstAK4AK8Pair[0].p4, firstAK4AK8Pair[1].p4), SL_boosted, EqBin(
+            Plot.make1D("SL_InvM_jj_boosted", op.invariant_mass(firstAK4AK8Bpair[0].p4, firstAK4AK8Bpair[1].p4), SL_boosted, EqBin(
                 160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)")
         ])
 
