@@ -290,5 +290,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         yields.add(hasTwoL, 'two leptons')
         yields.add(DL_boosted, 'DL boosted')
         yields.add(DL_resolved, 'DL resolved')
+        yields.add(SL_boosted, 'SL boosted')
+        yields.add(SL_resolved, 'SL resolved')
 
         return plots
