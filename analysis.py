@@ -62,6 +62,8 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         # EGamma
         addHLTPath('EGamma', 'Ele32_WPTight_Gsf')
         addHLTPath('EGamma', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
+        # MuonEG
+        addHLTPath('MuonEG', 'HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ')
         # SingleMuon
         addHLTPath('SingleMuon', 'IsoMu24')
         addHLTPath('SingleMuon', 'IsoMu27')
