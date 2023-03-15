@@ -111,7 +111,8 @@ samples:
     type: mc
     cross-section: 16.7
     generated-events: genEventSumw
-    split: 2
+    split: 10
+
 
 plotIt:
   configuration:
