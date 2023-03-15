@@ -17,10 +17,15 @@ mkdir -p ~/private/gridproxy
 voms-proxy-init --voms cms -rfc --valid 96:00  --out ~/private/gridproxy/x509
 export X509_USER_PROXY=$HOME/private/gridproxy/x509
 ```
-Then check various control plots via the following command line:
+
+Set working directory
+```
+export PYTHONPATH="${PYTHONPATH}:{PWD}
+```
+Then plot various control regions via the following command line:
 
 ```
-bambooRun -m analysis.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig ../bamboo/examples/ingrid.ini --distributed=driver
+bambooRun -m python/analysis.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig ../bamboo/examples/ingrid.ini --distributed=driver
 ```
 
 versioning
