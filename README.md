@@ -28,5 +28,5 @@ export X509_USER_PROXY=$HOME/private/gridproxy/x509
 Then plot various control regions via the following command line:
 
 ```
-bambooRun -m python/analysis.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig ../bamboo/examples/ingrid.ini --distributed=driver
+bambooRun -m python/controlPlotter.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig ../bamboo/examples/ingrid.ini --distributed=driver
 ```
