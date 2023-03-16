@@ -27,16 +27,3 @@ Then plot various control regions via the following command line:
 ```
 bambooRun -m python/analysis.py:NanoBaseHHWWbb config/analysis_2022.yml -o output-Run_2022 --envConfig ../bamboo/examples/ingrid.ini --distributed=driver
 ```
-
-versioning
-
-**v1**: first succesful run on all eras
-
-**v2**: add triggers on MC
-
-**v3**: add Wjets and VV MC
-
-**v4**: add DY-M-10to50
-
-**v5**: add SL and DL channels
-
