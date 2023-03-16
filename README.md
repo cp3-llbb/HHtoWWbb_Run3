@@ -1,5 +1,4 @@
 
-[![Manual workflow](https://github.com/Oguz-Guzel/HHWWbbRun3/actions/workflows/manual.yml/badge.svg)](https://github.com/Oguz-Guzel/HHWWbbRun3/actions/workflows/manual.yml)
 
 ----WORK IN PROGRESS----
 
