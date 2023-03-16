@@ -7,7 +7,7 @@ Install **bamboo analysis framework** with the instructions here: https://bamboo
 Then clone this repository inside the directory containing the bamboo installation:
 
 ```
-git clone https://github.com/Oguz-Guzel/HHWWbb.git && cd HHWWbb
+git clone https://github.com/Oguz-Guzel/HHWWbbRun3.git && cd HHWWbbRun3
 ```
 
 Execute these each time you start from a clean shell:
