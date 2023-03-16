@@ -27,18 +27,25 @@ def eleDef(el):
         el.lostHits <= 1
     )
 
-
-def ak8jetDef(jet):
-    return op.AND(
-        jet.jetId & 2,  # tight
-        jet.pt > 200.,
-        op.abs(jet.eta) <= 2.4
-    )
-
-
 def ak4jetDef(jet):
     return op.AND(
         jet.jetId & 2,  # tight
         jet.pt > 25.,
         op.abs(jet.eta) <= 2.4
+    )
+
+def ak8jetDef(jet):
+    return op.AND(
+        jet.jetId & 2,  # tight
+        jet.subJet1.isValid,
+        jet.subJet2.isValid,
+        jet.subJet1.pt > 20.,
+        jet.subJet2.pt > 20.,
+        op.abs(jet.subJet1.eta) <= 2.4,
+        op.abs(jet.subJet2.eta) <= 2.4,
+        jet.msoftdrop >= 30.,
+        jet.msoftdrop <= 210.,
+        jet.pt > 200.,
+        op.abs(jet.eta) <= 2.4,
+        jet.tau2 / jet.tau1 <= 0.75
     )
