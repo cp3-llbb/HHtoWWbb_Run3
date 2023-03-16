@@ -10,7 +10,14 @@ Then clone this repository inside the directory containing the bamboo installati
 git clone https://github.com/Oguz-Guzel/HHWWbb.git && cd HHWWbb
 ```
 
-Execute followings before submitting to the batch system:
+Execute these each time you start from a clean shell:
+```
+source /cvmfs/sft.cern.ch/lcg/views/LCG_102/x86_64-centos7-gcc11-opt/setup.sh
+source Bamboo/bamboovenv/bin/activate
+export PYTHONPATH="${PYTHONPATH}:${PWD}/python/"
+```
+
+and the followings before submitting to the batch system:
 
 ```
 mkdir -p ~/private/gridproxy
@@ -18,10 +25,6 @@ voms-proxy-init --voms cms -rfc --valid 96:00  --out ~/private/gridproxy/x509
 export X509_USER_PROXY=$HOME/private/gridproxy/x509
 ```
 
-Set working directory
-```
-export PYTHONPATH="${PYTHONPATH}:${PWD}/python/"
-```
 Then plot various control regions via the following command line:
 
 ```
