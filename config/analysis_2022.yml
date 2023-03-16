@@ -66,7 +66,7 @@ samples:
     type: mc
     cross-section: 4515
     generated-events: genEventSumw
-    split: 100
+    split: 120
 
   DY10to50:
     era: "2022"
