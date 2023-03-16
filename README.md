@@ -20,7 +20,7 @@ export X509_USER_PROXY=$HOME/private/gridproxy/x509
 
 Set working directory
 ```
-export PYTHONPATH="${PYTHONPATH}:{PWD}"
+export PYTHONPATH="${PYTHONPATH}:${PWD}"
 ```
 Then plot various control regions via the following command line:
 
