@@ -16,7 +16,7 @@ git clone https://github.com/Oguz-Guzel/HHWWbbRun3.git && cd HHWWbbRun3
 Execute these each time you start from a clean shell:
 ```
 source /cvmfs/sft.cern.ch/lcg/views/LCG_102/x86_64-centos7-gcc11-opt/setup.sh
-source Bamboo/bamboovenv/bin/activate
+source (path to your bamboo installation)/bamboovenv/bin/activate
 export PYTHONPATH="${PYTHONPATH}:${PWD}/python/"
 ```
 
