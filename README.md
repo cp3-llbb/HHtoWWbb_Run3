@@ -1,4 +1,5 @@
 [![Run test](https://github.com/Oguz-Guzel/HHWWbbRun3/actions/workflows/main.yml/badge.svg)](https://github.com/Oguz-Guzel/HHWWbbRun3/actions/workflows/main.yml)
+[![CodeQL](https://github.com/Oguz-Guzel/HHWWbbRun3/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/Oguz-Guzel/HHWWbbRun3/actions/workflows/github-code-scanning/codeql)
 
 ----WORK IN PROGRESS----
 
