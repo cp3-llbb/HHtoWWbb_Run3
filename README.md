@@ -23,9 +23,8 @@ export PYTHONPATH="${PYTHONPATH}:${PWD}/python/"
 and the followings before submitting to the batch system:
 
 ```
-mkdir -p ~/private/gridproxy
-voms-proxy-init --voms cms -rfc --valid 96:00  --out ~/private/gridproxy/x509
-export X509_USER_PROXY=$HOME/private/gridproxy/x509
+voms-proxy-init --voms cms -rfc --valid 192:00 
+export X509_USER_PROXY=$(voms-proxy-info -path)
 ```
 
 Then plot various control regions via the following command line:

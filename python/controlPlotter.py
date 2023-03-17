@@ -169,7 +169,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         hasOneL = noSel.refine('hasOneL', cut=(op.OR(op.AND(op.rng_len(
             electrons) == 1, electrons[0].pt > 32.), op.AND(op.rng_len(muons) == 1, muons[0].pt > 25.))))
 
-        ak4jetPair = op.combine((ak4Jets, ak4BJets), N=2, pred=lambda j1, j2: op.AND(
+        ak4jetPair = op.combine(ak4Jets, N=2, pred=lambda j1, j2: op.AND(
             op.deltaR(j1.p4, j2.p4) > 0.8, op.AND(j1.pt > 25., j2.pt > 25.)))
         firstJetPair = ak4jetPair[0]
 
@@ -249,12 +249,15 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             Plot.make1D("subleadingJetPt_hasMuMu", ak4Jets[1].pt,
                         hasTwoJetsMuMu, EqBin(250, 0., 250.), title="subleading jet p_T",
                         xTitle="Leading Jet p_T (GeV/c^2)"),
+
             Plot.make1D("DL_InvM_emu_boosted", op.invariant_mass(firstEMUpair[0].p4, firstEMUpair[1].p4), DL_boosted, EqBin(
                 160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pair (boosted) (GeV/c^2)"),
             Plot.make1D("DL_InvM_ee_boosted", op.invariant_mass(firstEEpair[0].p4, firstEEpair[1].p4), DL_boosted, EqBin(
                 160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electrons (boosted) (GeV/c^2)"),
             Plot.make1D("DL_InvM_mumu_boosted", op.invariant_mass(firstMUMUpair[0].p4, firstMUMUpair[1].p4), DL_boosted, EqBin(
                 160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of muons (boosted) (GeV/c^2)"),
+            Plot.make1D("DL_InvM_jj_boosted", op.invariant_mass(ak8Jets[0].subJet1.p4, ak8Jets[0].subJet2.p4), DL_boosted, EqBin(
+                160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
 
             Plot.make1D("DL_InvM_emu_resolved", op.invariant_mass(firstEMUpair[0].p4, firstEMUpair[1].p4), DL_resolved, EqBin(
                 160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pair (resolved) (GeV/c^2)"),
@@ -262,10 +265,12 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electrons (resolved) (GeV/c^2)"),
             Plot.make1D("DL_InvM_mumu_resolved", op.invariant_mass(firstMUMUpair[0].p4, firstMUMUpair[1].p4), DL_resolved, EqBin(
                 160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of muons (resolved) (GeV/c^2)"),
+            Plot.make1D("DL_InvM_jj_resolved", op.invariant_mass(firstJetPair[0].p4, firstJetPair[1].p4), SL_resolved, EqBin(
+                160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
 
             Plot.make1D("SL_InvM_jj_resolved", op.invariant_mass(firstJetPair[0].p4, firstJetPair[1].p4), SL_resolved, EqBin(
                 160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
-            Plot.make1D("SL_InvM_jj_boosted", op.invariant_mass(ak8Jets[0].subJet1.p4, ak8Jets[1].subJet2.p4), SL_boosted, EqBin(
+            Plot.make1D("SL_InvM_jj_boosted", op.invariant_mass(ak8Jets[0].subJet1.p4, ak8Jets[0].subJet2.p4), SL_boosted, EqBin(
                 160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)")
         ])
 
