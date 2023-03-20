@@ -89,7 +89,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         ak8Jets = op.sort(
             op.select(tree.FatJet, lambda jet: defs.ak8jetDef(jet)), lambda jet: -jet.pt)
 
-        ak8BJets = op.select(
+        ak8bJets = op.select(
             ak8Jets, lambda fatjet: fatjet.btagDeepB > 0.4184)  # 2018 WP
 
         # AK4 Jets(jet)
@@ -147,18 +147,18 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         ))
 
         emuPair = op.combine((electrons, muons), N=2,
-                             pred=lambda l1, l2: l1.charge != l2.charge)
-        eePair = op.combine(electrons, N=2, pred=lambda l1,
-                            l2: l1.charge != l2.charge)
-        mumuPair = op.combine(muons, N=2, pred=lambda l1,
-                              l2: l1.charge != l2.charge)
+                             pred=lambda el, mu: el.charge != mu.charge)
+        eePair = op.combine(electrons, N=2, pred=lambda el1,
+                            el2: el1.charge != el2.charge)
+        mumuPair = op.combine(muons, N=2, pred=lambda mu1,
+                              mu2: mu1.charge != mu2.charge)
 
         firstEMUpair = emuPair[0]
         firstEEpair = eePair[0]
         firstMUMUpair = mumuPair[0]
         # boosted -> and at least one b-tagged ak8 jet
         DL_boosted = hasTwoL.refine(
-            'DL_boosted', cut=(op.rng_len(ak8BJets) >= 1))
+            'DL_boosted', cut=(op.rng_len(ak8bJets) >= 1))
 
         # resolved -> and at least two ak4 jets with at least one b-tagged and no ak8 jets
         DL_resolved = hasTwoL.refine('DL_resolved', cut=(op.AND(op.rng_len(
@@ -173,13 +173,13 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                                 op.deltaR(j1.p4, j2.p4) > 0.8)
         firstJetPair = ak4jetPair[0]
 
-        ak4ak8Bpair = op.combine((ak4Jets, ak8BJets), N=2, pred=lambda j1, j2: op.AND(
-            op.deltaR(j1.p4, j2.p4) > 1.2, op.AND(j1.pt > 25., j2.pt > 200.)))
-        firstAK4AK8Bpair = ak4ak8Bpair[0]
+        ak4ak8Bpair = op.combine((ak4Jets, ak8bJets), N=2, pred=lambda ak4, ak8b: op.AND(
+            op.deltaR(ak4.p4, ak8b.p4) > 1.2, op.AND(ak4.pt > 25., ak8b.pt > 200.)))
+        firstAK4AK8bPair = ak4ak8Bpair[0]
 
         # boosted -> and at least one b-tagged ak8 jet and at least one ak4 jet outside the b-tagged ak8 jet
-        SL_boosted = hasOneL.refine('SL_boosted', cut=(op.AND(op.rng_len(ak8BJets) >= 1, op.AND(
-            op.rng_len(ak4Jets) >= 1, op.deltaR(firstAK4AK8Bpair[0].p4, firstAK4AK8Bpair[1].p4) > 1.2))))
+        SL_boosted = hasOneL.refine('SL_boosted', cut=(op.AND(op.rng_len(ak8bJets) >= 1, op.AND(
+            op.rng_len(ak4Jets) >= 1, op.deltaR(firstAK4AK8bPair[0].p4, firstAK4AK8bPair[1].p4) > 1.2))))
         # resolved -> and at least three ak4 jets with at least one b-tagged and no ak8 jets
         SL_resolved = hasOneL.refine('SL_resolved', cut=(op.AND(op.rng_len(
             ak4Jets) >= 3, op.rng_len(ak4BJets) >= 1, op.rng_len(ak8Jets) == 0)))
