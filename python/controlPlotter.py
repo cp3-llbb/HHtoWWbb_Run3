@@ -169,8 +169,8 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         hasOneL = noSel.refine('hasOneL', cut=(op.OR(op.AND(op.rng_len(
             electrons) == 1, electrons[0].pt > 32.), op.AND(op.rng_len(muons) == 1, muons[0].pt > 25.))))
 
-        ak4jetPair = op.combine(ak4Jets, N=2, pred=lambda j1, j2: op.AND(
-            op.deltaR(j1.p4, j2.p4) > 0.8, op.AND(j1.pt > 25., j2.pt > 25.)))
+        ak4jetPair = op.combine(ak4Jets, N=2, pred=lambda j1, j2:
+                                op.deltaR(j1.p4, j2.p4) > 0.8)
         firstJetPair = ak4jetPair[0]
 
         ak4ak8Bpair = op.combine((ak4Jets, ak8BJets), N=2, pred=lambda j1, j2: op.AND(
