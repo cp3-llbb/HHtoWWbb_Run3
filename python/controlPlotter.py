@@ -173,9 +173,9 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                                 op.deltaR(j1.p4, j2.p4) > 0.8)
         firstJetPair = ak4jetPair[0]
 
-        ak4ak8Bpair = op.combine((ak4Jets, ak8bJets), N=2, pred=lambda ak4, ak8b: op.AND(
+        ak4ak8bPair = op.combine((ak4Jets, ak8bJets), N=2, pred=lambda ak4, ak8b: op.AND(
             op.deltaR(ak4.p4, ak8b.p4) > 1.2, op.AND(ak4.pt > 25., ak8b.pt > 200.)))
-        firstAK4AK8bPair = ak4ak8Bpair[0]
+        firstAK4AK8bPair = ak4ak8bPair[0]
 
         # boosted -> and at least one b-tagged ak8 jet and at least one ak4 jet outside the b-tagged ak8 jet
         SL_boosted = hasOneL.refine('SL_boosted', cut=(op.AND(op.rng_len(ak8bJets) >= 1, op.AND(
