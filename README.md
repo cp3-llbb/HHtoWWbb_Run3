@@ -26,6 +26,12 @@ and the followings before submitting to the batch system:
 voms-proxy-init --voms cms -rfc --valid 192:00 
 export X509_USER_PROXY=$(voms-proxy-info -path)
 ```
+if you encounter problems with accessing files when when using batch, the following lines may solve your problem
+
+```
+voms-proxy-init --voms cms -rfc --valid 192:00  --out ~/private/gridproxy/x509
+export X509_USER_PROXY=$HOME/private/gridproxy/x509
+```
 
 Then plot various control regions via the following command line:
 
