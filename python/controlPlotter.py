@@ -167,7 +167,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         ### Semi-leptonic channel ###
         # has exactly one lepton
         hasOneL = noSel.refine('hasOneL', cut=(op.OR(op.AND(op.rng_len(
-            electrons) == 1, electrons[0].pt > 32.), op.AND(op.rng_len(muons) == 1, muons[0].pt > 25.))))
+            electrons) == 1, electrons[0].pt > 32., op.rng_len(muons) == 0), op.AND(op.rng_len(muons) == 1, muons[0].pt > 25., op.rng_len(electrons) == 0))))
 
         ak4jetPair = op.combine(ak4Jets, N=2, pred=lambda j1, j2:
                                 op.deltaR(j1.p4, j2.p4) > 0.8)
