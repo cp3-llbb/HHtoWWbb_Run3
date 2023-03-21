@@ -42,7 +42,7 @@ class controlPlotter(NanoBaseHHWWbb):
         ak4Jets = op.sort(
             op.select(tree.Jet, lambda jet: defs.ak4jetDef(jet)), lambda jet: -jet.pt)
 
-        ak4BJets = op.select(
+        ak4bJets = op.select(
             ak4Jets, lambda jet: jet.btagDeepB > 0.2770)  # 2018 WP
 
         # Gen Weight and Triggers
@@ -63,7 +63,7 @@ class controlPlotter(NanoBaseHHWWbb):
             "hasTwoJetsElEl", cut=[op.rng_len(ak4Jets) >= 2])
         # and two b jets
         hasTwoBJetsElEl = hasTwoJetsElEl.refine(
-            "hasTwoBJetsElEl", cut=[op.rng_len(ak4BJets) >= 2])
+            "hasTwoBJetsElEl", cut=[op.rng_len(ak4bJets) >= 2])
         # has at least one muon pair
         hasMuMu = noSel.refine("hasOSMuMu", cut=[op.rng_len(muons) >= 2,
                                                  muons[0].charge != muons[1].charge, muons[0].pt > 20., muons[1].pt > 10.])
@@ -72,7 +72,7 @@ class controlPlotter(NanoBaseHHWWbb):
             'hasTwoJetsMuMu', cut=[op.rng_len(ak4Jets) >= 2])
         # and two b jets
         hasTwoBJetsMuMu = hasTwoJetsMuMu.refine(
-            'hasTwoBJetsMuMu', cut=[op.rng_len(ak4BJets) >= 2])
+            'hasTwoBJetsMuMu', cut=[op.rng_len(ak4bJets) >= 2])
         # has at least one ak4 jet
         hasOneJet = noSel.refine('hasOneJet', cut=[op.rng_len(ak4Jets) >= 1])
         # has at least two ak4 jets
@@ -108,7 +108,7 @@ class controlPlotter(NanoBaseHHWWbb):
 
         # resolved -> and at least two ak4 jets with at least one b-tagged and no ak8 jets
         DL_resolved = hasTwoL.refine('DL_resolved', cut=(op.AND(op.rng_len(
-            ak4Jets) >= 2, op.rng_len(ak4BJets) >= 1, op.rng_len(ak8Jets) == 0)))
+            ak4Jets) >= 2, op.rng_len(ak4bJets) >= 1, op.rng_len(ak8Jets) == 0)))
 
         ### Semi-leptonic channel ###
         # has exactly one lepton
@@ -123,86 +123,90 @@ class controlPlotter(NanoBaseHHWWbb):
                 muons[0].pt > 25.)
         )))
 
-        ak4jetPair = op.combine(ak4Jets, N=2, pred=lambda j1, j2:
-                                op.deltaR(j1.p4, j2.p4) > 0.8)
-        firstJetPair = ak4jetPair[0]
+        ak4ak4bJetPair = op.combine((ak4Jets, ak4bJets), N=2, pred=lambda j1, j2:
+                                    op.deltaR(j1.p4, j2.p4) > 0.8)
+        firstJetPair = ak4ak4bJetPair[0]
 
         ak4ak8bPair = op.combine((ak4Jets, ak8bJets), N=2, pred=lambda ak4, ak8b: op.AND(
-            op.deltaR(ak4.p4, ak8b.p4) > 1.2, op.AND(ak4.pt > 25., ak8b.pt > 200.)))
+            op.deltaR(ak4.p4, ak8b.p4) >= 1.2))
         firstAK4AK8bPair = ak4ak8bPair[0]
 
         # boosted -> and at least one b-tagged ak8 jet and at least one ak4 jet outside the b-tagged ak8 jet
-        SL_boosted = hasOneL.refine('SL_boosted', cut=(op.AND(op.rng_len(ak8bJets) >= 1, op.AND(
-            op.rng_len(ak4Jets) >= 1, op.deltaR(firstAK4AK8bPair[0].p4, firstAK4AK8bPair[1].p4) > 1.2))))
+        SL_boosted = hasOneL.refine('SL_boosted', cut=(op.AND(
+            op.rng_len(ak8bJets) >= 1,
+            op.rng_len(ak4Jets) >= 1,
+            op.deltaR(ak4Jets[0].p4, ak8bJets[0].p4) >= 1.2)
+        ))
         # resolved -> and at least three ak4 jets with at least one b-tagged and no ak8 jets
-        SL_resolved = hasOneL.refine('SL_resolved', cut=(op.AND(op.rng_len(
-            ak4Jets) >= 3, op.rng_len(ak4BJets) >= 1, op.rng_len(ak8Jets) == 0)))
+        SL_resolved=hasOneL.refine('SL_resolved', cut = (op.AND(op.rng_len(
+            ak4Jets) >= 3, op.rng_len(ak4bJets) >= 1, op.rng_len(ak8Jets) == 0)
+        ))
 
         #############################################################################
         #                                 Plots                                     #
         #############################################################################
         plots.extend([
-            Plot.make1D("nEl_NoSel", op.rng_len(clElectrons), noSel, EqBin(
-                10, 0., 10.), xTitle="Number of Electrons"),
-            Plot.make1D("nEl_HasElEl", op.rng_len(clElectrons), hasElEl, EqBin(
-                10, 0., 10.), xTitle="Number of Electrons"),
-            Plot.make1D("nEl_hasTwoJetsElEl", op.rng_len(clElectrons), hasTwoJetsElEl, EqBin(
-                10, 0., 10.), xTitle="Number of Electrons"),
-            Plot.make1D("nMu_NoSel", op.rng_len(muons), noSel, EqBin(
-                10, 0., 10.), xTitle="Number of muons"),
-            Plot.make1D("nMu_HasMuMu", op.rng_len(muons), hasMuMu, EqBin(
-                10, 0., 10.), xTitle="Number of muons"),
-            Plot.make1D("nMu_hasTwoJetsMuMu", op.rng_len(muons), hasTwoJetsMuMu, EqBin(
-                10, 0., 10.), xTitle="Number of muons"),
-            Plot.make1D("nJet_NoSel", op.rng_len(ak4Jets), noSel, EqBin(
-                10, 0., 10.), xTitle="Number of jets"),
-            Plot.make1D("nJet_HasElEl", op.rng_len(ak4Jets), hasElEl, EqBin(
-                10, 0., 10.), xTitle="Number of jets"),
-            Plot.make1D("nJet_HasMuMu", op.rng_len(ak4Jets), hasMuMu, EqBin(
-                10, 0., 10.), xTitle="Number of jets"),
-            Plot.make1D("nJet_hasTwoJetsElEl", op.rng_len(ak4Jets), hasTwoJetsElEl, EqBin(
-                10, 0., 10.), xTitle="Number of jets"),
-            Plot.make1D("nJet_hasTwoJetsMuMu", op.rng_len(ak4Jets), hasTwoJetsMuMu, EqBin(
-                10, 0., 10.), xTitle="Number of jets"),
-            Plot.make1D("massZto2e", op.invariant_mass(clElectrons[0].p4, clElectrons[1].p4),
-                        hasElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
-                        xTitle="Invariant Mass of electrons (GeV/c^2)"),
-            Plot.make1D("massZto2e_hasTwoJets", op.invariant_mass(clElectrons[0].p4, clElectrons[1].p4),
-                        hasTwoJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
-                        xTitle="Invariant Mass of electrons (GeV/c^2)"),
-            Plot.make1D("massZto2e_hasTwoBJets", op.invariant_mass(clElectrons[0].p4, clElectrons[1].p4),
-                        hasTwoBJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
-                        xTitle="Invariant Mass of electrons (GeV/c^2)"),
-            Plot.make1D("massZto2mu", op.invariant_mass(muons[0].p4, muons[1].p4),
-                        hasMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
-                        xTitle="Invariant Mass of muons (GeV/c^2)"),
-            Plot.make1D("massZto2mu_hasTwoJets", op.invariant_mass(muons[0].p4, muons[1].p4),
-                        hasTwoJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
-                        xTitle="Invariant Mass of muons (GeV/c^2)"),
-            Plot.make1D("massZto2mu_hasTwoBJets", op.invariant_mass(muons[0].p4, muons[1].p4),
-                        hasTwoBJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
-                        xTitle="Invariant Mass of muons (GeV/c^2)"),
-            Plot.make1D("leadingJetPt_hasOneJet", ak4Jets[0].pt,
-                        hasOneJet, EqBin(250, 0., 250.), title="leading jet p_T",
-                        xTitle="Leading Jet p_T (GeV/c^2)"),
-            Plot.make1D("leadingJetPt_hasTwoJets", ak4Jets[0].pt,
-                        hasTwoJets, EqBin(250, 0., 250.), title="leading jet p_T",
-                        xTitle="Leading Jet p_T (GeV/c^2)"),
-            Plot.make1D("leadingJetPt_hasTwoJetsElEl", ak4Jets[0].pt,
-                        hasTwoJetsElEl, EqBin(250, 0., 250.), title="leading jet p_T",
-                        xTitle="Leading Jet p_T (GeV/c^2)"),
-            Plot.make1D("leadingJetPt_hasTwoJetsMuMu", ak4Jets[0].pt,
-                        hasTwoJetsMuMu, EqBin(250, 0., 250.), title="leading jet p_T",
-                        xTitle="Leading Jet p_T (GeV/c^2)"),
-            Plot.make1D("subleadingJetPt_NoSel", ak4Jets[1].pt,
-                        hasTwoJets, EqBin(250, 0., 250.), title="subleading jet p_T",
-                        xTitle="Leading Jet p_T (GeV/c^2)"),
-            Plot.make1D("subleadingJetPt_hasElEl", ak4Jets[1].pt,
-                        hasTwoJetsElEl, EqBin(250, 0., 250.), title="subleading jet p_T",
-                        xTitle="Leading Jet p_T (GeV/c^2)"),
-            Plot.make1D("subleadingJetPt_hasMuMu", ak4Jets[1].pt,
-                        hasTwoJetsMuMu, EqBin(250, 0., 250.), title="subleading jet p_T",
-                        xTitle="Leading Jet p_T (GeV/c^2)"),
+            # Plot.make1D("nEl_NoSel", op.rng_len(clElectrons), noSel, EqBin(
+            #     10, 0., 10.), xTitle="Number of Electrons"),
+            # Plot.make1D("nEl_HasElEl", op.rng_len(clElectrons), hasElEl, EqBin(
+            #     10, 0., 10.), xTitle="Number of Electrons"),
+            # Plot.make1D("nEl_hasTwoJetsElEl", op.rng_len(clElectrons), hasTwoJetsElEl, EqBin(
+            #     10, 0., 10.), xTitle="Number of Electrons"),
+            # Plot.make1D("nMu_NoSel", op.rng_len(muons), noSel, EqBin(
+            #     10, 0., 10.), xTitle="Number of muons"),
+            # Plot.make1D("nMu_HasMuMu", op.rng_len(muons), hasMuMu, EqBin(
+            #     10, 0., 10.), xTitle="Number of muons"),
+            # Plot.make1D("nMu_hasTwoJetsMuMu", op.rng_len(muons), hasTwoJetsMuMu, EqBin(
+            #     10, 0., 10.), xTitle="Number of muons"),
+            # Plot.make1D("nJet_NoSel", op.rng_len(ak4Jets), noSel, EqBin(
+            #     10, 0., 10.), xTitle="Number of jets"),
+            # Plot.make1D("nJet_HasElEl", op.rng_len(ak4Jets), hasElEl, EqBin(
+            #     10, 0., 10.), xTitle="Number of jets"),
+            # Plot.make1D("nJet_HasMuMu", op.rng_len(ak4Jets), hasMuMu, EqBin(
+            #     10, 0., 10.), xTitle="Number of jets"),
+            # Plot.make1D("nJet_hasTwoJetsElEl", op.rng_len(ak4Jets), hasTwoJetsElEl, EqBin(
+            #     10, 0., 10.), xTitle="Number of jets"),
+            # Plot.make1D("nJet_hasTwoJetsMuMu", op.rng_len(ak4Jets), hasTwoJetsMuMu, EqBin(
+            #     10, 0., 10.), xTitle="Number of jets"),
+            # Plot.make1D("massZto2e", op.invariant_mass(clElectrons[0].p4, clElectrons[1].p4),
+            #             hasElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
+            #             xTitle="Invariant Mass of electrons (GeV/c^2)"),
+            # Plot.make1D("massZto2e_hasTwoJets", op.invariant_mass(clElectrons[0].p4, clElectrons[1].p4),
+            #             hasTwoJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
+            #             xTitle="Invariant Mass of electrons (GeV/c^2)"),
+            # Plot.make1D("massZto2e_hasTwoBJets", op.invariant_mass(clElectrons[0].p4, clElectrons[1].p4),
+            #             hasTwoBJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
+            #             xTitle="Invariant Mass of electrons (GeV/c^2)"),
+            # Plot.make1D("massZto2mu", op.invariant_mass(muons[0].p4, muons[1].p4),
+            #             hasMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
+            #             xTitle="Invariant Mass of muons (GeV/c^2)"),
+            # Plot.make1D("massZto2mu_hasTwoJets", op.invariant_mass(muons[0].p4, muons[1].p4),
+            #             hasTwoJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
+            #             xTitle="Invariant Mass of muons (GeV/c^2)"),
+            # Plot.make1D("massZto2mu_hasTwoBJets", op.invariant_mass(muons[0].p4, muons[1].p4),
+            #             hasTwoBJetsMuMu, EqBin(120, 40., 120.), title="mass of Z to 2mu",
+            #             xTitle="Invariant Mass of muons (GeV/c^2)"),
+            # Plot.make1D("leadingJetPt_hasOneJet", ak4Jets[0].pt,
+            #             hasOneJet, EqBin(250, 0., 250.), title="leading jet p_T",
+            #             xTitle="Leading Jet p_T (GeV/c^2)"),
+            # Plot.make1D("leadingJetPt_hasTwoJets", ak4Jets[0].pt,
+            #             hasTwoJets, EqBin(250, 0., 250.), title="leading jet p_T",
+            #             xTitle="Leading Jet p_T (GeV/c^2)"),
+            # Plot.make1D("leadingJetPt_hasTwoJetsElEl", ak4Jets[0].pt,
+            #             hasTwoJetsElEl, EqBin(250, 0., 250.), title="leading jet p_T",
+            #             xTitle="Leading Jet p_T (GeV/c^2)"),
+            # Plot.make1D("leadingJetPt_hasTwoJetsMuMu", ak4Jets[0].pt,
+            #             hasTwoJetsMuMu, EqBin(250, 0., 250.), title="leading jet p_T",
+            #             xTitle="Leading Jet p_T (GeV/c^2)"),
+            # Plot.make1D("subleadingJetPt_NoSel", ak4Jets[1].pt,
+            #             hasTwoJets, EqBin(250, 0., 250.), title="subleading jet p_T",
+            #             xTitle="Leading Jet p_T (GeV/c^2)"),
+            # Plot.make1D("subleadingJetPt_hasElEl", ak4Jets[1].pt,
+            #             hasTwoJetsElEl, EqBin(250, 0., 250.), title="subleading jet p_T",
+            #             xTitle="Leading Jet p_T (GeV/c^2)"),
+            # Plot.make1D("subleadingJetPt_hasMuMu", ak4Jets[1].pt,
+            #             hasTwoJetsMuMu, EqBin(250, 0., 250.), title="subleading jet p_T",
+            #             xTitle="Leading Jet p_T (GeV/c^2)"),
 
             Plot.make1D("DL_InvM_emu_boosted", op.invariant_mass(firstEMUpair[0].p4, firstEMUpair[1].p4), DL_boosted, EqBin(
                 160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pair (boosted) (GeV/c^2)"),
@@ -224,7 +228,7 @@ class controlPlotter(NanoBaseHHWWbb):
 
             Plot.make1D("SL_InvM_jj_resolved", op.invariant_mass(firstJetPair[0].p4, firstJetPair[1].p4), SL_resolved, EqBin(
                 160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
-            Plot.make1D("SL_InvM_jj_boosted", op.invariant_mass(ak8Jets[0].subJet1.p4, ak8Jets[0].subJet2.p4), SL_boosted, EqBin(
+            Plot.make1D("SL_InvM_jj_boosted", op.invariant_mass(ak8bJets[0].subJet1.p4, ak8bJets[0].subJet2.p4), SL_boosted, EqBin(
                 160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)")
         ])
 
