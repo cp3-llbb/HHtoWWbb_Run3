@@ -28,6 +28,14 @@ def eleDef(el):
     )
 
 
+def cleanElectron(electrons, muons):
+    cleanedElectrons = op.select(electrons, lambda el: op.NOT(
+        op.rng_any(
+            muons, lambda mu: op.deltaR(el.p4, mu.p4) <= 0.3))
+    )
+    return cleanedElectrons
+
+
 def ak4jetDef(jet):
     return op.AND(
         jet.jetId & 2,  # tight
