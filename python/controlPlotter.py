@@ -28,6 +28,9 @@ class controlPlotter(NanoBaseHHWWbb):
         # Electrons
         electrons = op.sort(
             op.select(tree.Electron, lambda el: defs.eleDef(el)), lambda el: -el.pt)
+
+        # Cleaned Electrons
+        clElectrons = defs.cleanElectron(electrons, muons)
         # AK8 Jets
         ak8Jets = op.sort(
             op.select(tree.FatJet, lambda jet: defs.ak8jetDef(jet)), lambda jet: -jet.pt)
@@ -53,8 +56,8 @@ class controlPlotter(NanoBaseHHWWbb):
         # Selections
 
         # has at least one electron pair
-        hasElEl = noSel.refine("hasOSElEl", cut=[op.rng_len(electrons) >= 2,
-                                                 electrons[0].charge != electrons[1].charge, electrons[0].pt > 20., electrons[1].pt > 10.])
+        hasElEl = noSel.refine("hasOSElEl", cut=[op.rng_len(clElectrons) >= 2,
+                                                 clElectrons[0].charge != clElectrons[1].charge, clElectrons[0].pt > 20., clElectrons[1].pt > 10.])
         # and at least two ak4 jets
         hasTwoJetsElEl = hasElEl.refine(
             "hasTwoJetsElEl", cut=[op.rng_len(ak4Jets) >= 2])
@@ -80,18 +83,18 @@ class controlPlotter(NanoBaseHHWWbb):
         # has exactly two leptons
         hasTwoL = noSel.refine('hasTwoL', cut=(
             op.OR(
-                op.AND(op.rng_len(electrons) == 2, op.rng_len(muons) == 0,
-                       electrons[0].charge != electrons[1].charge, electrons[0].pt > 25., electrons[1].pt > 15.),
-                op.AND(op.rng_len(muons) == 2, op.rng_len(electrons) == 0,
+                op.AND(op.rng_len(clElectrons) == 2, op.rng_len(muons) == 0,
+                       clElectrons[0].charge != clElectrons[1].charge, clElectrons[0].pt > 25., clElectrons[1].pt > 15.),
+                op.AND(op.rng_len(muons) == 2, op.rng_len(clElectrons) == 0,
                        muons[0].charge != muons[1].charge, muons[0].pt > 25., muons[1].pt > 15.),
-                op.AND(op.rng_len(electrons) == 1, op.rng_len(muons) == 1,
-                       electrons[0].charge != muons[0].charge, op.OR(op.AND(electrons[0].pt > 25., muons[0].pt > 15.), op.AND(electrons[0].pt > 15., muons[0].pt > 25.)))
+                op.AND(op.rng_len(clElectrons) == 1, op.rng_len(muons) == 1,
+                       clElectrons[0].charge != muons[0].charge, op.OR(op.AND(clElectrons[0].pt > 25., muons[0].pt > 15.), op.AND(clElectrons[0].pt > 15., muons[0].pt > 25.)))
             )
         ))
 
-        emuPair = op.combine((electrons, muons), N=2,
+        emuPair = op.combine((clElectrons, muons), N=2,
                              pred=lambda el, mu: el.charge != mu.charge)
-        eePair = op.combine(electrons, N=2, pred=lambda el1,
+        eePair = op.combine(clElectrons, N=2, pred=lambda el1,
                             el2: el1.charge != el2.charge)
         mumuPair = op.combine(muons, N=2, pred=lambda mu1,
                               mu2: mu1.charge != mu2.charge)
@@ -111,12 +114,12 @@ class controlPlotter(NanoBaseHHWWbb):
         # has exactly one lepton
         hasOneL = noSel.refine('hasOneL', cut=(op.OR(
             op.AND(
-                op.rng_len(electrons) == 1,
+                op.rng_len(clElectrons) == 1,
                 op.rng_len(muons) == 0,
-                electrons[0].pt > 32.),
+                clElectrons[0].pt > 32.),
             op.AND(
                 op.rng_len(muons) == 1,
-                op.rng_len(electrons) == 0,
+                op.rng_len(clElectrons) == 0,
                 muons[0].pt > 25.)
         )))
 
@@ -139,12 +142,12 @@ class controlPlotter(NanoBaseHHWWbb):
         #                                 Plots                                     #
         #############################################################################
         plots.extend([
-            Plot.make1D("nEl_NoSel", op.rng_len(electrons), noSel, EqBin(
-                10, 0., 10.), xTitle="Number of electrons"),
-            Plot.make1D("nEl_HasElEl", op.rng_len(electrons), hasElEl, EqBin(
-                10, 0., 10.), xTitle="Number of electrons"),
-            Plot.make1D("nEl_hasTwoJetsElEl", op.rng_len(electrons), hasTwoJetsElEl, EqBin(
-                10, 0., 10.), xTitle="Number of electrons"),
+            Plot.make1D("nEl_NoSel", op.rng_len(clElectrons), noSel, EqBin(
+                10, 0., 10.), xTitle="Number of Electrons"),
+            Plot.make1D("nEl_HasElEl", op.rng_len(clElectrons), hasElEl, EqBin(
+                10, 0., 10.), xTitle="Number of Electrons"),
+            Plot.make1D("nEl_hasTwoJetsElEl", op.rng_len(clElectrons), hasTwoJetsElEl, EqBin(
+                10, 0., 10.), xTitle="Number of Electrons"),
             Plot.make1D("nMu_NoSel", op.rng_len(muons), noSel, EqBin(
                 10, 0., 10.), xTitle="Number of muons"),
             Plot.make1D("nMu_HasMuMu", op.rng_len(muons), hasMuMu, EqBin(
@@ -161,13 +164,13 @@ class controlPlotter(NanoBaseHHWWbb):
                 10, 0., 10.), xTitle="Number of jets"),
             Plot.make1D("nJet_hasTwoJetsMuMu", op.rng_len(ak4Jets), hasTwoJetsMuMu, EqBin(
                 10, 0., 10.), xTitle="Number of jets"),
-            Plot.make1D("massZto2e", op.invariant_mass(electrons[0].p4, electrons[1].p4),
+            Plot.make1D("massZto2e", op.invariant_mass(clElectrons[0].p4, clElectrons[1].p4),
                         hasElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
                         xTitle="Invariant Mass of electrons (GeV/c^2)"),
-            Plot.make1D("massZto2e_hasTwoJets", op.invariant_mass(electrons[0].p4, electrons[1].p4),
+            Plot.make1D("massZto2e_hasTwoJets", op.invariant_mass(clElectrons[0].p4, clElectrons[1].p4),
                         hasTwoJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
                         xTitle="Invariant Mass of electrons (GeV/c^2)"),
-            Plot.make1D("massZto2e_hasTwoBJets", op.invariant_mass(electrons[0].p4, electrons[1].p4),
+            Plot.make1D("massZto2e_hasTwoBJets", op.invariant_mass(clElectrons[0].p4, clElectrons[1].p4),
                         hasTwoBJetsElEl, EqBin(120, 40., 120.), title="mass of Z to 2e",
                         xTitle="Invariant Mass of electrons (GeV/c^2)"),
             Plot.make1D("massZto2mu", op.invariant_mass(muons[0].p4, muons[1].p4),
