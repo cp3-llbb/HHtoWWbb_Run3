@@ -137,12 +137,12 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         # has exactly two leptons
         hasTwoL = noSel.refine('hasTwoL', cut=(
             op.OR(
-                op.AND(op.rng_len(electrons) == 2,
+                op.AND(op.rng_len(electrons) == 2, op.rng_len(muons) == 0,
                        electrons[0].charge != electrons[1].charge, electrons[0].pt > 25., electrons[1].pt > 15.),
-                op.AND(op.rng_len(muons) == 2,
+                op.AND(op.rng_len(muons) == 2, op.rng_len(electrons) == 0,
                        muons[0].charge != muons[1].charge, muons[0].pt > 25., muons[1].pt > 15.),
-                op.AND(op.rng_len(electrons) == 1, op.rng_len(muons)
-                       == 1, electrons[0].charge != muons[0].charge, op.OR(op.AND(electrons[0].pt > 25., muons[0].pt > 15.), op.AND(electrons[0].pt > 15., muons[0].pt > 25.)))
+                op.AND(op.rng_len(electrons) == 1, op.rng_len(muons) == 1,
+                       electrons[0].charge != muons[0].charge, op.OR(op.AND(electrons[0].pt > 25., muons[0].pt > 15.), op.AND(electrons[0].pt > 15., muons[0].pt > 25.)))
             )
         ))
 
@@ -166,8 +166,16 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
 
         ### Semi-leptonic channel ###
         # has exactly one lepton
-        hasOneL = noSel.refine('hasOneL', cut=(op.OR(op.AND(op.rng_len(
-            electrons) == 1, electrons[0].pt > 32., op.rng_len(muons) == 0), op.AND(op.rng_len(muons) == 1, muons[0].pt > 25., op.rng_len(electrons) == 0))))
+        hasOneL = noSel.refine('hasOneL', cut=(op.OR(
+            op.AND(
+                op.rng_len(electrons) == 1,
+                op.rng_len(muons) == 0,
+                electrons[0].pt > 32.),
+            op.AND(
+                op.rng_len(muons) == 1,
+                op.rng_len(electrons) == 0,
+                muons[0].pt > 25.)
+        )))
 
         ak4jetPair = op.combine(ak4Jets, N=2, pred=lambda j1, j2:
                                 op.deltaR(j1.p4, j2.p4) > 0.8)
