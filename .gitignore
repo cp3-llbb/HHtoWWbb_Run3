@@ -4,3 +4,4 @@ output*
 # ignore some others
 __pycache__/
 python/*pyc
+data/

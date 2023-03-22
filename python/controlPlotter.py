@@ -23,14 +23,18 @@ class controlPlotter(NanoBaseHHWWbb):
         yields.add(noSel, 'No Selection')
 
         # Muons
-        muons = op.sort(op.select(tree.Muon, lambda mu: defs.muonDef(mu)),
-                        lambda mu: -mu.pt)
+        muons = op.sort(
+            op.select(tree.Muon, lambda mu: defs.muonDef(mu)),
+            lambda mu: -defs.muonConePt(tree.Muon)[mu.idx]
+        )
         # Electrons
         electrons = op.sort(
-            op.select(tree.Electron, lambda el: defs.eleDef(el)), lambda el: -el.pt)
+            op.select(tree.Electron, lambda el: defs.elDef(el)),
+            lambda el: -defs.elConePt(tree.Electron)[el.idx]
+        )
 
         # Cleaned Electrons
-        clElectrons = defs.cleanElectron(electrons, muons)
+        clElectrons = defs.cleanElectrons(electrons, muons)
         # AK8 Jets
         ak8Jets = op.sort(
             op.select(tree.FatJet, lambda jet: defs.ak8jetDef(jet)), lambda jet: -jet.pt)
@@ -138,7 +142,7 @@ class controlPlotter(NanoBaseHHWWbb):
             op.deltaR(ak4Jets[0].p4, ak8bJets[0].p4) >= 1.2)
         ))
         # resolved -> and at least three ak4 jets with at least one b-tagged and no ak8 jets
-        SL_resolved=hasOneL.refine('SL_resolved', cut = (op.AND(op.rng_len(
+        SL_resolved = hasOneL.refine('SL_resolved', cut=(op.AND(op.rng_len(
             ak4Jets) >= 3, op.rng_len(ak4bJets) >= 1, op.rng_len(ak8Jets) == 0)
         ))
 
@@ -232,6 +236,7 @@ class controlPlotter(NanoBaseHHWWbb):
                 160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)")
         ])
 
+        # Cutflow report
         yields.add(hasElEl, 'two electrons')
         yields.add(hasTwoJetsElEl, 'two el. two jets')
         yields.add(hasTwoBJetsElEl, 'two el. two Bjets')

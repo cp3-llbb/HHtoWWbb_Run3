@@ -15,7 +15,15 @@ def muonDef(mu):
     )
 
 
-def eleDef(el):
+def muonConePt(muons):
+    return op.map(muons, lambda lep: op.multiSwitch(
+        (op.AND(op.abs(lep.pdgId) != 11, op.abs(lep.pdgId) != 13), lep.pt),
+        (op.AND(op.abs(lep.pdgId) == 13, lep.mvaTTH > 0.50), lep.pt),
+        0.9*lep.pt*(1.+lep.jetRelIso)
+    ))
+
+
+def elDef(el):
     return op.AND(
         el.pt >= 7.,
         op.abs(el.eta) <= 2.5,
@@ -28,7 +36,16 @@ def eleDef(el):
     )
 
 
-def cleanElectron(electrons, muons):
+def elConePt(electrons):
+    return op.map(electrons, lambda lep: op.multiSwitch(
+        (op.AND(op.abs(lep.pdgId) != 11, op.abs(lep.pdgId) != 13), lep.pt),
+        # (op.AND(op.abs(lep.pdgId) == 11, lep.mvaTTH > 0.30), lep.pt), # run3 MC don't have mvaTTH for electrons
+        (op.AND(op.abs(lep.pdgId) == 11), lep.pt),
+        0.9*lep.pt*(1.+lep.jetRelIso)
+    ))
+
+
+def cleanElectrons(electrons, muons):
     cleanedElectrons = op.select(electrons, lambda el: op.NOT(
         op.rng_any(
             muons, lambda mu: op.deltaR(el.p4, mu.p4) <= 0.3))
