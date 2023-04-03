@@ -1,6 +1,7 @@
 from bamboo.analysismodules import NanoAODModule, HistogramsModule
 from bamboo.treedecorators import NanoAODDescription
 from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
+from bamboo import treefunctions as op
 
 from itertools import chain
 
