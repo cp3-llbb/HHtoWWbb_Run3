@@ -1,11 +1,9 @@
 
-from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
 from bamboo.plots import Plot, CutFlowReport
 from bamboo.plots import EquidistantBinning as EqBin
 from bamboo import treefunctions as op
 
 import definitions as defs
-from itertools import chain
 
 from basePlotter import NanoBaseHHWWbb
 
@@ -48,14 +46,6 @@ class controlPlotter(NanoBaseHHWWbb):
 
         ak4bJets = op.select(
             ak4Jets, lambda jet: jet.btagDeepB > 0.2770)  # 2018 WP
-
-        # Gen Weight and Triggers
-        if self.is_MC:
-            noSel = noSel.refine('genWeight', weight=tree.genWeight, cut=(
-                op.OR(*chain.from_iterable(self.triggersPerPrimaryDataset.values()))))
-        else:
-            noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
-                sample, self.triggersPerPrimaryDataset)])
 
         # Selections
 

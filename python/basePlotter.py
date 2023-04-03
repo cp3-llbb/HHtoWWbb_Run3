@@ -1,5 +1,8 @@
 from bamboo.analysismodules import NanoAODModule, HistogramsModule
 from bamboo.treedecorators import NanoAODDescription
+from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
+
+from itertools import chain
 
 
 class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
@@ -63,5 +66,13 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         addHLTPath('SingleMuon', 'IsoMu27')
         # DoubleMuon
         addHLTPath('DoubleMuon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
+
+        # Gen Weight and Triggers
+        if self.is_MC:
+            noSel = noSel.refine('genWeight', weight=tree.genWeight, cut=(
+                op.OR(*chain.from_iterable(self.triggersPerPrimaryDataset.values()))))
+        else:
+            noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
+                sample, self.triggersPerPrimaryDataset)])
 
         return tree, noSel, backend, lumiArgs
