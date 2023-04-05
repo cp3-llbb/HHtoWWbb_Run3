@@ -11,12 +11,12 @@ Install **bamboo analysis framework** with the instructions here: https://bamboo
 
 Then clone this repository in the parent directory containing the bamboo installation:
 
-```
+```bash
 git clone https://github.com/Oguz-Guzel/HHWWbbRun3.git && cd HHWWbbRun3
 ```
 
 Execute these each time you start from a clean shell:
-```
+```bash
 source /cvmfs/sft.cern.ch/lcg/views/LCG_102/x86_64-centos7-gcc11-opt/setup.sh
 source (path to your bamboo installation)/bamboovenv/bin/activate
 export PYTHONPATH="${PYTHONPATH}:${PWD}/python/"
@@ -24,19 +24,19 @@ export PYTHONPATH="${PYTHONPATH}:${PWD}/python/"
 
 and the followings before submitting to the batch system:
 
-```
+```bash
 voms-proxy-init --voms cms -rfc --valid 192:00 
 export X509_USER_PROXY=$(voms-proxy-info -path)
 ```
 if you encounter problems with accessing files when when using batch, the following lines may solve your problem
 
-```
+```bash
 voms-proxy-init --voms cms -rfc --valid 192:00  --out ~/private/gridproxy/x509
 export X509_USER_PROXY=$HOME/private/gridproxy/x509
 ```
 
 Then plot various control regions via the following command line:
 
-```
+```bash
 bambooRun -m python/controlPlotter.py config/analysis_2022.yml -o ./outputDir/ --envConfig config/ingrid.ini --distributed=driver
 ```
