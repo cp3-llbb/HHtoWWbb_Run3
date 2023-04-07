@@ -7,7 +7,7 @@
 
 **HH->WWbb Run-3 analysis**
 
-Install **bamboo analysis framework** with the instructions here: https://bamboo-hep.readthedocs.io/en/latest/install.html
+Install **bamboo analysis framework** with the instructions here: https://bamboo-hep.readthedocs.io/en/latest/install.html#fresh-install
 
 Then clone this repository in the parent directory containing the bamboo installation:
 
