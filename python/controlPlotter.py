@@ -30,9 +30,10 @@ class controlPlotter(NanoBaseHHWWbb):
             op.select(tree.Electron, lambda el: defs.elDef(el)),
             lambda el: -defs.elConePt(tree.Electron)[el.idx]
         )
-
         # Cleaned Electrons
         clElectrons = defs.cleanElectrons(electrons, muons)
+        # Fake Electrons
+        fakeElectrons = defs.elFakeSel(electrons, muons)
         # AK8 Jets
         ak8Jets = op.sort(
             op.select(tree.FatJet, lambda jet: defs.ak8jetDef(jet)), lambda jet: -jet.pt)
@@ -223,7 +224,8 @@ class controlPlotter(NanoBaseHHWWbb):
             Plot.make1D("SL_InvM_jj_resolved", op.invariant_mass(firstJetPair[0].p4, firstJetPair[1].p4), SL_resolved, EqBin(
                 160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
             Plot.make1D("SL_InvM_jj_boosted", op.invariant_mass(ak8bJets[0].subJet1.p4, ak8bJets[0].subJet2.p4), SL_boosted, EqBin(
-                160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)")
+                160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
+            Plot.make1D("fakeElectronPt", fakeElectrons[0].pt, hasTwoJets, EqBin(250, 0., 250.), title="fake electron p_T",)
         ])
 
         # Cutflow report

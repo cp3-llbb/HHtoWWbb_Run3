@@ -7,7 +7,7 @@
 
 **HH->WWbb Run-3 analysis**
 
-Install **bamboo analysis framework** with the instructions here: https://bamboo-hep.readthedocs.io/en/latest/install.html
+Install **bamboo analysis framework** with the instructions here: https://bamboo-hep.readthedocs.io/en/latest/install.html#fresh-install
 
 Then clone this repository in the parent directory containing the bamboo installation:
 
@@ -28,15 +28,15 @@ and the followings before submitting to the batch system:
 voms-proxy-init --voms cms -rfc --valid 192:00 
 export X509_USER_PROXY=$(voms-proxy-info -path)
 ```
-if you encounter problems with accessing files when when using batch, the following lines may solve your problem
+if you encounter problems with accessing files when using batch, the following lines may solve your problem
 
 ```bash
 voms-proxy-init --voms cms -rfc --valid 192:00  --out ~/private/gridproxy/x509
 export X509_USER_PROXY=$HOME/private/gridproxy/x509
 ```
 
-Then plot various control regions via the following command line:
+Then plot various control regions via the following command line using batch (you can pass `--maxFiles 1` to use only 1 file from each sample for a test):
 
 ```bash
-bambooRun -m python/controlPlotter.py config/analysis_2022.yml -o ./outputDir/ --envConfig config/ingrid.ini --distributed=driver
+bambooRun -m python/controlPlotter.py config/analysis_2022.yml -o ./outputDir/ --envConfig config/cern.ini --distributed driver
 ```
