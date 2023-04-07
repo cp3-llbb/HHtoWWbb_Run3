@@ -35,8 +35,8 @@ voms-proxy-init --voms cms -rfc --valid 192:00  --out ~/private/gridproxy/x509
 export X509_USER_PROXY=$HOME/private/gridproxy/x509
 ```
 
-Then plot various control regions via the following command line:
+Then plot various control regions via the following command line using batch (you can pass `--maxFiles 1` to use only 1 file from each sample for a test):
 
 ```
-bambooRun -m python/controlPlotter.py config/analysis_2022.yml -o ./outputDir/ --envConfig config/cern.ini --distributed=driver
+bambooRun -m python/controlPlotter.py config/analysis_2022.yml -o ./outputDir/ --envConfig config/cern.ini --distributed driver
 ```
