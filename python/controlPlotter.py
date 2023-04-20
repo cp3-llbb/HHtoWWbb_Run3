@@ -83,8 +83,12 @@ class controlPlotter(NanoBaseHHWWbb):
                 op.AND(op.rng_len(muons) == 2, op.rng_len(clElectrons) == 0,
                        muons[0].charge != muons[1].charge, muons[0].pt > 25., muons[1].pt > 15.),
                 op.AND(op.rng_len(clElectrons) == 1, op.rng_len(muons) == 1,
-                       clElectrons[0].charge != muons[0].charge, op.OR(op.AND(clElectrons[0].pt > 25., muons[0].pt > 15.), op.AND(clElectrons[0].pt > 15., muons[0].pt > 25.)))
-            )
+                       clElectrons[0].charge != muons[0].charge,
+                       op.switch(
+                    clElectrons[0].pt >= muons[0].pt,
+                    op.AND(clElectrons[0].pt > 25., muons[0].pt > 15.),
+                    op.AND(clElectrons[0].pt > 15., muons[0].pt > 25.))
+                ))
         ))
 
         emuPair = op.combine((clElectrons, muons), N=2,
@@ -225,7 +229,8 @@ class controlPlotter(NanoBaseHHWWbb):
                 160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
             Plot.make1D("SL_InvM_jj_boosted", op.invariant_mass(ak8bJets[0].subJet1.p4, ak8bJets[0].subJet2.p4), SL_boosted, EqBin(
                 160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
-            Plot.make1D("fakeElectronPt", fakeElectrons[0].pt, hasTwoJets, EqBin(250, 0., 250.), title="fake electron p_T",)
+            Plot.make1D("fakeElectronPt", fakeElectrons[0].pt, hasTwoJets, EqBin(
+                250, 0., 250.), title="fake electron p_T",)
         ])
 
         # Cutflow report
