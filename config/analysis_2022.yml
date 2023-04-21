@@ -11,7 +11,7 @@ samples:
     db: ['das:/Muon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/Muon/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/Muon/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD', 'das:/Muon/Run2022E-PromptNanoAODv10_v1-v3/NANOAOD', 'das:/Muon/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD', 'das:/Muon/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD']
     run_range: [355794, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 200
+    split: 557
 
   EGamma:
     era: "2022"
@@ -20,7 +20,7 @@ samples:
     db: ['das:/EGamma/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/EGamma/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD','das:/EGamma/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD', 'das:/EGamma/Run2022E-PromptNanoAODv10_v1-v2/NANOAOD', 'das:/EGamma/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD', 'das:/EGamma/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD']
     run_range: [355794, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 300
+    split: 748
 
   MuonEG:
     era: "2022"
@@ -29,7 +29,7 @@ samples:
     db: ['das:/MuonEG/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/MuonEG/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/MuonEG/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD', 'das:/MuonEG/Run2022E-PromptNanoAODv10_v1-v3/NANOAOD', 'das:/MuonEG/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD', 'das:/MuonEG/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD']
     run_range: [355794, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 100
+    split: 172
 
   DoubleMuon:
     era: "2022"
@@ -38,7 +38,7 @@ samples:
     db: das:/DoubleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 10
+    split: 4
 
   SingleMuon:
     era: "2022"
@@ -47,7 +47,7 @@ samples:
     db: das:/SingleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 10
+    split: 14
 
   # bkg #
   TTbar:
@@ -57,7 +57,7 @@ samples:
     type: mc
     cross-section: 88.4
     generated-events: genEventSumw
-    split: 25
+    split: 34
 
   DY:
     era: "2022"
@@ -66,7 +66,7 @@ samples:
     type: mc
     cross-section: 4515
     generated-events: genEventSumw
-    split: 120
+    split: 27
 
   DY10to50:
     era: "2022"
@@ -75,7 +75,7 @@ samples:
     type: mc
     cross-section: 19317.5
     generated-events: genEventSumw
-    split: 10
+    split: 24
 
   WJets:
     era: "2022"
@@ -84,7 +84,7 @@ samples:
     type: mc
     cross-section: 63199.9
     generated-events: genEventSumw
-    split: 90
+    split: 75
 
   WW:
     era: "2022"
@@ -93,7 +93,7 @@ samples:
     type: mc
     cross-section: 173.4
     generated-events: genEventSumw
-    split: 50
+    split: 28
 
   WZ:
     era: "2022"
