@@ -2,9 +2,8 @@
 [![Run test](https://github.com/cp3-llbb/HHtoWWbb_Run3/actions/workflows/python_test.yml/badge.svg)](https://github.com/cp3-llbb/HHtoWWbb_Run3/actions/workflows/python_test.yml)
 ![](https://img.shields.io/badge/CMS-Run3-blue)
 
+# HH->WWbb Run-3 analysis
 ----WORK IN PROGRESS----
-
-**HH->WWbb Run-3 analysis**
 
 Install **bamboo analysis framework** with the instructions here: https://bamboo-hep.readthedocs.io/en/latest/install.html#fresh-install
 
