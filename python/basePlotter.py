@@ -51,7 +51,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                                                                                  sample=sample,
                                                                                  sampleCfg=sampleCfg,
                                                                                  description=getNanoAODDescription(),
-                                                                                 backend="distributed")
+                                                                                 backend=backend)
         ### Triggers ###
         # Muon
         addHLTPath('Muon', 'IsoMu24')
