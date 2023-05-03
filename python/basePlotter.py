@@ -18,7 +18,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                             default=None,
                             help='This has no use right now!')
 
-    def prepareTree(self, tree, sample=None, sampleCfg=None):
+    def prepareTree(self, tree, sample=None, sampleCfg=None, backend=None):
         def isMC():
             if sampleCfg['type'] == 'data':
                 return False
