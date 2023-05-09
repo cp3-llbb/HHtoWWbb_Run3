@@ -1,7 +1,7 @@
 from bamboo.analysismodules import NanoAODModule, HistogramsModule
-from bamboo.treedecorators import NanoAODDescription
-from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
+from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection, configureJets, configureType1MET
 from bamboo import treefunctions as op
+from bamboo import treedecorators as td
 
 from itertools import chain
 
@@ -42,10 +42,19 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 print("Couldn't find branch tree.HLT.%s, will omit it!" % HLT)
 
         def getNanoAODDescription():
-            groups = ["HLT_", "MET_"]
+            groups = ["HLT_", "MET_", "RawMET_"]
             collections = ["nElectron", "nJet", "nMuon", "nFatJet", "nSubJet"]
+            mcCollections = ["nGenDressedLepton",
+                             "nGenJet", "nGenPart", "nCorrT1METJet"]
             varReaders = []
-            return NanoAODDescription(groups=groups, collections=collections, systVariations=varReaders)
+            if isMC:
+                varReaders.append(td.CalcCollectionsGroups(Jet=("pt", "mass")))
+                varReaders.append(
+                    td.CalcCollectionsGroups(GenJet=("pt", "mass")))
+                varReaders.append(td.CalcCollectionsGroups(MET=("pt", "phi")))
+                return td.NanoAODDescription(groups=groups, collections=collections + mcCollections, systVariations=varReaders)
+            else:
+                return td.NanoAODDescription(groups=groups, collections=collections, systVariations=varReaders)
 
         tree, noSel, backend, lumiArgs = super(NanoBaseHHWWbb, self).prepareTree(tree=tree,
                                                                                  sample=sample,
@@ -75,5 +84,31 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         else:
             noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
                 sample, self.triggersPerPrimaryDataset)])
+
+        if self.is_MC:
+            configureJets(
+                variProxy=tree._Jet,
+                jetType="AK4PFchs",
+                jsonFile="/home/ucl/cp3/aguzel/Bamboo/CMSJMECalculators/tests/data/2018_UL_jet_jerc.json.gz",
+                jec="Summer19UL18_V5_MC",
+                #   smear="Autumn18_V7b_MC",
+                jesUncertaintySources=["Total"],
+                enableSystematics=lambda v: not "jesTotal" in v,
+                isMC=self.is_MC,
+                backend=backend,
+                uName=sample
+            )
+            configureType1MET(
+                variProxy=tree._MET,
+                jsonFile="/home/ucl/cp3/aguzel/Bamboo/CMSJMECalculators/tests/data/2018_UL_jet_jerc.json",
+                smear="Summer19UL18_JRV2_MC",
+                jec="Summer19UL18_V5_MC",
+                # jesUncertainties=["Total"],
+                splitJER=True,
+                addHEM2018Issue=False,
+                isMC=self.is_MC,
+                backend=backend,
+                uName=sample,
+            )
 
         return tree, noSel, backend, lumiArgs
