@@ -25,6 +25,7 @@ class controlPlotter(NanoBaseHHWWbb):
             op.select(tree.Muon, lambda mu: defs.muonDef(mu)),
             lambda mu: -defs.muonConePt(tree.Muon)[mu.idx]
         )
+
         # Electrons
         electrons = op.sort(
             op.select(tree.Electron, lambda el: op.AND(

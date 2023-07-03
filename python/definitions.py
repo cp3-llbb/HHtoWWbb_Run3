@@ -31,7 +31,7 @@ def elDef(el):
         op.abs(el.dz) < 0.1,
         el.miniPFRelIso_all <= 0.4,
         el.sip3d < 8,
-        # el.mvaNoIso_WPL,
+        # el.mvaNoIso_WPL, # Run3 MC doesn't have mvaNoIso_WPL for electrons
         el.lostHits <= 1
     )
 
@@ -58,12 +58,12 @@ def elFakeSel(electrons):
         elConePt(electrons)[el.idx] > 10,
         op.OR(
             op.AND(op.abs(el.eta+el.deltaEtaSC)
-                   <= 1.479, el.sieie <= 0.011),
+                   <= 1.479, el.sieie < 0.011),
             op.AND(op.abs(el.eta+el.deltaEtaSC)
-                   > 1.479, el.sieie <= 0.030)
+                   > 1.479, el.sieie < 0.030)
         ),
-        el.hoe <= 0.10,
-        el.eInvMinusPInv >= -0.04,
+        el.hoe < 0.10,
+        el.eInvMinusPInv > -0.04,
         # op.OR(el.mvaTTH >= 0.30, op.AND(el.jetRelIso < 0.7, el.mvaFall17V2noIso_W90)),
         # op.switch(el.mvaTTV, el.mvaTTV >= 0.30, el.mvaTTH < 0.30, self.lambda_lepton_associatedJetLessThanTightBtag(el), self.lambda_lepton_associatedJetLessThanMediumBtag(el)),
         el.lostHits == 0,
