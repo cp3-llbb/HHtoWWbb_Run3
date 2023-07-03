@@ -43,7 +43,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
 
         def getNanoAODDescription():
             groups = ["HLT_", "MET_", "RawMET_"]
-            collections = ["nElectron", "nJet", "nMuon", "nFatJet", "nSubJet"]
+            collections = ["nElectron", "nJet", "nMuon", "nFatJet", "nSubJet", "nTau"]
             mcCollections = ["nGenDressedLepton",
                              "nGenJet", "nGenPart", "nCorrT1METJet"]
             varReaders = []

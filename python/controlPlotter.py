@@ -45,6 +45,8 @@ class controlPlotter(NanoBaseHHWWbb):
         ak8Jets = op.sort(
             op.select(tree.FatJet, lambda jet: defs.ak8jetDef(jet)), lambda jet: -jet.pt)
 
+        cleanedAK8Jets = op.select(ak8Jets, lambda jet: op.AND(op.rng_any(fakeElectrons, lambda el: op.deltaR(el.p4, jet.p4) > 0.8), op.rng_any(fakeMuons, lambda mu: op.deltaR(mu.p4, jet.p4) > 0.8)))
+
         ak8bJets = op.select(
             ak8Jets, lambda fatjet: fatjet.btagDeepB > 0.4184)  # 2018 WP
 
@@ -54,6 +56,12 @@ class controlPlotter(NanoBaseHHWWbb):
 
         ak4bJets = op.select(
             ak4Jets, lambda jet: jet.btagDeepB > 0.2770)  # 2018 WP
+        
+        # Taus
+
+        taus = defs.tauDef(tree.Tau)
+
+        cleanedTaus = op.select(taus, lambda tau: op.AND(op.rng_any(fakeElectrons, lambda el: op.deltaR(el.p4, tau.p4) > 0.3), op.rng_any(fakeMuons, lambda mu: op.deltaR(mu.p4, tau.p4) > 0.3)))
 
         ### Di-leptonic channel ###
 
@@ -130,6 +138,12 @@ class controlPlotter(NanoBaseHHWWbb):
                 15, 0., 15.), xTitle="Number of fake electrons"),
             Plot.make1D("nFakeMuons", op.rng_len(fakeMuons), noSel, EqBin(
                 15, 0., 15.), xTitle="Number of fake muons"),
+            Plot.make1D("ncleanedAK8Jets", op.rng_len(cleanedAK8Jets), noSel, EqBin(
+                15, 0., 15.), xTitle="Number of cleaned AK8 jets"),
+            Plot.make1D("nTaus", op.rng_len(taus), noSel, EqBin(
+                15, 0., 15.), xTitle="Number of taus"),
+            Plot.make1D("nCleanedTaus", op.rng_len(cleanedTaus), noSel, EqBin(
+                15, 0., 15.), xTitle="Number of cleaned taus"),
             # DL boosted plots
             Plot.make1D("DL_boosted_nJets", op.rng_len(ak4Jets), DL_boosted, EqBin(
                 15, 0., 15.), xTitle="Number of jets"),

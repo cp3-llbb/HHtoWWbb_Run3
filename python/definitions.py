@@ -22,12 +22,13 @@ def muonConePt(muons):
         0.9*lep.pt*(1.+lep.jetRelIso)
     ))
 
+
 def muonFakeSel(muons):
     return op.select(muons, lambda mu: op.AND(
         muonConePt(muons)[mu.idx] > 10,
         # self.lambda_lepton_associatedJetLessThanMediumBtag(mu),
         # op.OR(mu.mvaTTH >= 0.50, op.AND(mu.jetRelIso<0.8 , self.lambda_muon_deepJetInterpIfMvaFailed(mu)))) # will implement the second selection in the AND later, instead the following is used
-        op.OR(mu.mvaTTH >= 0.50, mu.jetRelIso<0.8)
+        op.OR(mu.mvaTTH >= 0.50, mu.jetRelIso < 0.8)
     ))
 
 
@@ -84,22 +85,41 @@ def ak4jetDef(jet):
     return op.AND(
         jet.jetId & 2,  # tight
         jet.pt > 25.,
-        op.abs(jet.eta) <= 2.4
+        op.abs(jet.eta) < 2.4
     )
 
 
 def ak8jetDef(jet):
     return op.AND(
+        jet.pt > 200.,
+        op.abs(jet.eta) < 2.4,
         jet.jetId & 2,  # tight
         jet.subJet1.isValid,
         jet.subJet2.isValid,
         jet.subJet1.pt > 20.,
         jet.subJet2.pt > 20.,
-        op.abs(jet.subJet1.eta) <= 2.4,
-        op.abs(jet.subJet2.eta) <= 2.4,
-        jet.msoftdrop >= 30.,
-        jet.msoftdrop <= 210.,
-        jet.pt > 200.,
-        op.abs(jet.eta) <= 2.4,
-        jet.tau2 / jet.tau1 <= 0.75
+        op.OR(op.AND(jet.subJet1.pt > 30., jet.subJet1.btagDeepB > 0.4184),
+              op.AND(jet.subJet2.pt > 30., jet.subJet2.btagDeepB > 0.4184)),
+        op.abs(jet.subJet1.eta) < 2.4,
+        op.abs(jet.subJet2.eta) < 2.4,
+        op.AND(jet.msoftdrop > 30., jet.msoftdrop < 210.),
+        jet.tau2 / jet.tau1 < 0.75
     )
+
+
+def tauDef(taus):
+    return op.select(taus, lambda tau: op.AND(
+        tau.pt > 20.,
+        op.abs(tau.p4.Eta()) < 2.3,
+        op.abs(tau.dxy) <= 1000.0,
+        op.abs(tau.dz) <= 0.2,
+        tau.idDecayModeOldDMs,
+        op.OR(tau.decayMode == 0,
+              tau.decayMode == 1,
+              tau.decayMode == 2,
+              tau.decayMode == 10,
+              tau.decayMode == 11),
+        (tau.idDeepTau2017v2p1VSjet >> 4 & 0x1) == 1,
+        (tau.idDeepTau2017v2p1VSe >> 0 & 0x1) == 1,
+        (tau.idDeepTau2017v2p1VSmu >> 0 & 0x1) == 1
+    ))
