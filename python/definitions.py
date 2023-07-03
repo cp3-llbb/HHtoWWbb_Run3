@@ -5,12 +5,12 @@ from bamboo import treefunctions as op
 
 def muonDef(mu):
     return op.AND(
-        mu.pt >= 5.,
-        op.abs(mu.eta) <= 2.4,
-        op.abs(mu.dxy) <= 0.05,
-        op.abs(mu.dz) <= 0.1,
-        mu.miniPFRelIso_all <= 0.4,
-        mu.sip3d <= 8,
+        mu.pt > 5.,
+        op.abs(mu.eta) < 2.4,
+        op.abs(mu.dxy) < 0.05,
+        op.abs(mu.dz) < 0.1,
+        mu.miniPFRelIso_all < 0.4,
+        mu.sip3d < 8,
         mu.looseId
     )
 
@@ -20,6 +20,14 @@ def muonConePt(muons):
         (op.AND(op.abs(lep.pdgId) != 11, op.abs(lep.pdgId) != 13), lep.pt),
         (op.AND(op.abs(lep.pdgId) == 13, lep.mvaTTH > 0.50), lep.pt),
         0.9*lep.pt*(1.+lep.jetRelIso)
+    ))
+
+def muonFakeSel(muons):
+    return op.select(muons, lambda mu: op.AND(
+        muonConePt(muons)[mu.idx] > 10,
+        # self.lambda_lepton_associatedJetLessThanMediumBtag(mu),
+        # op.OR(mu.mvaTTH >= 0.50, op.AND(mu.jetRelIso<0.8 , self.lambda_muon_deepJetInterpIfMvaFailed(mu)))) # will implement the second selection in the AND later, instead the following is used
+        op.OR(mu.mvaTTH >= 0.50, mu.jetRelIso<0.8)
     ))
 
 

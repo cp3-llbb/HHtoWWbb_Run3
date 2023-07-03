@@ -22,9 +22,12 @@ class controlPlotter(NanoBaseHHWWbb):
 
         # Muons
         muons = op.sort(
-            op.select(tree.Muon, lambda mu: defs.muonDef(mu)),
+            op.select(tree.Muon, lambda mu: op.AND(defs.muonDef(
+                mu), defs.muonConePt(tree.Muon)[mu.idx] > 10.)),
             lambda mu: -defs.muonConePt(tree.Muon)[mu.idx]
         )
+
+        fakeMuons = defs.muonFakeSel(muons)
 
         # Electrons
         electrons = op.sort(
@@ -125,6 +128,8 @@ class controlPlotter(NanoBaseHHWWbb):
         plots.extend([
             Plot.make1D("nFakeElectrons", op.rng_len(fakeElectrons), noSel, EqBin(
                 15, 0., 15.), xTitle="Number of fake electrons"),
+            Plot.make1D("nFakeMuons", op.rng_len(fakeMuons), noSel, EqBin(
+                15, 0., 15.), xTitle="Number of fake muons"),
             # DL boosted plots
             Plot.make1D("DL_boosted_nJets", op.rng_len(ak4Jets), DL_boosted, EqBin(
                 15, 0., 15.), xTitle="Number of jets"),
