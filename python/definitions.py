@@ -75,7 +75,8 @@ def elFakeSel(electrons):
         # op.OR(el.mvaTTH >= 0.30, op.AND(el.jetRelIso < 0.7, el.mvaFall17V2noIso_W90)),
         # op.switch(el.mvaTTV, el.mvaTTV >= 0.30, el.mvaTTH < 0.30, self.lambda_lepton_associatedJetLessThanTightBtag(el), self.lambda_lepton_associatedJetLessThanMediumBtag(el)),
         el.lostHits == 0,
-        el.convVeto
+        el.convVeto,
+        el.jetRelIso < 0.7
     ))
 
 
