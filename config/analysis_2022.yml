@@ -127,9 +127,6 @@ plotIt:
     extra-label: Run 3 (2022) - Work in progress
     error-fill-style: 3154
     error-fill-color: "#ee556270"
-    ratio-fit-error-fill-style: 1001
-    ratio-fit-error-fill-color: "#aa556270"
-    ratio-fit-line-color: "#0B486B"
     yields-table-align: v
   legend:
     position: [0.7, 0.6, 0.91, 0.91]
@@ -149,10 +146,10 @@ plotIt:
       legend: VV
       fill-color: "#C900FF"
   plotdefaults:
-    y-axis: Events
+    y-axis: 'Events'
     log-y: both
     y-axis-show-zero: True
-    save-extensions: [pdf]
+    save-extensions: ['pdf']
     show-ratio: True
     sort-by-yields: True
     legend-columns: 2
