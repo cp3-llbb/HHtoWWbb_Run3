@@ -28,7 +28,7 @@ class controlPlotter(NanoBaseHHWWbb):
         # Electrons
         electrons = op.sort(
             op.select(tree.Electron, lambda el: op.AND(
-                defs.elDef(el), defs.elConePt(electrons)[el.idx] >= 7)),
+                defs.elDef(el), defs.elConePt(tree.Electron)[el.idx] > 7)),
             lambda el: -defs.elConePt(tree.Electron)[el.idx]
         )
         # Cleaned Electrons
@@ -122,7 +122,7 @@ class controlPlotter(NanoBaseHHWWbb):
         #                                 Plots                                     #
         #############################################################################
         plots.extend([
-            Plot.make1D("DL_boosted_nJets", op.rng_len(fakeElectrons), noSel, EqBin(
+            Plot.make1D("nFakeElectrons", op.rng_len(fakeElectrons), noSel, EqBin(
                 15, 0., 15.), xTitle="Number of fake electrons"),
             # DL boosted plots
             Plot.make1D("DL_boosted_nJets", op.rng_len(ak4Jets), DL_boosted, EqBin(

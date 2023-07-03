@@ -55,7 +55,7 @@ def cleanElectrons(electrons, muons):
 
 def elFakeSel(electrons):
     return op.select(electrons, lambda el: op.AND(
-        elConePt(electrons)[el.idx] >= 10,
+        elConePt(electrons)[el.idx] > 10,
         op.OR(
             op.AND(op.abs(el.eta+el.deltaEtaSC)
                    <= 1.479, el.sieie <= 0.011),
