@@ -26,11 +26,11 @@ def muonConePt(muons):
 def elDef(el):
     return op.AND(
         el.pt >= 7.,
-        op.abs(el.eta) <= 2.5,
-        op.abs(el.dxy) <= 0.05,
-        op.abs(el.dz) <= 0.1,
+        op.abs(el.eta) < 2.5,
+        op.abs(el.dxy) < 0.05,
+        op.abs(el.dz) < 0.1,
         el.miniPFRelIso_all <= 0.4,
-        el.sip3d <= 8,
+        el.sip3d < 8,
         # el.mvaNoIso_WPL,
         el.lostHits <= 1
     )
@@ -39,7 +39,7 @@ def elDef(el):
 def elConePt(electrons):
     return op.map(electrons, lambda lep: op.multiSwitch(
         (op.AND(op.abs(lep.pdgId) != 11, op.abs(lep.pdgId) != 13), lep.pt),
-        # (op.AND(op.abs(lep.pdgId) == 11, lep.mvaTTH > 0.30), lep.pt), # run3 MC don't have mvaTTH for electrons
+        # (op.AND(op.abs(lep.pdgId) == 11, lep.mvaTTH > 0.30), lep.pt), # run3 MC doesn't have mvaTTH for electrons
         (op.AND(op.abs(lep.pdgId) == 11), lep.pt),
         0.9*lep.pt*(1.+lep.jetRelIso)
     ))
@@ -53,9 +53,9 @@ def cleanElectrons(electrons, muons):
     return cleanedElectrons
 
 
-def elFakeSel(electrons, muons):
-    fakeElectrons = op.select(electrons, lambda el: op.AND(
-        elConePt(cleanElectrons(electrons, muons))[el.idx] >= 10,
+def elFakeSel(electrons):
+    return op.select(electrons, lambda el: op.AND(
+        elConePt(electrons)[el.idx] >= 10,
         op.OR(
             op.AND(op.abs(el.eta+el.deltaEtaSC)
                    <= 1.479, el.sieie <= 0.011),
@@ -69,7 +69,6 @@ def elFakeSel(electrons, muons):
         el.lostHits == 0,
         el.convVeto
     ))
-    return fakeElectrons
 
 
 def ak4jetDef(jet):
