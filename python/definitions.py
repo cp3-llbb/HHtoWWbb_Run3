@@ -6,8 +6,8 @@ from bamboo import treefunctions as op
 def hasAssociatedJet(lep): return lep.jet.idx != -1
 
 
-def lepton_associatedJetLessThanMediumBtag(lep): return op.OR(op.NOT(hasAssociatedJet(lep)),
-                                                                     lep.jet.btagDeepFlavB <= 0.2770)  # 2018 value
+def lepton_associatedJetLessThanMediumBtag(lep): return op.OR(
+    op.NOT(hasAssociatedJet(lep)), lep.jet.btagDeepFlavB <= 0.2770)  # 2018 value
 
 
 def muon_x(mu): return op.min(
@@ -22,12 +22,18 @@ def muon_deepJetInterpIfMvaFailed(mu): return op.OR(op.NOT(
     hasAssociatedJet(mu)), mu.jet.btagDeepFlavB < muon_btagInterpolation(mu))
 
 
-def lepton_associatedJetLessThanMediumBtag(lep): return op.OR(op.NOT(hasAssociatedJet(lep)),
-                                                                     lep.jet.btagDeepFlavB <= 0.2770)  # 2018 value
+def muonTightSel(mu): return op.AND(mu.mvaTTH >= 0.50, mu.mediumId)
 
 
-def lepton_associatedJetLessThanTightBtag(lep): return op.OR(op.NOT(hasAssociatedJet(lep)),
-                                                                    lep.jet.btagDeepFlavB <= 0.7264)  # 2018 value
+def lepton_associatedJetLessThanMediumBtag(lep): return op.OR(
+    op.NOT(hasAssociatedJet(lep)), lep.jet.btagDeepFlavB <= 0.2770)  # 2018 value
+
+
+def lepton_associatedJetLessThanTightBtag(lep): return op.OR(
+    op.NOT(hasAssociatedJet(lep)), lep.jet.btagDeepFlavB <= 0.7264)  # 2018 value
+
+
+def electronTightSel(el): return el.mvaTTH >= 0.30
 
 # Object definitions
 
@@ -108,8 +114,7 @@ def elFakeSel(electrons):
             lepton_associatedJetLessThanTightBtag(el),
             lepton_associatedJetLessThanMediumBtag(el)),
         el.lostHits == 0,
-        el.convVeto,
-        el.jetRelIso < 0.7
+        el.convVeto
     ))
 
 
