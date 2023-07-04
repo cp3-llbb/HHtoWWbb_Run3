@@ -21,6 +21,14 @@ def lambda_muon_btagInterpolation(mu): return lambda_muon_x(
 def lambda_muon_deepJetInterpIfMvaFailed(mu): return op.OR(op.NOT(
     lambda_hasAssociatedJet(mu)), mu.jet.btagDeepFlavB < lambda_muon_btagInterpolation(mu))
 
+
+def lambda_lepton_associatedJetLessThanMediumBtag(lep): return op.OR(op.NOT(lambda_hasAssociatedJet(lep)),
+                                                                     lep.jet.btagDeepFlavB <= 0.2770)  # 2018 value
+
+
+def lambda_lepton_associatedJetLessThanTightBtag(lep): return op.OR(op.NOT(lambda_hasAssociatedJet(lep)),
+                                                                    lep.jet.btagDeepFlavB <= 0.7264)  # 2018 value
+
 # Object definitions
 
 
@@ -54,13 +62,13 @@ def muonFakeSel(muons):
 
 def elDef(el):
     return op.AND(
-        el.pt >= 7.,
+        el.pt > 7.,
         op.abs(el.eta) < 2.5,
         op.abs(el.dxy) < 0.05,
         op.abs(el.dz) < 0.1,
-        el.miniPFRelIso_all <= 0.4,
         el.sip3d < 8,
-        # el.mvaNoIso_WPL, # Run3 MC doesn't have mvaNoIso_WPL for electrons
+        el.miniPFRelIso_all < 0.4,
+        el.mvaNoIso,  # check if this is WPL
         el.lostHits <= 1
     )
 
@@ -68,7 +76,7 @@ def elDef(el):
 def elConePt(electrons):
     return op.map(electrons, lambda lep: op.multiSwitch(
         (op.AND(op.abs(lep.pdgId) != 11, op.abs(lep.pdgId) != 13), lep.pt),
-        # (op.AND(op.abs(lep.pdgId) == 11, lep.mvaTTH > 0.30), lep.pt), # run3 MC doesn't have mvaTTH for electrons
+        (op.AND(op.abs(lep.pdgId) == 11, lep.mvaTTH > 0.30), lep.pt),
         (op.AND(op.abs(lep.pdgId) == 11), lep.pt),
         0.9*lep.pt*(1.+lep.jetRelIso)
     ))
@@ -93,10 +101,12 @@ def elFakeSel(electrons):
         ),
         el.hoe < 0.10,
         el.eInvMinusPInv > -0.04,
-        # op.OR(el.mvaTTH >= 0.30, op.AND(
-        #     el.jetRelIso < 0.7, el.mvaFall17V2noIso_W90)),
-        # op.switch(el.mvaTTV, el.mvaTTV >= 0.30, el.mvaTTH < 0.30, self.lambda_lepton_associatedJetLessThanTightBtag(
-        #     el), self.lambda_lepton_associatedJetLessThanMediumBtag(el)),
+        op.OR(el.mvaTTH >= 0.30, op.AND(
+            el.jetRelIso < 0.7, el.mvaNoIso_WP90)),
+        op.switch(
+            el.mvaTTH < 0.30,
+            lambda_lepton_associatedJetLessThanTightBtag(el),
+            lambda_lepton_associatedJetLessThanMediumBtag(el)),
         el.lostHits == 0,
         el.convVeto,
         el.jetRelIso < 0.7
