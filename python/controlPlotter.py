@@ -146,7 +146,7 @@ class controlPlotter(NanoBaseHHWWbb):
                 15, 0., 15.), xTitle="Number of taus"),
             Plot.make1D("nCleanedTaus", op.rng_len(cleanedTaus), noSel, EqBin(
                 15, 0., 15.), xTitle="Number of cleaned taus"),
-            DL boosted plots
+            # DL boosted plots
             Plot.make1D("DL_boosted_nJets", op.rng_len(ak4Jets), DL_boosted, EqBin(
                 15, 0., 15.), xTitle="Number of jets"),
             Plot.make1D("DL_boosted_fatJet_pt", ak8Jets[0].pt, DL_boosted, EqBin(
