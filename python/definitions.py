@@ -1,32 +1,32 @@
 from bamboo import treefunctions as op
 
-# Lepton Lambda funtions
+# Lepton funtions
 
 
-def lambda_hasAssociatedJet(lep): return lep.jet.idx != -1
+def hasAssociatedJet(lep): return lep.jet.idx != -1
 
 
-def lambda_lepton_associatedJetLessThanMediumBtag(lep): return op.OR(op.NOT(lambda_hasAssociatedJet(lep)),
+def lepton_associatedJetLessThanMediumBtag(lep): return op.OR(op.NOT(hasAssociatedJet(lep)),
                                                                      lep.jet.btagDeepFlavB <= 0.2770)  # 2018 value
 
 
-def lambda_muon_x(mu): return op.min(
+def muon_x(mu): return op.min(
     op.max(0., (0.9*mu.pt*(1+mu.jetRelIso))-20.)/(45.-20.), 1.)
 
 
-def lambda_muon_btagInterpolation(mu): return lambda_muon_x(
-    mu)*0.0494 + (1-lambda_muon_x(mu))*0.2770  # 2018 values
+def muon_btagInterpolation(mu): return muon_x(
+    mu)*0.0494 + (1-muon_x(mu))*0.2770  # 2018 values
 
 
-def lambda_muon_deepJetInterpIfMvaFailed(mu): return op.OR(op.NOT(
-    lambda_hasAssociatedJet(mu)), mu.jet.btagDeepFlavB < lambda_muon_btagInterpolation(mu))
+def muon_deepJetInterpIfMvaFailed(mu): return op.OR(op.NOT(
+    hasAssociatedJet(mu)), mu.jet.btagDeepFlavB < muon_btagInterpolation(mu))
 
 
-def lambda_lepton_associatedJetLessThanMediumBtag(lep): return op.OR(op.NOT(lambda_hasAssociatedJet(lep)),
+def lepton_associatedJetLessThanMediumBtag(lep): return op.OR(op.NOT(hasAssociatedJet(lep)),
                                                                      lep.jet.btagDeepFlavB <= 0.2770)  # 2018 value
 
 
-def lambda_lepton_associatedJetLessThanTightBtag(lep): return op.OR(op.NOT(lambda_hasAssociatedJet(lep)),
+def lepton_associatedJetLessThanTightBtag(lep): return op.OR(op.NOT(hasAssociatedJet(lep)),
                                                                     lep.jet.btagDeepFlavB <= 0.7264)  # 2018 value
 
 # Object definitions
@@ -55,8 +55,8 @@ def muonConePt(muons):
 def muonFakeSel(muons):
     return op.select(muons, lambda mu: op.AND(
         muonConePt(muons)[mu.idx] > 10,
-        lambda_lepton_associatedJetLessThanMediumBtag(mu),
-        op.OR(mu.mvaTTH > 0.50, op.AND(mu.jetRelIso < 0.8, lambda_muon_deepJetInterpIfMvaFailed(mu))))
+        lepton_associatedJetLessThanMediumBtag(mu),
+        op.OR(mu.mvaTTH > 0.50, op.AND(mu.jetRelIso < 0.8, muon_deepJetInterpIfMvaFailed(mu))))
     )
 
 
@@ -105,8 +105,8 @@ def elFakeSel(electrons):
             el.jetRelIso < 0.7, el.mvaNoIso_WP90)),
         op.switch(
             el.mvaTTH < 0.30,
-            lambda_lepton_associatedJetLessThanTightBtag(el),
-            lambda_lepton_associatedJetLessThanMediumBtag(el)),
+            lepton_associatedJetLessThanTightBtag(el),
+            lepton_associatedJetLessThanMediumBtag(el)),
         el.lostHits == 0,
         el.convVeto,
         el.jetRelIso < 0.7
