@@ -85,30 +85,30 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
                 sample, self.triggersPerPrimaryDataset)])
 
-        if self.is_MC:
-            configureJets(
-                variProxy=tree._Jet,
-                jetType="AK4PFchs",
-                jsonFile="/home/ucl/cp3/aguzel/Bamboo/CMSJMECalculators/tests/data/2018_UL_jet_jerc.json.gz",
-                jec="Summer19UL18_V5_MC",
-                #   smear="Autumn18_V7b_MC",
-                jesUncertaintySources=["Total"],
-                enableSystematics=lambda v: not "jesTotal" in v,
-                isMC=self.is_MC,
-                backend=backend,
-                uName=sample
-            )
-            configureType1MET(
-                variProxy=tree._MET,
-                jsonFile="/home/ucl/cp3/aguzel/Bamboo/CMSJMECalculators/tests/data/2018_UL_jet_jerc.json",
-                smear="Summer19UL18_JRV2_MC",
-                jec="Summer19UL18_V5_MC",
-                # jesUncertainties=["Total"],
-                splitJER=True,
-                addHEM2018Issue=False,
-                isMC=self.is_MC,
-                backend=backend,
-                uName=sample,
-            )
+        # if self.is_MC:
+        #     configureJets(
+        #         variProxy=tree._Jet,
+        #         jetType="AK4PFchs",
+        #         jsonFile="/home/ucl/cp3/aguzel/Bamboo/CMSJMECalculators/tests/data/2018_UL_jet_jerc.json.gz",
+        #         jec="Summer19UL18_V5_MC",
+        #         #   smear="Autumn18_V7b_MC",
+        #         jesUncertaintySources=["Total"],
+        #         enableSystematics=lambda v: not "jesTotal" in v,
+        #         isMC=self.is_MC,
+        #         backend=backend,
+        #         uName=sample
+        #     )
+        #     configureType1MET(
+        #         variProxy=tree._MET,
+        #         jsonFile="/home/ucl/cp3/aguzel/Bamboo/CMSJMECalculators/tests/data/2018_UL_jet_jerc.json",
+        #         smear="Summer19UL18_JRV2_MC",
+        #         jec="Summer19UL18_V5_MC",
+        #         # jesUncertainties=["Total"],
+        #         splitJER=True,
+        #         addHEM2018Issue=False,
+        #         isMC=self.is_MC,
+        #         backend=backend,
+        #         uName=sample,
+        #     )
 
         return tree, noSel, backend, lumiArgs
