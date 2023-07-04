@@ -1,5 +1,26 @@
 from bamboo import treefunctions as op
 
+# Lepton Lambda funtions
+
+
+def lambda_hasAssociatedJet(lep): return lep.jet.idx != -1
+
+
+def lambda_lepton_associatedJetLessThanMediumBtag(lep): return op.OR(op.NOT(lambda_hasAssociatedJet(lep)),
+                                                                     lep.jet.btagDeepFlavB <= 0.2770)  # 2018 value
+
+
+def lambda_muon_x(mu): return op.min(
+    op.max(0., (0.9*mu.pt*(1+mu.jetRelIso))-20.)/(45.-20.), 1.)
+
+
+def lambda_muon_btagInterpolation(mu): return lambda_muon_x(
+    mu)*0.0494 + (1-lambda_muon_x(mu))*0.2770  # 2018 values
+
+
+def lambda_muon_deepJetInterpIfMvaFailed(mu): return op.OR(op.NOT(
+    lambda_hasAssociatedJet(mu)), mu.jet.btagDeepFlavB < lambda_muon_btagInterpolation(mu))
+
 # Object definitions
 
 
@@ -26,10 +47,9 @@ def muonConePt(muons):
 def muonFakeSel(muons):
     return op.select(muons, lambda mu: op.AND(
         muonConePt(muons)[mu.idx] > 10,
-        # self.lambda_lepton_associatedJetLessThanMediumBtag(mu),
-        # op.OR(mu.mvaTTH >= 0.50, op.AND(mu.jetRelIso<0.8 , self.lambda_muon_deepJetInterpIfMvaFailed(mu)))) # will implement the second selection in the AND later, instead the following is used
-        op.OR(mu.mvaTTH >= 0.50, mu.jetRelIso < 0.8)
-    ))
+        lambda_lepton_associatedJetLessThanMediumBtag(mu),
+        op.OR(mu.mvaTTH > 0.50, op.AND(mu.jetRelIso < 0.8, lambda_muon_deepJetInterpIfMvaFailed(mu))))
+    )
 
 
 def elDef(el):
@@ -73,8 +93,10 @@ def elFakeSel(electrons):
         ),
         el.hoe < 0.10,
         el.eInvMinusPInv > -0.04,
-        # op.OR(el.mvaTTH >= 0.30, op.AND(el.jetRelIso < 0.7, el.mvaFall17V2noIso_W90)),
-        # op.switch(el.mvaTTV, el.mvaTTV >= 0.30, el.mvaTTH < 0.30, self.lambda_lepton_associatedJetLessThanTightBtag(el), self.lambda_lepton_associatedJetLessThanMediumBtag(el)),
+        # op.OR(el.mvaTTH >= 0.30, op.AND(
+        #     el.jetRelIso < 0.7, el.mvaFall17V2noIso_W90)),
+        # op.switch(el.mvaTTV, el.mvaTTV >= 0.30, el.mvaTTH < 0.30, self.lambda_lepton_associatedJetLessThanTightBtag(
+        #     el), self.lambda_lepton_associatedJetLessThanMediumBtag(el)),
         el.lostHits == 0,
         el.convVeto,
         el.jetRelIso < 0.7
