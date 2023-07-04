@@ -68,7 +68,7 @@ def elDef(el):
         op.abs(el.dz) < 0.1,
         el.sip3d < 8,
         el.miniPFRelIso_all < 0.4,
-        el.mvaNoIso,  # check if this is WPL
+        el.mvaNoIso > 0.5,  # check WPL
         el.lostHits <= 1
     )
 
