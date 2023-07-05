@@ -62,7 +62,7 @@ samples:
   DY:
     era: "2022"
     group: "DY"
-    db: ['das:/DYTo2L_MLL-50_TuneCP5_13p6TeV_pythia8/Run3Winter23NanoAOD-KeepSi_RnD_126X_mcRun3_2023_forPU65_v1-v1/NANOAODSIM', '/DYTo2L_MLL-50_TuneCP5_13p6TeV_pythia8/Run3Winter23NanoAOD-RnD_126X_mcRun3_2023_forPU65_v1-v2/NANOAODSIM']
+    db: ['das:/DYTo2L_MLL-50_TuneCP5_13p6TeV_pythia8/Run3Winter23NanoAOD-KeepSi_RnD_126X_mcRun3_2023_forPU65_v1-v1/NANOAODSIM', 'das:/DYTo2L_MLL-50_TuneCP5_13p6TeV_pythia8/Run3Winter23NanoAOD-RnD_126X_mcRun3_2023_forPU65_v1-v2/NANOAODSIM']
     type: mc
     cross-section: 5556.0
     generated-events: genEventSumw
