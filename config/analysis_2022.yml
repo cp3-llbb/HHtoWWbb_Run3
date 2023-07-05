@@ -53,22 +53,20 @@ samples:
   TTbar:
     era: "2022"
     group: "TTbar"
-    # db: das:/TTTo2L2Nu_CP5_13p6TeV_powheg-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
-    db: das:/TT_TuneCP5_13p6TeV_powheg-pythia8/Run3Winter23NanoAOD-126X_mcRun3_2023_forPU65_v1-v2/NANOAODSIM
+    db: das:/TT_TuneCP5_13p6TeV_powheg-pythia8/Run3Winter23NanoAOD-GTv3Digi_GTv3_MiniGTv3_NanoGTv3_126X_mcRun3_2023_forPU65_v3_ext1-v2/NANOAODSIM 
     type: mc
-    cross-section: 88.4
+    cross-section: 762.3
     generated-events: genEventSumw
-    # split: 34
-    split: 29
+    split: 43
 
-  # DY:
-  #   era: "2022"
-  #   group: "DY"
-  #   db: das:/DYtoLL_NoTau_CP5_13p6TeV_amcatnloFXFX-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
-  #   type: mc
-  #   cross-section: 4515
-  #   generated-events: genEventSumw
-  #   split: 27
+  DY:
+    era: "2022"
+    group: "DY"
+    db: ['das:/DYTo2L_MLL-50_TuneCP5_13p6TeV_pythia8/Run3Winter23NanoAOD-KeepSi_RnD_126X_mcRun3_2023_forPU65_v1-v1/NANOAODSIM', '/DYTo2L_MLL-50_TuneCP5_13p6TeV_pythia8/Run3Winter23NanoAOD-RnD_126X_mcRun3_2023_forPU65_v1-v2/NANOAODSIM']
+    type: mc
+    cross-section: 5556.0
+    generated-events: genEventSumw
+    split: 43
 
   # DY10to50:
   #   era: "2022"
@@ -141,12 +139,12 @@ plotIt:
     DY:
       legend: DY
       fill-color: "#9FFF33"
-    WJets:
-      legend: WJets
-      fill-color: "#FFC300"
-    VV:
-      legend: VV
-      fill-color: "#C900FF"
+    # WJets:
+    #   legend: WJets
+    #   fill-color: "#FFC300"
+    # VV:
+    #   legend: VV
+    #   fill-color: "#C900FF"
   plotdefaults:
     y-axis: 'Events'
     log-y: both
