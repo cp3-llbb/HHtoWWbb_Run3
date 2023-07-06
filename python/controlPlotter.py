@@ -13,6 +13,7 @@ class controlPlotter(NanoBaseHHWWbb):
 
     def __init__(self, args):
         super(controlPlotter, self).__init__(args)
+        self.channel = self.args.channel
 
     def definePlots(self, tree, noSel, sample=None, sampleCfg=None):
         plots = []
@@ -42,7 +43,8 @@ class controlPlotter(NanoBaseHHWWbb):
         # Fake Electrons
         fakeElectrons = defs.elFakeSel(clElectrons)
 
-        tightElectrons = op.select(fakeElectrons, lambda el: defs.elTightSel(el))
+        tightElectrons = op.select(
+            fakeElectrons, lambda el: defs.elTightSel(el))
 
         # AK8 Jets
         ak8Jets = op.sort(
