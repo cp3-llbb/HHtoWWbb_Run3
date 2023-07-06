@@ -49,6 +49,28 @@ class controlPlotter(NanoBaseHHWWbb):
         tightElectrons = op.select(
             fakeElectrons, lambda el: defs.elTightSel(el))
 
+        # Dileptons
+
+        def leptonOS(l1, l2): return l1.charge != l2.charge
+
+        ElElDileptonPreSel = op.combine(electrons, N=2)
+        MuMuDileptonPreSel = op.combine(muons, N=2)
+        ElMuDileptonPreSel = op.combine((electrons, muons))
+
+        OSElElDileptonPreSel = op.combine(electrons, N=2, pred=leptonOS)
+        OSMuMuDileptonPreSel = op.combine(muons, N=2, pred=leptonOS)
+        OSElMuDileptonPreSel = op.combine((electrons, muons), pred=leptonOS)
+
+        # Dilepton for selection #
+        if self.channel == "DL":
+            ElElFakeSel = op.combine(fakeElectrons, N=2)
+            MuMuFakeSel = op.combine(fakeMuons, N=2)
+            ElMuFakeSel = op.combine((fakeElectrons, fakeMuons))
+
+            ElElTightSel = op.combine(tightElectrons, N=2)
+            MuMuTightSel = op.combine(tightMuons, N=2)
+            ElMuTightSel = op.combine((tightElectrons, tightMuons))
+
         # AK4 Jets
         ak4JetsPreSel = op.sort(
             op.select(tree.Jet, lambda jet: defs.ak4jetDef(jet)), lambda jet: -jet.pt)
@@ -187,7 +209,32 @@ class controlPlotter(NanoBaseHHWWbb):
             op.rng_any(fakeMuons, lambda mu: op.deltaR(mu.p4, tau.p4) > 0.3)
         ))
 
+        Zmass = 91.1876
+
+        def lowMllCut(dileptons): return op.NOT(op.rng_any(
+            dileptons, lambda dilep: op.invariant_mass(dilep[0].p4, dilep[1].p4) < 12.))
+
+        def outZ(dileptons): return op.NOT(op.rng_any(dileptons, lambda dilep: op.in_range(
+            Zmass - 10., op.invariant_mass(dilep[0].p4, dilep[1].p4), Zmass + 10.)))
+
+        # SL channel
+        if self.channel == 'SL':
+            def elPtCut(el): return electron_conept[el[0].idx] > 32.0
+            def muPtCut(mu): return muon_conept[mu[0].idx] > 25.0
+
         ### Di-leptonic channel ###
+        if self.channel == 'DL':
+            def OSDilepton(dilep): return dilep[0].charge != dilep[1].charge
+            def elPtCut(el): return electron_conept[el[0].idx] > 25.0
+            def muPtCut(mu): return muon_conept[mu[0].idx] > 15.0
+            noSel = noSel.refine('OScut', cut=(OSDilepton))
+
+        mllCut = [lowMllCut(ElElDileptonPreSel), lowMllCut(
+            MuMuDileptonPreSel), lowMllCut(ElMuDileptonPreSel)]
+
+        outZCut = [outZ(OSElElDileptonPreSel), outZ(OSMuMuDileptonPreSel)]
+
+        noSel = noSel.refine('commonSelections', cut=(op.AND(elPtCut, muPtCut, mllCut, outZCut)))
 
         # has exactly two leptons
         # hasTwoL = noSel.refine('hasTwoL', cut=(
