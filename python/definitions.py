@@ -37,12 +37,12 @@ def electronTightSel(el): return el.mvaTTH >= 0.30
 
 def muonDef(mu):
     return op.AND(
-        mu.pt > 5.,
-        op.abs(mu.eta) < 2.4,
-        op.abs(mu.dxy) < 0.05,
-        op.abs(mu.dz) < 0.1,
-        mu.miniPFRelIso_all < 0.4,
-        mu.sip3d < 8,
+        mu.pt >= 5.,
+        op.abs(mu.eta) <= 2.4,
+        op.abs(mu.dxy) <= 0.05,
+        op.abs(mu.dz) <= 0.1,
+        mu.miniPFRelIso_all <= 0.4,
+        mu.sip3d <= 8,
         mu.looseId
     )
 
@@ -57,24 +57,24 @@ def muonConePt(muons):
 
 def muonFakeSel(muons):
     return op.select(muons, lambda mu: op.AND(
-        muonConePt(muons)[mu.idx] > 10.,
+        muonConePt(muons)[mu.idx] >= 10.,
         lepton_associatedJetLessThanMediumBtag(mu),
-        op.OR(mu.mvaTTH > 0.50, op.AND(mu.jetRelIso < 0.8, muon_deepJetInterpIfMvaFailed(mu))))
+        op.OR(mu.mvaTTH >= 0.50, op.AND(mu.jetRelIso < 0.8, muon_deepJetInterpIfMvaFailed(mu))))
     )
 
 
-def muonTightSel(mu): return op.AND(mu.mvaTTH > 0.50, mu.mediumId)
+def muonTightSel(mu): return op.AND(mu.mvaTTH >= 0.50, mu.mediumId)
 
 
 def elDef(el):
     return op.AND(
-        el.pt > 7.,
-        op.abs(el.eta) < 2.5,
-        op.abs(el.dxy) < 0.05,
-        op.abs(el.dz) < 0.1,
-        el.sip3d < 8,
-        el.miniPFRelIso_all < 0.4,
-        el.mvaNoIso > 0.5,  # this should mean loose WP
+        el.pt >= 7.,
+        op.abs(el.eta) <= 2.5,
+        op.abs(el.dxy) <= 0.05,
+        op.abs(el.dz) <= 0.1,
+        el.sip3d <= 8,
+        el.miniPFRelIso_all <= 0.4,
+        el.mvaNoIso >= 0.5,  # this should mean loose WP
         el.lostHits <= 1
     )
 
@@ -98,16 +98,16 @@ def cleanElectrons(electrons, muons):
 
 def elFakeSel(electrons):
     return op.select(electrons, lambda el: op.AND(
-        elConePt(electrons)[el.idx] > 10,
+        elConePt(electrons)[el.idx] >= 10,
         op.OR(
-            op.AND(op.abs(el.eta+el.deltaEtaSC) <= 1.479, el.sieie < 0.011),
-            op.AND(op.abs(el.eta+el.deltaEtaSC) > 1.479, el.sieie < 0.030)
+            op.AND(op.abs(el.eta+el.deltaEtaSC) <= 1.479, el.sieie <= 0.011),
+            op.AND(op.abs(el.eta+el.deltaEtaSC) > 1.479, el.sieie <= 0.030)
         ),
-        el.hoe < 0.10,
-        el.eInvMinusPInv > -0.04,
-        op.OR(el.mvaTTH > 0.30, op.AND(el.jetRelIso < 0.7, el.mvaNoIso_WP90)),
+        el.hoe <= 0.10,
+        el.eInvMinusPInv >= -0.04,
+        op.OR(el.mvaTTH >= 0.30, op.AND(el.jetRelIso < 0.7, el.mvaNoIso_WP90)),
         op.switch(
-            el.mvaTTH <= 0.30,
+            el.mvaTTH < 0.30,
             lepton_associatedJetLessThanTightBtag(el),
             lepton_associatedJetLessThanMediumBtag(el)),
         el.lostHits == 0,
@@ -115,40 +115,38 @@ def elFakeSel(electrons):
     ))
 
 
-def elTightSel(el): return el.mvaTTH > 0.30
+def elTightSel(el): return el.mvaTTH >= 0.30
 
 
 def ak4jetDef(jet):
     return op.AND(
         jet.jetId & 2,  # tight
-        jet.pt > 25.,
-        op.abs(jet.eta) < 2.4,
+        jet.pt >= 25.,
+        op.abs(jet.eta) <= 2.4,
         # op.OR(((jet.puId >> 2) & 1), jet.pt > 50.) # Jet PU ID bit1 is loose # no puId in Run3 so far
     )
 
 
 def ak8jetDef(jet):
     return op.AND(
-        jet.pt > 200.,
-        op.abs(jet.eta) < 2.4,
+        jet.pt >= 200.,
+        op.abs(jet.eta) <= 2.4,
         jet.jetId & 2,  # tight
         jet.subJet1.isValid,
         jet.subJet2.isValid,
-        jet.subJet1.pt > 20.,
-        jet.subJet2.pt > 20.,
-        op.OR(op.AND(jet.subJet1.pt > 30., jet.subJet1.btagDeepB > 0.4184),
-              op.AND(jet.subJet2.pt > 30., jet.subJet2.btagDeepB > 0.4184)),
-        op.abs(jet.subJet1.eta) < 2.4,
-        op.abs(jet.subJet2.eta) < 2.4,
-        op.AND(jet.msoftdrop > 30., jet.msoftdrop < 210.),
-        jet.tau2 / jet.tau1 < 0.75
+        jet.subJet1.pt >= 20.,
+        jet.subJet2.pt >= 20.,
+        op.abs(jet.subJet1.eta) <= 2.4,
+        op.abs(jet.subJet2.eta) <= 2.4,
+        op.AND(jet.msoftdrop >= 30., jet.msoftdrop <= 210.),
+        jet.tau2 / jet.tau1 <= 0.75
     )
 
 
 def tauDef(taus):
     return op.select(taus, lambda tau: op.AND(
         tau.pt > 20.,
-        op.abs(tau.p4.Eta()) < 2.3,
+        op.abs(tau.eta) < 2.3,
         op.abs(tau.dxy) <= 1000.0,
         op.abs(tau.dz) <= 0.2,
         tau.idDecayModeOldDMs,
