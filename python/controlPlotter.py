@@ -50,19 +50,18 @@ class controlPlotter(NanoBaseHHWWbb):
             fakeElectrons, lambda el: defs.elTightSel(el))
 
         # Dileptons
+        if self.channel == "DL":
+            def leptonOS(l1, l2): return l1.charge != l2.charge
 
-        def leptonOS(l1, l2): return l1.charge != l2.charge
+            ElElDileptonPreSel = op.combine(electrons, N=2)
+            MuMuDileptonPreSel = op.combine(muons, N=2)
+            ElMuDileptonPreSel = op.combine((electrons, muons))
 
-        ElElDileptonPreSel = op.combine(electrons, N=2)
-        MuMuDileptonPreSel = op.combine(muons, N=2)
-        ElMuDileptonPreSel = op.combine((electrons, muons))
-
-        OSElElDileptonPreSel = op.combine(electrons, N=2, pred=leptonOS)
-        OSMuMuDileptonPreSel = op.combine(muons, N=2, pred=leptonOS)
-        OSElMuDileptonPreSel = op.combine((electrons, muons), pred=leptonOS)
+            OSElElDileptonPreSel = op.combine(electrons, N=2, pred=leptonOS)
+            OSMuMuDileptonPreSel = op.combine(muons, N=2, pred=leptonOS)
+            OSElMuDileptonPreSel = op.combine((electrons, muons), pred=leptonOS)
 
         # Dilepton for selection #
-        if self.channel == "DL":
             ElElFakeSel = op.combine(fakeElectrons, N=2)
             MuMuFakeSel = op.combine(fakeMuons, N=2)
             ElMuFakeSel = op.combine((fakeElectrons, fakeMuons))
@@ -227,14 +226,30 @@ class controlPlotter(NanoBaseHHWWbb):
             def OSDilepton(dilep): return dilep[0].charge != dilep[1].charge
             def elPtCut(el): return electron_conept[el[0].idx] > 25.0
             def muPtCut(mu): return muon_conept[mu[0].idx] > 15.0
-            noSel = noSel.refine('OScut', cut=(OSDilepton))
 
-        mllCut = [lowMllCut(ElElDileptonPreSel), lowMllCut(
-            MuMuDileptonPreSel), lowMllCut(ElMuDileptonPreSel)]
+            mllCut = [lowMllCut(ElElDileptonPreSel), lowMllCut(
+                MuMuDileptonPreSel), lowMllCut(ElMuDileptonPreSel)]
 
-        outZCut = [outZ(OSElElDileptonPreSel), outZ(OSMuMuDileptonPreSel)]
+            outZCut = [outZ(OSElElDileptonPreSel), outZ(OSMuMuDileptonPreSel)]
 
-        noSel = noSel.refine('commonSelections', cut=(op.AND(elPtCut, muPtCut, mllCut, outZCut)))
+
+            DLsel = noSel.refine('commonSelections', cut=[
+                                elPtCut, muPtCut, mllCut, outZCut])
+
+        SL_resolved = noSel.refine('SL_resolved', cut=[op.rng_len(ak4Jets) >= 3,
+                                        op.rng_len(ak4BJets) >= 1,
+                                        op.rng_len(ak8BJets) == 0])
+
+        SL_boosted = noSel.refine('SL_boosted', 
+            cut=[op.rng_len(ak8BJets) >= 1, op.rng_len(ak4JetsCleanedFromAk8b) >= 1])
+
+        # boosted -> and at least one b-tagged ak8 jet
+        DL_boosted = DLsel.refine(
+            'DL_boosted', cut=(op.rng_len(ak8BJets) >= 1))
+
+        # resolved -> and at least two ak4 jets with at least one b-tagged and no ak8 jets
+        DL_resolved = DLsel.refine('DL_resolved', cut=(op.AND(op.rng_len(
+            ak4Jets) >= 2, op.rng_len(ak4BJets) >= 1, op.rng_len(ak8Jets) == 0)))
 
         # has exactly two leptons
         # hasTwoL = noSel.refine('hasTwoL', cut=(
@@ -307,14 +322,57 @@ class controlPlotter(NanoBaseHHWWbb):
         plots.extend([
             Plot.make1D("nFakeElectrons", op.rng_len(fakeElectrons), noSel, EqBin(
                 15, 0., 15.), xTitle="Number of fake electrons"),
-            # Plot.make1D("nFakeMuons", op.rng_len(fakeMuons), noSel, EqBin(
-            #     15, 0., 15.), xTitle="Number of fake muons"),
-            # Plot.make1D("ncleanedAK8Jets", op.rng_len(cleanedAK8Jets), noSel, EqBin(
-            #     15, 0., 15.), xTitle="Number of cleaned AK8 jets"),
-            # Plot.make1D("nTaus", op.rng_len(taus), noSel, EqBin(
-            #     15, 0., 15.), xTitle="Number of taus"),
-            # Plot.make1D("nCleanedTaus", op.rng_len(cleanedTaus), noSel, EqBin(
-            #     15, 0., 15.), xTitle="Number of cleaned taus")
+            Plot.make1D("nFakeMuons", op.rng_len(fakeMuons), noSel, EqBin(
+                15, 0., 15.), xTitle="Number of fake muons"),
+            # DL boosted plots
+            Plot.make1D("DL_boosted_nJets", op.rng_len(ak4Jets), DL_boosted, EqBin(
+                15, 0., 15.), xTitle="Number of jets"),
+            Plot.make1D("DL_boosted_fatJet_pt", ak8Jets[0].pt, DL_boosted, EqBin(
+                400, 200, 1000), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
+            Plot.make1D("DL_boosted_subjet1_pt", ak8Jets[0].subJet1.pt, DL_boosted, EqBin(
+                250, 0, 500), title=" pT(j1 subjet1)", xTitle="pT(j1 subjet1) (GeV/c)"),
+            Plot.make1D("DL_boosted_subjet2_pt", ak8Jets[0].subJet2.pt, DL_boosted, EqBin(
+                250, 0, 500), title=" pT(j1 subjet2)", xTitle="pT(j1 subjet2) (GeV/c)"),
+            Plot.make1D("DL_boosted_fatJet_eta", ak8Jets[0].eta, DL_boosted, EqBin(
+                80, -3, 3), title="eta(j1)", xTitle="eta(j1)"),
+            Plot.make1D("DL_boosted_subjet1_eta", ak8Jets[0].subJet1.eta, DL_boosted, EqBin(
+                80, -3, 3), title="eta(j1 subjet1)", xTitle="eta(j1 subjet1)"),
+            Plot.make1D("DL_boosted_subjet2_eta", ak8Jets[0].subJet2.eta, DL_boosted, EqBin(
+                80, -3, 3), title="eta(j1 subjet2)", xTitle="eta(j1 subjet2)"),
+            Plot.make1D("DL_boosted_InvM_emu", op.invariant_mass(ElMuDileptonPreSel[0][0].p4, ElMuDileptonPreSel[0][1].p4), DL_boosted, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pair (boosted) (GeV/c^2)"),
+            Plot.make1D("DL_boosted_InvM_ee", op.invariant_mass(ElElDileptonPreSel[0][0].p4, ElElDileptonPreSel[0][1].p4), DL_boosted, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electrons (boosted) (GeV/c^2)"),
+            Plot.make1D("DL_boosted_InvM_mumu", op.invariant_mass(MuMuDileptonPreSel[0][0].p4, MuMuDileptonPreSel[1][1].p4), DL_boosted, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of muons (boosted) (GeV/c^2)"),
+            Plot.make1D("DL_boosted_InvM_jj", op.invariant_mass(ak8Jets[0].subJet1.p4, ak8Jets[0].subJet2.p4), DL_boosted, EqBin(
+                160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
+            Plot.make2D("DL_boosted_InvM_jj_vs_jet1_eta", [op.invariant_mass(ak8Jets[0].subJet1.p4, ak8Jets[0].subJet2.p4), ak8Jets[0].eta], DL_boosted, [
+                        EqBin(160, 40., 200.), EqBin(-8, -3, 3)], title="InvM(jj) vs jet1 eta", xTitle="Invariant Mass of jets (GeV/c^2)", yTitle="eta(j1)"),
+            Plot.make2D("DL_boosted_InvM_jj_vs_jet2_eta", [op.invariant_mass(ak8Jets[0].subJet1.p4, ak8Jets[0].subJet2.p4), ak8Jets[0].subJet2.eta], DL_boosted, [
+                        EqBin(160, 40., 200.), EqBin(-8, -3, 3)], title="InvM(jj) vs jet2 eta", xTitle="Invariant Mass of jets (GeV/c^2)", yTitle="eta(j2)"),
+
+            # DL resolved plots
+            Plot.make1D("DL_resolved_nJets", op.rng_len(ak4Jets), DL_resolved, EqBin(
+                15, 0., 15.), xTitle="Number of jets"),
+            Plot.make1D("DL_resolved_InvM_leadingJet_pt", ak4Jets[0].pt, DL_resolved, EqBin(
+                500, 0, 500), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
+            Plot.make1D("DL_resolved_InvM_subleadingJet_pt", ak4Jets[1].pt, DL_resolved, EqBin(
+                500, 0, 500), title="pT(j2)", xTitle="pT(j2) (GeV/c)"),
+            Plot.make1D("DL_resolved_InvM_leadingJet_eta", ak4Jets[0].eta, DL_resolved, EqBin(
+                80, -3, 3), title="eta(j1)", xTitle="eta(j1)"),
+            Plot.make1D("DL_resolved_InvM_subleadingJet_eta", ak4Jets[1].eta, DL_resolved, EqBin(
+                80, -3, 3), title="eta(j2)", xTitle="eta(j2)"),
+            Plot.make1D("DL_resolved_DR_jets", op.deltaR(ak4Jets[0].p4, ak4Jets[1].p4), DL_resolved, EqBin(
+                100, 0, 10), title="DR(j1,j2)", xTitle="DR(j1,j2)"),
+            Plot.make1D("DL_resolved_InvM_emu", op.invariant_mass(ElMuDileptonPreSel[0][0].p4, ElMuDileptonPreSel[0][1].p4), DL_resolved, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pair (resolved) (GeV/c^2)"),
+            Plot.make1D("DL_resolved_InvM_ee", op.invariant_mass(ElElDileptonPreSel[0][0].p4, ElElDileptonPreSel[0][1].p4), DL_resolved, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electrons (resolved) (GeV/c^2)"),
+            Plot.make1D("DL_resolved_InvM_mumu", op.invariant_mass(MuMuDileptonPreSel[0][0].p4, MuMuDileptonPreSel[0][1].p4), DL_resolved, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of muons (resolved) (GeV/c^2)"),
+            # Plot.make1D("DL_resolved_InvM_jj", op.invariant_mass(firstJetPair[0].p4, firstJetPair[1].p4), DL_resolved, EqBin(
+            #     160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
         ])
 
         # Cutflow report
