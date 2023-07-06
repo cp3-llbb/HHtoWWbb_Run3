@@ -22,9 +22,6 @@ def muon_deepJetInterpIfMvaFailed(mu): return op.OR(op.NOT(
     hasAssociatedJet(mu)), mu.jet.btagDeepFlavB < muon_btagInterpolation(mu))
 
 
-def muonTightSel(mu): return op.AND(mu.mvaTTH >= 0.50, mu.mediumId)
-
-
 def lepton_associatedJetLessThanMediumBtag(lep): return op.OR(
     op.NOT(hasAssociatedJet(lep)), lep.jet.btagDeepFlavB <= 0.2770)  # 2018 value
 
@@ -53,17 +50,20 @@ def muonDef(mu):
 def muonConePt(muons):
     return op.map(muons, lambda lep: op.multiSwitch(
         (op.AND(op.abs(lep.pdgId) != 11, op.abs(lep.pdgId) != 13), lep.pt),
-        (op.AND(op.abs(lep.pdgId) == 13, lep.mvaTTH > 0.50), lep.pt),
+        (op.AND(op.abs(lep.pdgId) == 13, lep.mediumId, lep.mvaTTH > 0.50), lep.pt),
         0.9*lep.pt*(1.+lep.jetRelIso)
     ))
 
 
 def muonFakeSel(muons):
     return op.select(muons, lambda mu: op.AND(
-        muonConePt(muons)[mu.idx] > 10,
+        muonConePt(muons)[mu.idx] > 10.,
         lepton_associatedJetLessThanMediumBtag(mu),
         op.OR(mu.mvaTTH > 0.50, op.AND(mu.jetRelIso < 0.8, muon_deepJetInterpIfMvaFailed(mu))))
     )
+
+
+def muonTightSel(mu): return op.AND(mu.mvaTTH > 0.50, mu.mediumId)
 
 
 def elDef(el):
@@ -74,7 +74,7 @@ def elDef(el):
         op.abs(el.dz) < 0.1,
         el.sip3d < 8,
         el.miniPFRelIso_all < 0.4,
-        el.mvaNoIso > 0.5,  # check WPL
+        el.mvaNoIso > 0.5,  # this should mean loose WP
         el.lostHits <= 1
     )
 
@@ -100,22 +100,21 @@ def elFakeSel(electrons):
     return op.select(electrons, lambda el: op.AND(
         elConePt(electrons)[el.idx] > 10,
         op.OR(
-            op.AND(op.abs(el.eta+el.deltaEtaSC)
-                   <= 1.479, el.sieie < 0.011),
-            op.AND(op.abs(el.eta+el.deltaEtaSC)
-                   > 1.479, el.sieie < 0.030)
+            op.AND(op.abs(el.eta+el.deltaEtaSC) <= 1.479, el.sieie < 0.011),
+            op.AND(op.abs(el.eta+el.deltaEtaSC) > 1.479, el.sieie < 0.030)
         ),
         el.hoe < 0.10,
         el.eInvMinusPInv > -0.04,
-        op.OR(el.mvaTTH >= 0.30, op.AND(
-            el.jetRelIso < 0.7, el.mvaNoIso_WP90)),
+        op.OR(el.mvaTTH > 0.30, op.AND(el.jetRelIso < 0.7, el.mvaNoIso_WP90)),
         op.switch(
-            el.mvaTTH < 0.30,
+            el.mvaTTH <= 0.30,
             lepton_associatedJetLessThanTightBtag(el),
             lepton_associatedJetLessThanMediumBtag(el)),
         el.lostHits == 0,
         el.convVeto
     ))
+
+def elTightSel(el): return el.mvaTTH > 0.30
 
 
 def ak4jetDef(jet):

@@ -28,6 +28,8 @@ class controlPlotter(NanoBaseHHWWbb):
 
         fakeMuons = defs.muonFakeSel(muons)
 
+        tightMuons = op.select(fakeMuons, lambda mu: defs.muonTightSel(mu))
+
         # Electrons
         electrons = op.sort(
             op.select(tree.Electron, lambda el: op.AND(
@@ -39,6 +41,8 @@ class controlPlotter(NanoBaseHHWWbb):
 
         # Fake Electrons
         fakeElectrons = defs.elFakeSel(clElectrons)
+
+        tightElectrons = op.select(fakeElectrons, lambda el: defs.elTightSel(el))
 
         # AK8 Jets
         ak8Jets = op.sort(
