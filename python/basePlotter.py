@@ -12,11 +12,11 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
 
     def addArgs(self, parser):
         super(NanoBaseHHWWbb, self).addArgs(parser)
-        parser.add_argument("--era",
-                            action='store',
+        parser.add_argument("-c", "--channel",
+                            dest="channel",
                             type=str,
-                            default=None,
-                            help='This has no use right now!')
+                            required=True,
+                            help='Channel to be selected between SL and DL')
 
     def prepareTree(self, tree, sample=None, sampleCfg=None, backend=None):
         def isMC():
@@ -43,7 +43,8 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
 
         def getNanoAODDescription():
             groups = ["HLT_", "MET_", "RawMET_"]
-            collections = ["nElectron", "nJet", "nMuon", "nFatJet", "nSubJet", "nTau"]
+            collections = ["nElectron", "nJet",
+                           "nMuon", "nFatJet", "nSubJet", "nTau"]
             mcCollections = ["nGenDressedLepton",
                              "nGenJet", "nGenPart", "nCorrT1METJet"]
             varReaders = []
