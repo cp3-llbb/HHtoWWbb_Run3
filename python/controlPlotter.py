@@ -210,11 +210,11 @@ class controlPlotter(NanoBaseHHWWbb):
 
         Zmass = 91.1876
 
-        def lowMllCut(dileptons): return op.NOT(op.rng_any(
-            dileptons, lambda dilep: op.invariant_mass(dilep[0].p4, dilep[1].p4) < 12.))
+        def lowMllCut(dileptons): return op.rng_any(
+            dileptons, lambda dilep: op.invariant_mass(dilep[0].p4, dilep[1].p4) >= 12.)
 
-        def outZ(dileptons): return op.NOT(op.rng_any(dileptons, lambda dilep: op.in_range(
-            Zmass - 10., op.invariant_mass(dilep[0].p4, dilep[1].p4), Zmass + 10.)))
+        def outZ(dileptons): return op.rng_any(
+            dileptons, lambda dilep: op.abs(op.invariant_mass(dilep[0].p4, dilep[1].p4) - Zmass) >= 10.)
 
         # SL channel
         if self.channel == 'SL':
