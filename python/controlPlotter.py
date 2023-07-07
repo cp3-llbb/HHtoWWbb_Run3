@@ -248,73 +248,10 @@ class controlPlotter(NanoBaseHHWWbb):
             'DL_boosted', cut=(op.rng_len(ak8BJets) >= 1))
 
         # resolved -> and at least two ak4 jets with at least one b-tagged and no ak8 jets
-        DL_resolved = DLsel.refine('DL_resolved', cut=(op.AND(op.rng_len(
+        DL_resolved_1b = DLsel.refine('DL_resolved_1b', cut=(op.AND(op.rng_len(
             ak4Jets) >= 2, op.rng_len(ak4BJets) >= 1, op.rng_len(ak8Jets) == 0)))
-
-        # has exactly two leptons
-        # hasTwoL = noSel.refine('hasTwoL', cut=(
-        #     op.OR(
-        #         op.AND(op.rng_len(clElectrons) == 2, op.rng_len(muons) == 0,
-        #                clElectrons[0].charge != clElectrons[1].charge, clElectrons[0].pt > 25., clElectrons[1].pt > 15.),
-        #         op.AND(op.rng_len(muons) == 2, op.rng_len(clElectrons) == 0,
-        #                muons[0].charge != muons[1].charge, muons[0].pt > 25., muons[1].pt > 15.),
-        #         op.AND(op.rng_len(clElectrons) == 1, op.rng_len(muons) == 1,
-        #                clElectrons[0].charge != muons[0].charge,
-        #                op.switch(
-        #             clElectrons[0].pt >= muons[0].pt,
-        #             op.AND(clElectrons[0].pt > 25., muons[0].pt > 15.),
-        #             op.AND(clElectrons[0].pt > 15., muons[0].pt > 25.))
-        #         ))
-        # ))
-
-        # lepton channels
-        # emuPair = op.combine((clElectrons, muons), N=2,
-        #                      pred=lambda el, mu: el.charge != mu.charge)
-        # eePair = op.combine(clElectrons, N=2, pred=lambda el1,
-        #                     el2: el1.charge != el2.charge)
-        # mumuPair = op.combine(muons, N=2, pred=lambda mu1,
-        #                       mu2: mu1.charge != mu2.charge)
-
-        # firstEMUpair = emuPair[0]
-        # firstEEpair = eePair[0]
-        # firstMUMUpair = mumuPair[0]
-
-        # boosted -> and at least one b-tagged ak8 jet
-        # DL_boosted = hasTwoL.refine(
-        #     'DL_boosted', cut=(op.rng_len(ak8bJets) >= 1))
-
-        # resolved -> and at least two ak4 jets with at least one b-tagged and no ak8 jets
-        # DL_resolved = hasTwoL.refine('DL_resolved', cut=(op.AND(op.rng_len(
-        #     ak4Jets) >= 2, op.rng_len(ak4bJets) >= 1, op.rng_len(ak8Jets) == 0)))
-
-        ### Semi-leptonic channel ###
-
-        # has exactly one lepton
-        # hasOneL = noSel.refine('hasOneL', cut=(op.OR(
-        #     op.AND(
-        #         op.rng_len(clElectrons) == 1,
-        #         op.rng_len(muons) == 0,
-        #         clElectrons[0].pt > 32.),
-        #     op.AND(
-        #         op.rng_len(muons) == 1,
-        #         op.rng_len(clElectrons) == 0,
-        #         muons[0].pt > 25.)
-        # )))
-
-        # ak4ak4bJetPair = op.combine((ak4Jets, ak4bJets), N=2, pred=lambda j1, j2:
-        #                             op.deltaR(j1.p4, j2.p4) > 0.8)
-        # firstJetPair = ak4ak4bJetPair[0]
-
-        # boosted -> and at least one b-tagged ak8 jet and at least one ak4 jet outside the b-tagged ak8 jet
-        # SL_boosted = hasOneL.refine('SL_boosted', cut=(op.AND(
-        #     op.rng_len(ak8bJets) >= 1,
-        #     op.rng_len(ak4Jets) >= 1,
-        #     op.deltaR(ak4Jets[0].p4, ak8bJets[0].p4) >= 1.2)
-        # ))
-        # resolved -> and at least three ak4 jets with at least one b-tagged and no ak8 jets
-        # SL_resolved = hasOneL.refine('SL_resolved', cut=(op.AND(op.rng_len(
-        #     ak4Jets) >= 3, op.rng_len(ak4bJets) >= 1, op.rng_len(ak8Jets) == 0)
-        # ))
+        DL_resolved_2b = DLsel.refine('DL_resolved', cut=(op.AND(op.rng_len(
+            ak4Jets) >= 2, op.rng_len(ak4BJets) >= 2, op.rng_len(ak8Jets) == 0)))
 
         #############################################################################
         #                                 Plots                                     #
@@ -352,35 +289,53 @@ class controlPlotter(NanoBaseHHWWbb):
             Plot.make2D("DL_boosted_InvM_jj_vs_jet2_eta", [op.invariant_mass(ak8Jets[0].subJet1.p4, ak8Jets[0].subJet2.p4), ak8Jets[0].subJet2.eta], DL_boosted, [
                         EqBin(160, 40., 200.), EqBin(-8, -3, 3)], title="InvM(jj) vs jet2 eta", xTitle="Invariant Mass of jets (GeV/c^2)", yTitle="eta(j2)"),
 
-            # DL resolved plots
-            Plot.make1D("DL_resolved_nJets", op.rng_len(ak4Jets), DL_resolved, EqBin(
+            # DL resolved 1b plots
+            Plot.make1D("DL_resolved_1b_nJets", op.rng_len(ak4Jets), DL_resolved_1b, EqBin(
                 15, 0., 15.), xTitle="Number of jets"),
-            Plot.make1D("DL_resolved_InvM_leadingJet_pt", ak4Jets[0].pt, DL_resolved, EqBin(
+            Plot.make1D("DL_resolved_1b_InvM_leadingJet_pt", ak4Jets[0].pt, DL_resolved_1b, EqBin(
                 500, 0, 500), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
-            Plot.make1D("DL_resolved_InvM_subleadingJet_pt", ak4Jets[1].pt, DL_resolved, EqBin(
+            Plot.make1D("DL_resolved_1b_InvM_subleadingJet_pt", ak4Jets[1].pt, DL_resolved_1b, EqBin(
                 500, 0, 500), title="pT(j2)", xTitle="pT(j2) (GeV/c)"),
-            Plot.make1D("DL_resolved_InvM_leadingJet_eta", ak4Jets[0].eta, DL_resolved, EqBin(
+            Plot.make1D("DL_resolved_1b_InvM_leadingJet_eta", ak4Jets[0].eta, DL_resolved_1b, EqBin(
                 80, -3, 3), title="eta(j1)", xTitle="eta(j1)"),
-            Plot.make1D("DL_resolved_InvM_subleadingJet_eta", ak4Jets[1].eta, DL_resolved, EqBin(
+            Plot.make1D("DL_resolved_1b_InvM_subleadingJet_eta", ak4Jets[1].eta, DL_resolved_1b, EqBin(
                 80, -3, 3), title="eta(j2)", xTitle="eta(j2)"),
-            Plot.make1D("DL_resolved_DR_jets", op.deltaR(ak4Jets[0].p4, ak4Jets[1].p4), DL_resolved, EqBin(
+            Plot.make1D("DL_resolved_1b_DR_jets", op.deltaR(ak4Jets[0].p4, ak4Jets[1].p4), DL_resolved_1b, EqBin(
                 100, 0, 10), title="DR(j1,j2)", xTitle="DR(j1,j2)"),
-            Plot.make1D("DL_resolved_InvM_emu", op.invariant_mass(ElMuDileptonPreSel[0][0].p4, ElMuDileptonPreSel[0][1].p4), DL_resolved, EqBin(
+            Plot.make1D("DL_resolved_1b_InvM_emu", op.invariant_mass(ElMuDileptonPreSel[0][0].p4, ElMuDileptonPreSel[0][1].p4), DL_resolved_1b, EqBin(
                 160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pair (resolved) (GeV/c^2)"),
-            Plot.make1D("DL_resolved_InvM_ee", op.invariant_mass(ElElDileptonPreSel[0][0].p4, ElElDileptonPreSel[0][1].p4), DL_resolved, EqBin(
+            Plot.make1D("DL_resolved_1b_InvM_ee", op.invariant_mass(ElElDileptonPreSel[0][0].p4, ElElDileptonPreSel[0][1].p4), DL_resolved_1b, EqBin(
                 160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electrons (resolved) (GeV/c^2)"),
-            Plot.make1D("DL_resolved_InvM_mumu", op.invariant_mass(MuMuDileptonPreSel[0][0].p4, MuMuDileptonPreSel[0][1].p4), DL_resolved, EqBin(
+            Plot.make1D("DL_resolved_1b_InvM_mumu", op.invariant_mass(MuMuDileptonPreSel[0][0].p4, MuMuDileptonPreSel[0][1].p4), DL_resolved_1b, EqBin(
                 160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of muons (resolved) (GeV/c^2)"),
-            # Plot.make1D("DL_resolved_InvM_jj", op.invariant_mass(firstJetPair[0].p4, firstJetPair[1].p4), DL_resolved, EqBin(
-            #     160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
+
+            # DL resolved 2b plots
+            Plot.make1D("DL_resolved_2b_nJets", op.rng_len(ak4Jets), DL_resolved_2b, EqBin(
+                15, 0., 15.), xTitle="Number of jets"),
+            Plot.make1D("DL_resolved_2b_InvM_leadingJet_pt", ak4Jets[0].pt, DL_resolved_2b, EqBin(
+                500, 0, 500), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
+            Plot.make1D("DL_resolved_2b_InvM_subleadingJet_pt", ak4Jets[1].pt, DL_resolved_2b, EqBin(
+                500, 0, 500), title="pT(j2)", xTitle="pT(j2) (GeV/c)"),
+            Plot.make1D("DL_resolved_2b_InvM_leadingJet_eta", ak4Jets[0].eta, DL_resolved_2b, EqBin(
+                80, -3, 3), title="eta(j1)", xTitle="eta(j1)"),
+            Plot.make1D("DL_resolved_2b_InvM_subleadingJet_eta", ak4Jets[1].eta, DL_resolved_2b, EqBin(
+                80, -3, 3), title="eta(j2)", xTitle="eta(j2)"),
+            Plot.make1D("DL_resolved_2b_DR_jets", op.deltaR(ak4Jets[0].p4, ak4Jets[1].p4), DL_resolved_2b, EqBin(
+                100, 0, 10), title="DR(j1,j2)", xTitle="DR(j1,j2)"),
+            Plot.make1D("DL_resolved_2b_InvM_emu", op.invariant_mass(ElMuDileptonPreSel[0][0].p4, ElMuDileptonPreSel[0][1].p4), DL_resolved_2b, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pair (resolved) (GeV/c^2)"),
+            Plot.make1D("DL_resolved_2b_InvM_ee", op.invariant_mass(ElElDileptonPreSel[0][0].p4, ElElDileptonPreSel[0][1].p4), DL_resolved_2b, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electrons (resolved) (GeV/c^2)"),
+            Plot.make1D("DL_resolved_2b_InvM_mumu", op.invariant_mass(MuMuDileptonPreSel[0][0].p4, MuMuDileptonPreSel[0][1].p4), DL_resolved_2b, EqBin(
+                160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of muons (resolved) (GeV/c^2)"),
+
         ])
 
         # Cutflow report
-        # yields.add(hasOneL, 'one lepton')
-        # yields.add(hasTwoL, 'two leptons')
-        # yields.add(DL_boosted, 'DL boosted')
-        # # yields.add(DL_resolved, 'DL resolved')
-        # yields.add(SL_boosted, 'SL boosted')
-        # # yields.add(SL_resolved, 'SL resolved')
+        yields.add(DL_boosted, 'DL boosted')
+        yields.add(DL_resolved_1b, 'DL resolved_1b')
+        yields.add(DL_resolved_2b, 'DL resolved_2b')
+        yields.add(SL_boosted, 'SL boosted')
+        yields.add(SL_resolved, 'SL resolved')
 
         return plots
