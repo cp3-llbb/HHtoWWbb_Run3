@@ -1,9 +1,9 @@
 tree: Events
 eras:
   "2022":
-    luminosity: 7.865 # pb^-1
+    luminosity: 7865 # pb^-1
   "2022EE":
-    luminosity: 20.665 # pb^-1
+    luminosity: 20665 # pb^-1
 dbcache: dascache
 samples:
   Muon:
@@ -11,7 +11,7 @@ samples:
     type: data
     group: "data"
     db: ['das:/Muon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/Muon/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/Muon/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
-    run_range: [355794, 359021]
+    run_range: [355794, 358219]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
     split: 128
     
@@ -29,7 +29,7 @@ samples:
     type: data
     group: "data"
     db: ['das:/EGamma/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/EGamma/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD','das:/EGamma/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
-    run_range: [355794, 359021]
+    run_range: [355794, 358219]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
     split: 223
 
@@ -47,7 +47,7 @@ samples:
     type: data
     group: "data"
     db: ['das:/MuonEG/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/MuonEG/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/MuonEG/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
-    run_range: [355794, 359021]
+    run_range: [355794, 358219]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
     split: 40
 
@@ -232,6 +232,7 @@ plotIt:
       legend: VV
       fill-color: "#C900FF"
   plotdefaults:
+    normalized: False
     y-axis: Events
     log-y: both
     y-axis-show-zero: True
@@ -241,4 +242,3 @@ plotIt:
     legend-columns: 2
     ratio-y-axis: '#frac{Data}{MC}'
     ratio-y-axis-range: [0.8, 1.2]
-    normalized: False
