@@ -1,0 +1,16 @@
+# jobqueue.yaml file
+jobqueue:
+  htcondor:
+    processes: 1
+    cores: 4
+    memory: 3GiB
+    disk: 1GiB
+    extra:
+      - '--worker-port 10000:10100'
+    scheduler_options:
+      port: 8786
+    job-extra:
+      +JobFlavour: '"longlunch"'
+      should_transfer_files: Yes
+      when_to_transfer_output: ON_EXIT
+      getenv: True
