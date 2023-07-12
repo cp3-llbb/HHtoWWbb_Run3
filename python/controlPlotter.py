@@ -344,43 +344,43 @@ class controlPlotter(NanoBaseHHWWbb):
                     160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of muons (resolved) (GeV/c^2)"),
 
             ])
-            if self.channel == "SL":
-                plots.extend([
-                    # SL boosted plots
-                    Plot.make1D("SL_boosted_nJets", op.rng_len(ak4Jets), SL_boosted, EqBin(
-                        15, 0., 15.), xTitle="Number of jets"),
-                    Plot.make1D("SL_boosted_fatJet_pt", ak8BJets[0].pt, SL_boosted, EqBin(
-                        400, 200, 1000), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
-                    Plot.make1D("SL_boosted_subjet1_pt", ak8BJets[0].subJet1.pt, SL_boosted, EqBin(
-                        250, 0, 500), title=" pT(j1 subjet1)", xTitle="pT(j1 subjet1) (GeV/c)"),
-                    Plot.make1D("SL_boosted_subjet2_pt", ak8BJets[0].subJet2.pt, SL_boosted, EqBin(
-                        250, 0, 500), title=" pT(j1 subjet2)", xTitle="pT(j1 subjet2) (GeV/c)"),
-                    Plot.make1D("SL_boosted_fatJet_eta", ak8BJets[0].eta, SL_boosted, EqBin(
-                        80, -3, 3), title="eta(j1)", xTitle="eta(j1)"),
-                    Plot.make1D("SL_boosted_subjet1_eta", ak8BJets[0].subJet1.eta, SL_boosted, EqBin(
-                        80, -3, 3), title="eta(j1 subjet1)", xTitle="eta(j1 subjet1)"),
-                    Plot.make1D("SL_boosted_subjet2_eta", ak8BJets[0].subJet2.eta, SL_boosted, EqBin(
-                        80, -3, 3), title="eta(j1 subjet2)", xTitle="eta(j1 subjet2)"),
-                    Plot.make1D("SL_boosted_InvM_jj", op.invariant_mass(ak8BJets[0].subJet1.p4, ak8BJets[0].subJet2.p4), SL_boosted, EqBin(
-                        160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
-                    Plot.make2D("SL_boosted_InvM_jj_vs_jet1_eta", [op.invariant_mass(ak8BJets[0].subJet1.p4, ak8BJets[0].subJet2.p4), ak8BJets[0].eta], SL_boosted, [
-                        EqBin(160, 40., 200.), EqBin(-8, -3, 3)], title="InvM(jj) vs jet1 eta", xTitle="Invariant Mass of jets (GeV/c^2)", yTitle="eta(j1)"),
-                    Plot.make2D("SL_boosted_InvM_jj_vs_jet2_eta", [op.invariant_mass(ak8BJets[0].subJet1.p4, ak8BJets[0].subJet2.p4), ak8BJets[0].subJet2.eta], SL_boosted, [
-                        EqBin(160, 40., 200.), EqBin(-8, -3, 3)], title="InvM(jj) vs jet2 eta", xTitle="Invariant Mass of jets (GeV/c^2)", yTitle="eta(j2)"),
+        if self.channel == "SL":
+            plots.extend([
+                # SL boosted plots
+                Plot.make1D("SL_boosted_nJets", op.rng_len(ak4Jets), SL_boosted, EqBin(
+                    15, 0., 15.), xTitle="Number of jets"),
+                Plot.make1D("SL_boosted_fatJet_pt", ak8BJets[0].pt, SL_boosted, EqBin(
+                    400, 200, 1000), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
+                Plot.make1D("SL_boosted_subjet1_pt", ak8BJets[0].subJet1.pt, SL_boosted, EqBin(
+                    250, 0, 500), title=" pT(j1 subjet1)", xTitle="pT(j1 subjet1) (GeV/c)"),
+                Plot.make1D("SL_boosted_subjet2_pt", ak8BJets[0].subJet2.pt, SL_boosted, EqBin(
+                    250, 0, 500), title=" pT(j1 subjet2)", xTitle="pT(j1 subjet2) (GeV/c)"),
+                Plot.make1D("SL_boosted_fatJet_eta", ak8BJets[0].eta, SL_boosted, EqBin(
+                    80, -3, 3), title="eta(j1)", xTitle="eta(j1)"),
+                Plot.make1D("SL_boosted_subjet1_eta", ak8BJets[0].subJet1.eta, SL_boosted, EqBin(
+                    80, -3, 3), title="eta(j1 subjet1)", xTitle="eta(j1 subjet1)"),
+                Plot.make1D("SL_boosted_subjet2_eta", ak8BJets[0].subJet2.eta, SL_boosted, EqBin(
+                    80, -3, 3), title="eta(j1 subjet2)", xTitle="eta(j1 subjet2)"),
+                Plot.make1D("SL_boosted_InvM_jj", op.invariant_mass(ak8BJets[0].subJet1.p4, ak8BJets[0].subJet2.p4), SL_boosted, EqBin(
+                    160, 40., 200.), title="InvM(jj)", xTitle="Invariant Mass of jets (GeV/c^2)"),
+                Plot.make2D("SL_boosted_InvM_jj_vs_jet1_eta", [op.invariant_mass(ak8BJets[0].subJet1.p4, ak8BJets[0].subJet2.p4), ak8BJets[0].eta], SL_boosted, [
+                    EqBin(160, 40., 200.), EqBin(-8, -3, 3)], title="InvM(jj) vs jet1 eta", xTitle="Invariant Mass of jets (GeV/c^2)", yTitle="eta(j1)"),
+                Plot.make2D("SL_boosted_InvM_jj_vs_jet2_eta", [op.invariant_mass(ak8BJets[0].subJet1.p4, ak8BJets[0].subJet2.p4), ak8BJets[0].subJet2.eta], SL_boosted, [
+                    EqBin(160, 40., 200.), EqBin(-8, -3, 3)], title="InvM(jj) vs jet2 eta", xTitle="Invariant Mass of jets (GeV/c^2)", yTitle="eta(j2)"),
 
-                    # SL resolved plots
-                    Plot.make1D("SL_resolved_nJets", op.rng_len(ak4BJets), SL_resolved, EqBin(
-                        15, 0., 15.), xTitle="Number of jets"),
-                    Plot.make1D("SL_resolved_InvM_leadingJet_pt", ak4BJets[0].pt, SL_resolved, EqBin(
-                        500, 0, 500), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
-                    Plot.make1D("SL_resolved_InvM_subleadingJet_pt", ak4BJets[1].pt, SL_resolved, EqBin(
-                        500, 0, 500), title="pT(j2)", xTitle="pT(j2) (GeV/c)"),
-                    Plot.make1D("SL_resolved_InvM_leadingJet_eta", ak4BJets[0].eta, SL_resolved, EqBin(
-                        80, -3, 3), title="eta(j1)", xTitle="eta(j1)"),
-                    Plot.make1D("SL_resolved_InvM_subleadingJet_eta", ak4BJets[1].eta, SL_resolved, EqBin(
-                        80, -3, 3), title="eta(j2)", xTitle="eta(j2)"),
-                    Plot.make1D("SL_resolved_DR_jets", op.deltaR(ak4BJets[0].p4, ak4BJets[1].p4), SL_resolved, EqBin(
-                        100, 0, 10), title="DR(j1,j2)", xTitle="DR(j1,j2)")
-                ])
+                # SL resolved plots
+                Plot.make1D("SL_resolved_nJets", op.rng_len(ak4BJets), SL_resolved, EqBin(
+                    15, 0., 15.), xTitle="Number of jets"),
+                Plot.make1D("SL_resolved_InvM_leadingJet_pt", ak4BJets[0].pt, SL_resolved, EqBin(
+                    500, 0, 500), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
+                Plot.make1D("SL_resolved_InvM_subleadingJet_pt", ak4BJets[1].pt, SL_resolved, EqBin(
+                    500, 0, 500), title="pT(j2)", xTitle="pT(j2) (GeV/c)"),
+                Plot.make1D("SL_resolved_InvM_leadingJet_eta", ak4BJets[0].eta, SL_resolved, EqBin(
+                    80, -3, 3), title="eta(j1)", xTitle="eta(j1)"),
+                Plot.make1D("SL_resolved_InvM_subleadingJet_eta", ak4BJets[1].eta, SL_resolved, EqBin(
+                    80, -3, 3), title="eta(j2)", xTitle="eta(j2)"),
+                Plot.make1D("SL_resolved_DR_jets", op.deltaR(ak4BJets[0].p4, ak4BJets[1].p4), SL_resolved, EqBin(
+                    100, 0, 10), title="DR(j1,j2)", xTitle="DR(j1,j2)")
+            ])
 
         return plots
