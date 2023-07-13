@@ -259,6 +259,7 @@ class controlPlotter(NanoBaseHHWWbb):
                 op.rng_len(ak8BJets) == 0])
 
             SL_boosted = noSel.refine('SL_boosted', cut=[
+                op.OR(elPtCut, muPtCut), lowMllCut, outZ, tau_h_veto,
                 op.rng_len(ak8BJets) >= 1,
                 op.rng_len(ak4JetsCleanedFromAk8b) >= 1])
 
