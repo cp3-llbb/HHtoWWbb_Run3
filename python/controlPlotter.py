@@ -71,12 +71,22 @@ class controlPlotter(NanoBaseHHWWbb):
             MuMuTightSel = op.combine(tightMuons, N=2)
             ElMuTightSel = op.combine((tightElectrons, tightMuons))
 
+        # Taus
+
+        taus = defs.tauDef(tree.Tau)
+
+        cleanedTaus = op.select(taus, lambda tau: op.AND(
+            op.NOT(op.rng_any(
+                fakeElectrons, lambda el: op.deltaR(tau.p4, el.p4) <= 0.3)),
+            op.NOT(op.rng_any(
+                fakeMuons, lambda mu: op.deltaR(tau.p4, mu.p4) <= 0.3))
+        ))
+
         # AK4 Jets
         ak4JetsPreSel = op.sort(
             op.select(tree.Jet, lambda jet: defs.ak4jetDef(jet)), lambda jet: -jet.pt)
 
         # remove jets within cone of DR<0.4 of leading leptons at each channel
-
         if self.channel == 'SL':
             def cleaningWithRespectToLeadingLepton(DR):
                 return lambda jet: op.multiSwitch(
@@ -199,17 +209,6 @@ class controlPlotter(NanoBaseHHWWbb):
             ak8Btag_bothSubJets(fjet), op.c_float(2.0), op.c_float(1.0))
         nMediumBTaggedSubJets = op.rng_sum(ak8BJets, btaggedSubJets)
 
-        # Taus
-
-        taus = defs.tauDef(tree.Tau)
-
-        cleanedTaus = op.select(taus, lambda tau: op.AND(
-            op.NOT(op.rng_any(
-                fakeElectrons, lambda el: op.deltaR(tau.p4, el.p4) <= 0.3)),
-            op.NOT(op.rng_any(
-                fakeMuons, lambda mu: op.deltaR(tau.p4, mu.p4) <= 0.3))
-        ))
-
         # common variables for DL and SL channels
         Zmass = 91.1876
 
@@ -249,11 +248,12 @@ class controlPlotter(NanoBaseHHWWbb):
             yields.add(DL_resolved_2b, 'DL resolved_2b')
 
         if self.channel == 'SL':
-            def elPtCut(lep): return electron_conept[lep[0].idx] > 32.0
-            def muPtCut(lep): return muon_conept[lep[0].idx] > 25.0
+            def elPtCut(lep): return op.AND(electron_conept[lep[0].idx] > 32.0, op.rng_len(lep) == 1)
+            def muPtCut(lep): return op.AND(muon_conept[lep[0].idx] > 25.0, op.rng_len(lep) == 1)
+            def tau_h_veto(tauColl): return op.NOT(op.rng_any(tauColl, lambda tau: op.rng_len(tau) == 0))
 
             SL_resolved = noSel.refine('SL_resolved', cut=[
-                elPtCut, muPtCut, lowMllCut, outZ,
+                op.OR(elPtCut, muPtCut), lowMllCut, outZ, tau_h_veto,
                 op.rng_len(ak4Jets) >= 3,
                 op.rng_len(ak4BJets) >= 1,
                 op.rng_len(ak8BJets) == 0])
@@ -268,11 +268,6 @@ class controlPlotter(NanoBaseHHWWbb):
         #############################################################################
         #                                 Plots                                     #
         #############################################################################
-        plots.extend([
-            Plot.make1D("nFakeElectrons", op.rng_len(fakeElectrons), noSel, EqBin(
-                15, 0., 15.), xTitle="Number of fake electrons"),
-            Plot.make1D("nFakeMuons", op.rng_len(fakeMuons), noSel, EqBin(
-                15, 0., 15.), xTitle="Number of fake muons")])
         if self.channel == 'DL':
             plots.extend([
                 # DL boosted plots
@@ -347,8 +342,6 @@ class controlPlotter(NanoBaseHHWWbb):
         if self.channel == "SL":
             plots.extend([
                 # SL boosted plots
-                Plot.make1D("SL_boosted_nJets", op.rng_len(ak4Jets), SL_boosted, EqBin(
-                    15, 0., 15.), xTitle="Number of jets"),
                 Plot.make1D("SL_boosted_fatJet_pt", ak8BJets[0].pt, SL_boosted, EqBin(
                     400, 200, 1000), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
                 Plot.make1D("SL_boosted_subjet1_pt", ak8BJets[0].subJet1.pt, SL_boosted, EqBin(
@@ -373,14 +366,8 @@ class controlPlotter(NanoBaseHHWWbb):
                     15, 0., 15.), xTitle="Number of jets"),
                 Plot.make1D("SL_resolved_InvM_leadingJet_pt", ak4BJets[0].pt, SL_resolved, EqBin(
                     500, 0, 500), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
-                Plot.make1D("SL_resolved_InvM_subleadingJet_pt", ak4BJets[1].pt, SL_resolved, EqBin(
-                    500, 0, 500), title="pT(j2)", xTitle="pT(j2) (GeV/c)"),
                 Plot.make1D("SL_resolved_InvM_leadingJet_eta", ak4BJets[0].eta, SL_resolved, EqBin(
-                    80, -3, 3), title="eta(j1)", xTitle="eta(j1)"),
-                Plot.make1D("SL_resolved_InvM_subleadingJet_eta", ak4BJets[1].eta, SL_resolved, EqBin(
-                    80, -3, 3), title="eta(j2)", xTitle="eta(j2)"),
-                Plot.make1D("SL_resolved_DR_jets", op.deltaR(ak4BJets[0].p4, ak4BJets[1].p4), SL_resolved, EqBin(
-                    100, 0, 10), title="DR(j1,j2)", xTitle="DR(j1,j2)")
+                    80, -3, 3), title="eta(j1)", xTitle="eta(j1)")
             ])
 
         return plots
