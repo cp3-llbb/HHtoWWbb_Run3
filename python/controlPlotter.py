@@ -296,27 +296,27 @@ class controlPlotter(NanoBaseHHWWbb):
                                                                  [1].idx] > electron_conept[fakeElectrons[1].idx],
                                                      electron_conept[ElMuFakeSel[0][0].idx] > muon_conept[fakeMuons[1].idx]))])
 
-            elelSel.refine(cut=[OSDilepton(ElElFakeSel[0])])
-            mumuSel.refine(cut=[OSDilepton(MuMuFakeSel[0])])
-            elmuSel.refine(cut=[OSDilepton(ElMuFakeSel[0])])
+            elelSel.refine('OSelelSel', cut=[OSDilepton(ElElFakeSel[0])])
+            mumuSel.refine('OSmumuSel', cut=[OSDilepton(MuMuFakeSel[0])])
+            elmuSel.refine('OSelmuSel', cut=[OSDilepton(ElMuFakeSel[0])])
 
             outZCut = [outZ(OSElElDileptonPreSel), outZ(OSMuMuDileptonPreSel)]
-            elelSel.refine(cut=outZCut)
-            mumuSel.refine(cut=outZCut)
-            elmuSel.refine(cut=outZCut)
+            elelSel.refine('OSoutZelelSel', cut=outZCut)
+            mumuSel.refine('OSoutZmumuSel', cut=outZCut)
+            elmuSel.refine('OSoutZelmuSel', cut=outZCut)
 
-            elelSel.refine(cut=[lowPtCutElEl(ElElFakeSel[0]),
+            elelSel.refine('elelptSel', cut=[lowPtCutElEl(ElElFakeSel[0]),
                            leadingPtCutElEl(ElElFakeSel[0])])
-            mumuSel.refine(cut=[lowPtCutMuMu(MuMuFakeSel[0]),
+            mumuSel.refine('mumuptSel', cut=[lowPtCutMuMu(MuMuFakeSel[0]),
                            leadingPtCutMuMu(MuMuFakeSel[0])])
-            elmuSel.refine(cut=[lowPtCutElMu(ElMuFakeSel[0]),
+            elmuSel.refine('elmuptSel', cut=[lowPtCutElMu(ElMuFakeSel[0]),
                            leadingPtCutElMu(ElMuFakeSel[0])])
 
             mllCut = [lowMllCut(ElElDileptonPreSel), lowMllCut(
                 MuMuDileptonPreSel), lowMllCut(ElMuDileptonPreSel)]
-            elelSel.refine(cut=mllCut)
-            mumuSel.refine(cut=mllCut)
-            elmuSel.refine(cut=mllCut)
+            elelSel.refine('elelMllSel', cut=mllCut)
+            mumuSel.refine('mumuMllSel', cut=mllCut)
+            elmuSel.refine('elmuMllSel', cut=mllCut)
 
             # boosted -> and at least one b-tagged ak8 jet
             DL_boosted_ee = elelSel.refine(
