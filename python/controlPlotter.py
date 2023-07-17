@@ -275,57 +275,57 @@ class controlPlotter(NanoBaseHHWWbb):
                 electron_conept[dilep[0].idx] > 25, muon_conept[dilep[1].idx] > 25)  # leading above 25 GeV
 
             # Fake lepton selection #
-            elelSel = noSel.refine('elelSel', cut=[op.rng_len(ElElFakeSel) >= 1,
-                                                   op.OR(op.rng_len(fakeMuons) == 0,
-                                                         op.AND(op.rng_len(fakeMuons) == 1,
-                                                                electron_conept[ElElFakeSel[0]
-                                                                                [0].idx] > muon_conept[fakeMuons[0].idx],
-                                                                electron_conept[ElElFakeSel[0][1].idx] > muon_conept[fakeMuons[0].idx]),
-                                                         op.AND(op.rng_len(fakeMuons) >= 2,
-                                                                electron_conept[ElElFakeSel[0]
-                                                                                [0].idx] > muon_conept[fakeMuons[0].idx],
-                                                                electron_conept[ElElFakeSel[0]
-                                                                                [1].idx] > muon_conept[fakeMuons[0].idx],
-                                                                electron_conept[ElElFakeSel[0]
-                                                                                [0].idx] > muon_conept[fakeMuons[1].idx],
-                                                                electron_conept[ElElFakeSel[0][1].idx] > muon_conept[fakeMuons[1].idx]))])
+            # elelSel = noSel.refine('elelSel', cut=[op.rng_len(ElElFakeSel) >= 1,
+            #                                        op.OR(op.rng_len(fakeMuons) == 0,
+            #                                              op.AND(op.rng_len(fakeMuons) == 1,
+            #                                                     electron_conept[ElElFakeSel[0]
+            #                                                                     [0].idx] > muon_conept[fakeMuons[0].idx],
+            #                                                     electron_conept[ElElFakeSel[0][1].idx] > muon_conept[fakeMuons[0].idx]),
+            #                                              op.AND(op.rng_len(fakeMuons) >= 2,
+            #                                                     electron_conept[ElElFakeSel[0]
+            #                                                                     [0].idx] > muon_conept[fakeMuons[0].idx],
+            #                                                     electron_conept[ElElFakeSel[0]
+            #                                                                     [1].idx] > muon_conept[fakeMuons[0].idx],
+            #                                                     electron_conept[ElElFakeSel[0]
+            #                                                                     [0].idx] > muon_conept[fakeMuons[1].idx],
+            #                                                     electron_conept[ElElFakeSel[0][1].idx] > muon_conept[fakeMuons[1].idx]))])
 
-            mumuSel = noSel.refine('mumuSel', cut=[op.rng_len(MuMuFakeSel) >= 1,
-                                                   op.OR(op.rng_len(fakeElectrons) == 0,
-                                                         op.AND(op.rng_len(fakeElectrons) == 1,
-                                                                muon_conept[MuMuFakeSel[0]
-                                                                            [0].idx] > electron_conept[fakeElectrons[0].idx],
-                                                                muon_conept[MuMuFakeSel[0][1].idx] > electron_conept[fakeElectrons[0].idx]),
-                                                         op.AND(op.rng_len(fakeElectrons) >= 2,
-                                                                muon_conept[MuMuFakeSel[0]
-                                                                            [0].idx] > electron_conept[fakeElectrons[0].idx],
-                                                                muon_conept[MuMuFakeSel[0]
-                                                                            [1].idx] > electron_conept[fakeElectrons[0].idx],
-                                                                muon_conept[MuMuFakeSel[0]
-                                                                            [0].idx] > electron_conept[fakeElectrons[1].idx],
-                                                                muon_conept[MuMuFakeSel[0][1].idx] > electron_conept[fakeElectrons[1].idx]))])
-            elmuSel = noSel.refine('elmuSel', cut=[op.rng_len(ElMuFakeSel) >= 1,
-                                                   op.OR(op.AND(op.rng_len(fakeElectrons) == 1,
-                                                                op.rng_len(fakeMuons) == 1),
-                                                         op.AND(op.rng_len(fakeElectrons) >= 2,
-                                                                op.rng_len(
-                                                             fakeMuons) == 1,
-                                                       muon_conept[ElMuFakeSel[0][1].idx] > electron_conept[fakeElectrons[1].idx]),
-                op.AND(op.rng_len(fakeMuons) >= 2,
-                                                       op.rng_len(
-                    fakeElectrons) == 1,
-                                                       electron_conept[ElMuFakeSel[0][0].idx] > muon_conept[fakeMuons[1].idx]),
-                op.AND(op.rng_len(fakeElectrons) >= 2,
-                                                       op.rng_len(
-                    fakeMuons) >= 2,
-                                                       muon_conept[ElMuFakeSel[0]
-                                                                   [1].idx] > electron_conept[fakeElectrons[1].idx],
-                                                       electron_conept[ElMuFakeSel[0][0].idx] > muon_conept[fakeMuons[1].idx]))])
+            # mumuSel = noSel.refine('mumuSel', cut=[op.rng_len(MuMuFakeSel) >= 1,
+            #                                        op.OR(op.rng_len(fakeElectrons) == 0,
+            #                                              op.AND(op.rng_len(fakeElectrons) == 1,
+            #                                                     muon_conept[MuMuFakeSel[0]
+            #                                                                 [0].idx] > electron_conept[fakeElectrons[0].idx],
+            #                                                     muon_conept[MuMuFakeSel[0][1].idx] > electron_conept[fakeElectrons[0].idx]),
+            #                                              op.AND(op.rng_len(fakeElectrons) >= 2,
+            #                                                     muon_conept[MuMuFakeSel[0]
+            #                                                                 [0].idx] > electron_conept[fakeElectrons[0].idx],
+            #                                                     muon_conept[MuMuFakeSel[0]
+            #                                                                 [1].idx] > electron_conept[fakeElectrons[0].idx],
+            #                                                     muon_conept[MuMuFakeSel[0]
+            #                                                                 [0].idx] > electron_conept[fakeElectrons[1].idx],
+            #                                                     muon_conept[MuMuFakeSel[0][1].idx] > electron_conept[fakeElectrons[1].idx]))])
+            # elmuSel = noSel.refine('elmuSel', cut=[op.rng_len(ElMuFakeSel) >= 1,
+            #                                        op.OR(op.AND(op.rng_len(fakeElectrons) == 1,
+            #                                                     op.rng_len(fakeMuons) == 1),
+            #                                              op.AND(op.rng_len(fakeElectrons) >= 2,
+            #                                                     op.rng_len(
+            #                                                  fakeMuons) == 1,
+            #                                            muon_conept[ElMuFakeSel[0][1].idx] > electron_conept[fakeElectrons[1].idx]),
+            #     op.AND(op.rng_len(fakeMuons) >= 2,
+            #                                            op.rng_len(
+            #         fakeElectrons) == 1,
+            #                                            electron_conept[ElMuFakeSel[0][0].idx] > muon_conept[fakeMuons[1].idx]),
+            #     op.AND(op.rng_len(fakeElectrons) >= 2,
+            #                                            op.rng_len(
+            #         fakeMuons) >= 2,
+            #                                            muon_conept[ElMuFakeSel[0]
+            #                                                        [1].idx] > electron_conept[fakeElectrons[1].idx],
+            #                                            electron_conept[ElMuFakeSel[0][0].idx] > muon_conept[fakeMuons[1].idx]))])
 
             # OS cut
-            elelSel.refine('OSelelSel', cut=[OSDilepton(ElElFakeSel[0])])
-            mumuSel.refine('OSmumuSel', cut=[OSDilepton(MuMuFakeSel[0])])
-            elmuSel.refine('OSelmuSel', cut=[OSDilepton(ElMuFakeSel[0])])
+            elelSel = noSel.refine('OSelelSel', cut=[OSDilepton(ElElFakeSel[0])])
+            mumuSel = noSel.refine('OSmumuSel', cut=[OSDilepton(MuMuFakeSel[0])])
+            elmuSel = noSel.refine('OSelmuSel', cut=[OSDilepton(ElMuFakeSel[0])])
 
             # Pt cuts
             elelSel.refine('elelptSel', cut=[lowPtCutElEl(ElElFakeSel[0]),
