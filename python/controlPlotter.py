@@ -71,12 +71,12 @@ class controlPlotter(NanoBaseHHWWbb):
             MuMuTightSel = op.combine(tightMuons, N=2)
             ElMuTightSel = op.combine((tightElectrons, tightMuons))
 
-            if self.isMC:
+            if self.is_MC:
                 def is_matched(lep): return op.OR(lep.genPartFlav == 1,  # Prompt muon or electron
                                                   lep.genPartFlav == 15)  # From tau decay
                 # lep.genPartFlav==22) # From photon conversion (only available for electrons)
             else:
-                def is_matched(): return op.c_bool(True)
+                def is_matched(lep): return op.c_bool(True)
 
             def dilepton_matched(dilep): return op.AND(
                 is_matched(dilep[0]), is_matched(dilep[1]))
@@ -356,7 +356,7 @@ class controlPlotter(NanoBaseHHWWbb):
                 ElElTightSel[0][1].idx == ElElFakeSel[0][1].idx]
             )
             mumuSel.refine('dileptonCut_mumu', cut=[
-                tightpair_MuMu(self.MuMuFakeSel[0]),
+                tightpair_MuMu(MuMuFakeSel[0]),
                 op.rng_len(tightMuons) == 2,
                 op.rng_len(tightElectrons) == 0,
                 MuMuTightSel[0][0].idx == MuMuFakeSel[0][0].idx,
