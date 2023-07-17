@@ -71,6 +71,37 @@ class controlPlotter(NanoBaseHHWWbb):
             MuMuTightSel = op.combine(tightMuons, N=2)
             ElMuTightSel = op.combine((tightElectrons, tightMuons))
 
+            if self.isMC:
+                def is_matched(lep): return op.OR(lep.genPartFlav == 1,  # Prompt muon or electron
+                                                  lep.genPartFlav == 15)  # From tau decay
+                # lep.genPartFlav==22) # From photon conversion (only available for electrons)
+            else:
+                def is_matched(): return op.c_bool(True)
+
+            def dilepton_matched(dilep): return op.AND(
+                is_matched(dilep[0]), is_matched(dilep[1]))
+
+            def electronTightSel(ele): return ele.mvaTTH >= 0.30
+
+            def muonTightSel(mu): return op.AND(mu.mvaTTH >= 0.50, mu.mediumId)
+
+            def tightpair_ElEl(dilep): return op.AND(
+                dilepton_matched(dilep),
+                electronTightSel(dilep[0]),
+                electronTightSel(dilep[1])
+            )
+
+            def tightpair_MuMu(dilep): return op.AND(
+                dilepton_matched(dilep),
+                muonTightSel(dilep[0]),
+                muonTightSel(dilep[1])
+            )
+
+            def tightpair_ElMu(dilep): return op.AND(
+                dilepton_matched(dilep),
+                electronTightSel(dilep[0]),
+                muonTightSel(dilep[1])
+            )
         # Taus
 
         taus = defs.tauDef(tree.Tau)
@@ -224,12 +255,6 @@ class controlPlotter(NanoBaseHHWWbb):
         if self.channel == 'DL':
             def OSDilepton(dilep): return dilep[0].charge != dilep[1].charge
 
-            def eePtCut(el): return op.AND(
-                electron_conept[el[0].idx] > 25.0, electron_conept[el[1].idx] > 15.0)
-
-            def mumuPtCut(mu): return op.AND(
-                muon_conept[mu[0].idx] > 25.0, muon_conept[mu[1].idx] > 15.0)
-
             # Pt cuts #
             def lowPtCutElEl(dilep): return op.AND(
                 electron_conept[dilep[0].idx] > 15, electron_conept[dilep[1].idx] > 15)  # subleading above 15 GeV
@@ -250,61 +275,58 @@ class controlPlotter(NanoBaseHHWWbb):
                 electron_conept[dilep[0].idx] > 25, muon_conept[dilep[1].idx] > 25)  # leading above 25 GeV
 
             elelSel = noSel.refine('elelSel', cut=[op.rng_len(ElElFakeSel) >= 1,
-                                        op.OR(op.rng_len(fakeMuons) == 0,
-                                              op.AND(op.rng_len(fakeMuons) == 1,
-                                                     electron_conept[ElElFakeSel[0]
-                                                                     [0].idx] > muon_conept[fakeMuons[0].idx],
-                                                     electron_conept[ElElFakeSel[0][1].idx] > muon_conept[fakeMuons[0].idx]),
-                                              op.AND(op.rng_len(fakeMuons) >= 2,
-                                                     electron_conept[ElElFakeSel[0]
-                                                                     [0].idx] > muon_conept[fakeMuons[0].idx],
-                                                     electron_conept[ElElFakeSel[0]
-                                                                     [1].idx] > muon_conept[fakeMuons[0].idx],
-                                                     electron_conept[ElElFakeSel[0]
-                                                                     [0].idx] > muon_conept[fakeMuons[1].idx],
-                                                     electron_conept[ElElFakeSel[0][1].idx] > muon_conept[fakeMuons[1].idx]))])
+                                                   op.OR(op.rng_len(fakeMuons) == 0,
+                                                         op.AND(op.rng_len(fakeMuons) == 1,
+                                                                electron_conept[ElElFakeSel[0]
+                                                                                [0].idx] > muon_conept[fakeMuons[0].idx],
+                                                                electron_conept[ElElFakeSel[0][1].idx] > muon_conept[fakeMuons[0].idx]),
+                                                         op.AND(op.rng_len(fakeMuons) >= 2,
+                                                                electron_conept[ElElFakeSel[0]
+                                                                                [0].idx] > muon_conept[fakeMuons[0].idx],
+                                                                electron_conept[ElElFakeSel[0]
+                                                                                [1].idx] > muon_conept[fakeMuons[0].idx],
+                                                                electron_conept[ElElFakeSel[0]
+                                                                                [0].idx] > muon_conept[fakeMuons[1].idx],
+                                                                electron_conept[ElElFakeSel[0][1].idx] > muon_conept[fakeMuons[1].idx]))])
 
             mumuSel = noSel.refine('mumuSel', cut=[op.rng_len(MuMuFakeSel) >= 1,
-                                        op.OR(op.rng_len(fakeElectrons) == 0,
-                                              op.AND(op.rng_len(fakeElectrons) == 1,
-                                                     muon_conept[MuMuFakeSel[0]
-                                                                 [0].idx] > electron_conept[fakeElectrons[0].idx],
-                                                     muon_conept[MuMuFakeSel[0][1].idx] > electron_conept[fakeElectrons[0].idx]),
-                                              op.AND(op.rng_len(fakeElectrons) >= 2,
-                                                     muon_conept[MuMuFakeSel[0]
-                                                                 [0].idx] > electron_conept[fakeElectrons[0].idx],
-                                                     muon_conept[MuMuFakeSel[0]
-                                                                 [1].idx] > electron_conept[fakeElectrons[0].idx],
-                                                     muon_conept[MuMuFakeSel[0]
-                                                                 [0].idx] > electron_conept[fakeElectrons[1].idx],
-                                                     muon_conept[MuMuFakeSel[0][1].idx] > electron_conept[fakeElectrons[1].idx]))])
+                                                   op.OR(op.rng_len(fakeElectrons) == 0,
+                                                         op.AND(op.rng_len(fakeElectrons) == 1,
+                                                                muon_conept[MuMuFakeSel[0]
+                                                                            [0].idx] > electron_conept[fakeElectrons[0].idx],
+                                                                muon_conept[MuMuFakeSel[0][1].idx] > electron_conept[fakeElectrons[0].idx]),
+                                                         op.AND(op.rng_len(fakeElectrons) >= 2,
+                                                                muon_conept[MuMuFakeSel[0]
+                                                                            [0].idx] > electron_conept[fakeElectrons[0].idx],
+                                                                muon_conept[MuMuFakeSel[0]
+                                                                            [1].idx] > electron_conept[fakeElectrons[0].idx],
+                                                                muon_conept[MuMuFakeSel[0]
+                                                                            [0].idx] > electron_conept[fakeElectrons[1].idx],
+                                                                muon_conept[MuMuFakeSel[0][1].idx] > electron_conept[fakeElectrons[1].idx]))])
             elmuSel = noSel.refine('elmuSel', cut=[op.rng_len(ElMuFakeSel) >= 1,
-                                        op.OR(op.AND(op.rng_len(fakeElectrons) == 1,
-                                                     op.rng_len(fakeMuons) == 1),
-                                              op.AND(op.rng_len(fakeElectrons) >= 2,
-                                                     op.rng_len(
-                                                         fakeMuons) == 1,
-                                                     muon_conept[ElMuFakeSel[0][1].idx] > electron_conept[fakeElectrons[1].idx]),
-                                              op.AND(op.rng_len(fakeMuons) >= 2,
-                                                     op.rng_len(
-                                                         fakeElectrons) == 1,
-                                                     electron_conept[ElMuFakeSel[0][0].idx] > muon_conept[fakeMuons[1].idx]),
-                                              op.AND(op.rng_len(fakeElectrons) >= 2,
-                                                     op.rng_len(
-                                                         fakeMuons) >= 2,
-                                                     muon_conept[ElMuFakeSel[0]
-                                                                 [1].idx] > electron_conept[fakeElectrons[1].idx],
-                                                     electron_conept[ElMuFakeSel[0][0].idx] > muon_conept[fakeMuons[1].idx]))])
+                                                   op.OR(op.AND(op.rng_len(fakeElectrons) == 1,
+                                                                op.rng_len(fakeMuons) == 1),
+                                                         op.AND(op.rng_len(fakeElectrons) >= 2,
+                                                                op.rng_len(
+                                                             fakeMuons) == 1,
+                                                       muon_conept[ElMuFakeSel[0][1].idx] > electron_conept[fakeElectrons[1].idx]),
+                op.AND(op.rng_len(fakeMuons) >= 2,
+                                                       op.rng_len(
+                    fakeElectrons) == 1,
+                                                       electron_conept[ElMuFakeSel[0][0].idx] > muon_conept[fakeMuons[1].idx]),
+                op.AND(op.rng_len(fakeElectrons) >= 2,
+                                                       op.rng_len(
+                    fakeMuons) >= 2,
+                                                       muon_conept[ElMuFakeSel[0]
+                                                                   [1].idx] > electron_conept[fakeElectrons[1].idx],
+                                                       electron_conept[ElMuFakeSel[0][0].idx] > muon_conept[fakeMuons[1].idx]))])
 
+            # OS cut
             elelSel.refine('OSelelSel', cut=[OSDilepton(ElElFakeSel[0])])
             mumuSel.refine('OSmumuSel', cut=[OSDilepton(MuMuFakeSel[0])])
             elmuSel.refine('OSelmuSel', cut=[OSDilepton(ElMuFakeSel[0])])
 
-            outZCut = [outZ(OSElElDileptonPreSel), outZ(OSMuMuDileptonPreSel)]
-            elelSel.refine('OSoutZelelSel', cut=outZCut)
-            mumuSel.refine('OSoutZmumuSel', cut=outZCut)
-            elmuSel.refine('OSoutZelmuSel', cut=outZCut)
-
+            # Pt cuts
             elelSel.refine('elelptSel', cut=[lowPtCutElEl(ElElFakeSel[0]),
                            leadingPtCutElEl(ElElFakeSel[0])])
             mumuSel.refine('mumuptSel', cut=[lowPtCutMuMu(MuMuFakeSel[0]),
@@ -312,11 +334,41 @@ class controlPlotter(NanoBaseHHWWbb):
             elmuSel.refine('elmuptSel', cut=[lowPtCutElMu(ElMuFakeSel[0]),
                            leadingPtCutElMu(ElMuFakeSel[0])])
 
+            # Mll cut
             mllCut = [lowMllCut(ElElDileptonPreSel), lowMllCut(
                 MuMuDileptonPreSel), lowMllCut(ElMuDileptonPreSel)]
             elelSel.refine('elelMllSel', cut=mllCut)
             mumuSel.refine('mumuMllSel', cut=mllCut)
             elmuSel.refine('elmuMllSel', cut=mllCut)
+
+            # z-veto
+            outZCut = [outZ(OSElElDileptonPreSel), outZ(OSMuMuDileptonPreSel)]
+            elelSel.refine('OSoutZelelSel', cut=outZCut)
+            mumuSel.refine('OSoutZmumuSel', cut=outZCut)
+            elmuSel.refine('OSoutZelmuSel', cut=outZCut)
+
+            # di-lepton cut
+            elelSel.refine('dileptonCut_ee', cut=[
+                tightpair_ElEl(ElElFakeSel[0]),
+                op.rng_len(tightElectrons) == 2,
+                op.rng_len(tightMuons) == 0,
+                ElElTightSel[0][0].idx == ElElFakeSel[0][0].idx,
+                ElElTightSel[0][1].idx == ElElFakeSel[0][1].idx]
+            )
+            mumuSel.refine('dileptonCut_mumu', cut=[
+                tightpair_MuMu(self.MuMuFakeSel[0]),
+                op.rng_len(tightMuons) == 2,
+                op.rng_len(tightElectrons) == 0,
+                MuMuTightSel[0][0].idx == MuMuFakeSel[0][0].idx,
+                MuMuTightSel[0][1].idx == MuMuFakeSel[0][1].idx]
+            )
+            elmuSel.refine('dileptonCut_emu', cut=[
+                tightpair_ElMu(ElMuFakeSel[0]),
+                op.rng_len(tightElectrons) == 1,
+                op.rng_len(tightMuons) == 1,
+                ElMuTightSel[0][0].idx == ElMuFakeSel[0][0].idx,
+                ElMuTightSel[0][1].idx == ElMuFakeSel[0][1].idx]
+            )
 
             # boosted -> and at least one b-tagged ak8 jet
             DL_boosted_ee = elelSel.refine(
@@ -333,7 +385,7 @@ class controlPlotter(NanoBaseHHWWbb):
                 ak4Jets) >= 2, op.rng_len(ak4BJets) >= 1, op.rng_len(ak8Jets) == 0)))
             DL_resolved_1b_emu = elmuSel.refine('DL_resolved_1b_emu', cut=(op.AND(op.rng_len(
                 ak4Jets) >= 2, op.rng_len(ak4BJets) >= 1, op.rng_len(ak8Jets) == 0)))
-            
+
             DL_resolved_2b_ee = elelSel.refine('DL_resolved_ee', cut=(op.AND(op.rng_len(
                 ak4Jets) >= 2, op.rng_len(ak4BJets) >= 2, op.rng_len(ak8Jets) == 0)))
             DL_resolved_2b_mumu = mumuSel.refine('DL_resolved_mumu', cut=(op.AND(op.rng_len(
@@ -387,7 +439,7 @@ class controlPlotter(NanoBaseHHWWbb):
                     400, 200, 1000), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
                 Plot.make1D("DL_boosted_fatJet_pt_emu", ak8Jets[0].pt, DL_boosted_emu, EqBin(
                     400, 200, 1000), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
-                    
+
                 Plot.make1D("DL_boosted_subjet1_pt_ee", ak8Jets[0].subJet1.pt, DL_boosted_ee, EqBin(
                     250, 0, 500), title=" pT(j1 subjet1)", xTitle="pT(j1 subjet1) (GeV/c)"),
                 Plot.make1D("DL_boosted_subjet1_pt_mumu", ak8Jets[0].subJet1.pt, DL_boosted_mumu, EqBin(
@@ -409,7 +461,7 @@ class controlPlotter(NanoBaseHHWWbb):
                 Plot.make1D("DL_boosted_InvM_ee", op.invariant_mass(ElElDileptonPreSel[0][0].p4, ElElDileptonPreSel[0][1].p4), DL_boosted_ee, EqBin(
                     160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electrons (boosted) (GeV/c^2)"),
                 Plot.make1D("DL_boosted_InvM_mumu", op.invariant_mass(MuMuDileptonPreSel[0][0].p4, MuMuDileptonPreSel[0][1].p4), DL_boosted_mumu, EqBin(
-                    160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of muons (boosted) (GeV/c^2)"),             
+                    160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of muons (boosted) (GeV/c^2)"),
                 Plot.make1D("DL_boosted_InvM_emu", op.invariant_mass(ElMuDileptonPreSel[0][0].p4, ElMuDileptonPreSel[0][1].p4), DL_boosted_emu, EqBin(
                     160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pair (boosted) (GeV/c^2)"),
                 Plot.make1D("DL_boosted_InvM_jj_ee", op.invariant_mass(ak8Jets[0].subJet1.p4, ak8Jets[0].subJet2.p4), DL_boosted_ee, EqBin(
@@ -496,7 +548,7 @@ class controlPlotter(NanoBaseHHWWbb):
                     100, 0, 10), title="DR(j1,j2)", xTitle="DR(j1,j2)"),
                 Plot.make1D("DL_resolved_2b_mumu_InvM_mumu", op.invariant_mass(MuMuDileptonPreSel[0][0].p4, MuMuDileptonPreSel[0][1].p4), DL_resolved_2b_mumu, EqBin(
                     160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of muons (resolved) (GeV/c^2)"),
-                
+
                 Plot.make1D("DL_resolved_2b_emu_nJets", op.rng_len(ak4Jets), DL_resolved_2b_emu, EqBin(
                     15, 0., 15.), xTitle="Number of jets"),
                 Plot.make1D("DL_resolved_2b_emu_InvM_leadingJet_pt", ak4Jets[0].pt, DL_resolved_2b_emu, EqBin(
@@ -510,7 +562,7 @@ class controlPlotter(NanoBaseHHWWbb):
                 Plot.make1D("DL_resolved_2b_emu_DR_jets", op.deltaR(ak4Jets[0].p4, ak4Jets[1].p4), DL_resolved_2b_emu, EqBin(
                     100, 0, 10), title="DR(j1,j2)", xTitle="DR(j1,j2)"),
                 Plot.make1D("DL_resolved_2b_emu_InvM_emu", op.invariant_mass(ElMuDileptonPreSel[0][0].p4, ElMuDileptonPreSel[0][1].p4), DL_resolved_2b_emu, EqBin(
-                    160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pairs (resolved) (GeV/c^2)") 
+                    160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pairs (resolved) (GeV/c^2)")
 
             ])
         if self.channel == "SL":
