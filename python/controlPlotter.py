@@ -274,6 +274,7 @@ class controlPlotter(NanoBaseHHWWbb):
             def leadingPtCutElMu(dilep): return op.OR(
                 electron_conept[dilep[0].idx] > 25, muon_conept[dilep[1].idx] > 25)  # leading above 25 GeV
 
+            # Fake lepton selection #
             elelSel = noSel.refine('elelSel', cut=[op.rng_len(ElElFakeSel) >= 1,
                                                    op.OR(op.rng_len(fakeMuons) == 0,
                                                          op.AND(op.rng_len(fakeMuons) == 1,
@@ -341,7 +342,7 @@ class controlPlotter(NanoBaseHHWWbb):
             mumuSel.refine('mumuMllSel', cut=mllCut)
             elmuSel.refine('elmuMllSel', cut=mllCut)
 
-            # z-veto
+            # Z-veto
             outZCut = [outZ(OSElElDileptonPreSel), outZ(OSMuMuDileptonPreSel)]
             elelSel.refine('OSoutZelelSel', cut=outZCut)
             mumuSel.refine('OSoutZmumuSel', cut=outZCut)
