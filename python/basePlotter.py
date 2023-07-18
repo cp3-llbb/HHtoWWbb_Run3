@@ -28,7 +28,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 raise RuntimeError(
                     f"The type '{sampleCfg['type']}' of {sample} dataset not understood.")
 
-        era = sampleCfg['era']  # reserved for future use
+        era = sampleCfg['era']
         self.is_MC = isMC()
         self.triggersPerPrimaryDataset = {}
 
@@ -86,30 +86,38 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
                 sample, self.triggersPerPrimaryDataset)])
 
+        JECTagDatabase = {
+            "2016ULpreVFP": "Summer19UL16APV_V7_MC",
+            "2016ULpostVFP": "Summer19UL16_V7_MC",
+            "2017UL": "Summer19UL17_V5_MC",
+            "2018UL": "Summer19UL18_V5_MC",
+            "2022": "Summer22Prompt22_V1_MC",
+            "2022EE": "Summer22EEPrompt22_V1_MC"
+        }
+        JERTagDatabase = {
+            "2016ULpreVFP": "Summer20UL16APV_JRV3_MC",
+            "2016ULpostVFP": "Summer20UL16_JRV3_MC",
+            "2017UL": "Summer19UL17_JRV2_MC",
+            "2018UL": "Summer19UL18_JRV2_MC",
+            "2022": "Summer22Prompt22_JRV1_MC",
+            "2022EE": "Summer22EEPrompt22_JRV1_MC"
+        }
+
         # if self.is_MC:
+        #     print("Configure jet corrections...")
         #     configureJets(
-        #         variProxy=tree._Jet,
-        #         jetType="AK4PFchs",
-        #         jsonFile="/home/ucl/cp3/aguzel/Bamboo/CMSJMECalculators/tests/data/2018_UL_jet_jerc.json.gz",
-        #         jec="Summer19UL18_V5_MC",
-        #         #   smear="Autumn18_V7b_MC",
-        #         jesUncertaintySources=["Total"],
-        #         enableSystematics=lambda v: not "jesTotal" in v,
-        #         isMC=self.is_MC,
-        #         backend=backend,
-        #         uName=sample
-        #     )
-        #     configureType1MET(
-        #         variProxy=tree._MET,
-        #         jsonFile="/home/ucl/cp3/aguzel/Bamboo/CMSJMECalculators/tests/data/2018_UL_jet_jerc.json",
-        #         smear="Summer19UL18_JRV2_MC",
-        #         jec="Summer19UL18_V5_MC",
-        #         # jesUncertainties=["Total"],
-        #         splitJER=True,
-        #         addHEM2018Issue=False,
-        #         isMC=self.is_MC,
-        #         backend=backend,
-        #         uName=sample,
-        #     )
+        #         variProxy               = tree._Jet,
+        #         jetType                 = "AK4PFchs",
+        #         jec                     = JECTagDatabase['2018UL'],
+        #         jecLevels               = [],
+        #         smear                   = JERTagDatabase['2018UL'],
+        #         jesUncertaintySources   = "Total",
+        #         regroupTag              = "V5",
+        #         mayWriteCache           = self.args.distributed != "worker",
+        #         isMC                    = isMC,
+        #         backend                 = backend,
+        #         uName                   = sample
+        #         )
+        #     print("Finished configuring jet corrections!")
 
         return tree, noSel, backend, lumiArgs
