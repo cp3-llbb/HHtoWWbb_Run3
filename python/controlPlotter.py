@@ -429,11 +429,11 @@ class controlPlotter(NanoBaseHHWWbb):
             plots.extend([
                 # DL boosted plots
                 Plot.make1D("DL_boosted_fatJet_pt_ee", ak8Jets[0].pt, DL_boosted_ee, EqBin(
-                    400, 200, 1000), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
+                    400, 200, 1000), title="pT(j1)", xTitle="pT(ak8jet) (GeV/c)"),
                 Plot.make1D("DL_boosted_fatJet_pt_mumu", ak8Jets[0].pt, DL_boosted_mumu, EqBin(
-                    400, 200, 1000), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
+                    400, 200, 1000), title="pT(j1)", xTitle="pT(ak8jet) (GeV/c)"),
                 Plot.make1D("DL_boosted_fatJet_pt_emu", ak8Jets[0].pt, DL_boosted_emu, EqBin(
-                    400, 200, 1000), title="pT(j1)", xTitle="pT(j1) (GeV/c)"),
+                    400, 200, 1000), title="pT(j1)", xTitle="pT(ak8jet) (GeV/c)"),
 
                 Plot.make1D("DL_boosted_subjet1_pt_ee", ak8Jets[0].subJet1.pt, DL_boosted_ee, EqBin(
                     250, 0, 500), title=" pT(j1 subjet1)", xTitle="pT(j1 subjet1) (GeV/c)"),
@@ -448,11 +448,11 @@ class controlPlotter(NanoBaseHHWWbb):
                 Plot.make1D("DL_boosted_subjet2_pt_emu", ak8Jets[0].subJet2.pt, DL_boosted_emu, EqBin(
                     250, 0, 500), title=" pT(j1 subjet2)", xTitle="pT(j1 subjet2) (GeV/c)"),
                 Plot.make1D("DL_boosted_fatJet_eta_ee", ak8Jets[0].eta, DL_boosted_ee, EqBin(
-                    80, -3, 3), title="eta(j1)", xTitle="eta(j1)"),
+                    80, -3, 3), title="eta(j1)", xTitle="eta(ak8jet)"),
                 Plot.make1D("DL_boosted_fatJet_eta_mumu", ak8Jets[0].eta, DL_boosted_mumu, EqBin(
-                    80, -3, 3), title="eta(j1)", xTitle="eta(j1)"),
+                    80, -3, 3), title="eta(j1)", xTitle="eta(ak8jet)"),
                 Plot.make1D("DL_boosted_fatJet_eta_emu", ak8Jets[0].eta, DL_boosted_emu, EqBin(
-                    80, -3, 3), title="eta(j1)", xTitle="eta(j1)"),
+                    80, -3, 3), title="eta(j1)", xTitle="eta(ak8jet)"),
                 Plot.make1D("DL_boosted_InvM_ee", op.invariant_mass(ElElDileptonPreSel[0][0].p4, ElElDileptonPreSel[0][1].p4), DL_boosted_ee, EqBin(
                     160, 40., 200.), title="InvM(ll)", xTitle="Invariant Mass of electrons (boosted) (GeV/c^2)"),
                 Plot.make1D("DL_boosted_InvM_mumu", op.invariant_mass(MuMuDileptonPreSel[0][0].p4, MuMuDileptonPreSel[0][1].p4), DL_boosted_mumu, EqBin(
