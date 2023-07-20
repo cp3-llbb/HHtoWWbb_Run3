@@ -21,35 +21,26 @@ class controlPlotter(NanoBaseHHWWbb):
         plots.append(yields)
         yields.add(noSel, 'No Selection')
 
-        # Muons
+        # lepton cone-pt definitions
         muon_conept = defs.muonConePt(tree.Muon)
-
-        muons = op.sort(
-            op.select(tree.Muon, lambda mu: defs.muonDef(mu)),
-            lambda mu: -muon_conept[mu.idx]
-        )
-
-        fakeMuons = defs.muonFakeSel(muons)
-
-        tightMuons = op.select(fakeMuons, lambda mu: defs.muonTightSel(mu))
-
-        # Electrons
         electron_conept = defs.elConePt(tree.Electron)
 
-        electrons = op.sort(
-            op.select(tree.Electron, lambda el: defs.elDef(el)),
-            lambda el: -electron_conept[el.idx]
-        )
-        # Cleaned Electrons
+        # lepton definitions sorted by their cone-pt
+        muons = op.sort(defs.muonDef(tree.Muon), lambda mu: -muon_conept[mu.idx])
+        electrons = op.sort(defs.elDef(tree.Electron), lambda el: -electron_conept[el.idx])
+
+        # cleaning electrons wrt muons
         clElectrons = defs.cleanElectrons(electrons, muons)
 
-        # Fake Electrons
+        # Fakeable leptons
+        fakeMuons = defs.muonFakeSel(muons)
         fakeElectrons = defs.elFakeSel(clElectrons)
 
-        tightElectrons = op.select(
-            fakeElectrons, lambda el: defs.elTightSel(el))
+        # tight leptons
+        tightMuons = defs.muonTightSel(fakeMuons)
+        tightElectrons = defs.elTightSel(fakeElectrons)
 
-        # Dileptons
+        # Dilepton selections
         if self.channel == "DL":
             def leptonOS(l1, l2): return l1.charge != l2.charge
 
@@ -59,8 +50,7 @@ class controlPlotter(NanoBaseHHWWbb):
 
             OSElElDileptonPreSel = op.combine(electrons, N=2, pred=leptonOS)
             OSMuMuDileptonPreSel = op.combine(muons, N=2, pred=leptonOS)
-            OSElMuDileptonPreSel = op.combine(
-                (electrons, muons), pred=leptonOS)
+            OSElMuDileptonPreSel = op.combine((electrons, muons), pred=leptonOS)
 
         # Dilepton for selection #
             ElElFakeSel = op.combine(fakeElectrons, N=2)

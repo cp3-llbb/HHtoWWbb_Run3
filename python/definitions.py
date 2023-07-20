@@ -35,8 +35,8 @@ def electronTightSel(el): return el.mvaTTH >= 0.30
 # Object definitions
 
 
-def muonDef(mu):
-    return op.AND(
+def muonDef(muons):
+    return op.select(muons, lambda mu :op.AND(
         mu.pt >= 5.,
         op.abs(mu.eta) <= 2.4,
         op.abs(mu.dxy) <= 0.05,
@@ -44,7 +44,7 @@ def muonDef(mu):
         mu.miniPFRelIso_all <= 0.4,
         mu.sip3d <= 8,
         mu.looseId
-    )
+    ))
 
 
 def muonConePt(muons):
@@ -63,11 +63,11 @@ def muonFakeSel(muons):
     )
 
 
-def muonTightSel(mu): return op.AND(mu.mvaTTH >= 0.50, mu.mediumId)
+def muonTightSel(muons): return op.select(muons, lambda mu: op.AND(mu.mvaTTH >= 0.50, mu.mediumId))
 
 
-def elDef(el):
-    return op.AND(
+def elDef(electrons):
+    return op.select(electrons, lambda el: op.AND(
         el.pt >= 7.,
         op.abs(el.eta) <= 2.5,
         op.abs(el.dxy) <= 0.05,
@@ -76,7 +76,7 @@ def elDef(el):
         el.miniPFRelIso_all <= 0.4,
         el.mvaNoIso >= 0.5,  # this should mean loose WP
         el.lostHits <= 1
-    )
+    ))
 
 
 def elConePt(electrons):
@@ -115,7 +115,7 @@ def elFakeSel(electrons):
     ))
 
 
-def elTightSel(el): return el.mvaTTH >= 0.30
+def elTightSel(electrons): return op.select(electrons, lambda el: el.mvaTTH >= 0.30)
 
 
 def ak4jetDef(jet):
