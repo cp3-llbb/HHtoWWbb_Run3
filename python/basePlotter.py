@@ -86,7 +86,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 sample, self.triggersPerPrimaryDataset)])
 
         print("Configure jet corrections...")
-        if self.is_MC and era == "2022EE":
+        if sampleCfg['type'] == 'mc':
             JECTagDatabase = {"2022": "Winter22Run3_V2_MC",
                               "2022EE": "Summer22EEPrompt22_V1_MC"}
             configureJets(
@@ -101,48 +101,12 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                  backend                 = backend,
                  uName                   = sample
                  )
-        if not self.is_MC:
+        if sampleCfg['type'] == 'data':
             JECTagDatabase = {"2022C": "Winter22Run3_RunC_V2_DATA",
                               "2022D": "Winter22Run3_RunD_V2_DATA",
                               "2022F": "Summer22EEPrompt22_RunF_V1_DATA",
                               "2022G": "Summer22EEPrompt22_RunG_V1_DATA"}
-            if era == "2022C":
-                configureJets(
-                    variProxy               = tree._Jet,
-                    jetType                 = "AK4PFPuppi",
-                    jec                     = JECTagDatabase[era],
-                    jecLevels               = "default",
-                    jesUncertaintySources   = "All",
-                    mayWriteCache           = self.args.distributed != "worker",
-                    isMC                    = self.is_MC,
-                    backend                 = backend,
-                    uName                   = sample
-                    )
-            if era == "2022D":
-                configureJets(
-                    variProxy               = tree._Jet,
-                    jetType                 = "AK4PFPuppi",
-                    jec                     = JECTagDatabase[era],
-                    jecLevels               = "default",
-                    jesUncertaintySources   = "All",
-                    mayWriteCache           = self.args.distributed != "worker",
-                    isMC                    = self.is_MC,
-                    backend                 = backend,
-                    uName                   = sample
-                    )
-            if era == "2022F":
-                configureJets(
-                    variProxy               = tree._Jet,
-                    jetType                 = "AK4PFPuppi",
-                    jec                     = JECTagDatabase[era],
-                    jecLevels               = "default",
-                    jesUncertaintySources   = "All",
-                    mayWriteCache           = self.args.distributed != "worker",
-                    isMC                    = self.is_MC,
-                    backend                 = backend,
-                    uName                   = sample
-                    )
-            if era == "2022G":
+            if era in JECTagDatabase.keys():
                 configureJets(
                     variProxy               = tree._Jet,
                     jetType                 = "AK4PFPuppi",
