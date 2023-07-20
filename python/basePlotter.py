@@ -50,8 +50,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             varReaders = []
             if isMC:
                 varReaders.append(td.CalcCollectionsGroups(Jet=("pt", "mass")))
-                varReaders.append(
-                    td.CalcCollectionsGroups(GenJet=("pt", "mass")))
+                varReaders.append(td.CalcCollectionsGroups(GenJet=("pt", "mass")))
                 varReaders.append(td.CalcCollectionsGroups(MET=("pt", "phi")))
                 return td.NanoAODDescription(groups=groups, collections=collections + mcCollections, systVariations=varReaders)
             else:
@@ -86,38 +85,75 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
                 sample, self.triggersPerPrimaryDataset)])
 
-        JECTagDatabase = {
-            "2016ULpreVFP": "Summer19UL16APV_V7_MC",
-            "2016ULpostVFP": "Summer19UL16_V7_MC",
-            "2017UL": "Summer19UL17_V5_MC",
-            "2018UL": "Summer19UL18_V5_MC",
-            "2022": "Summer22Prompt22_V1_MC",
-            "2022EE": "Summer22EEPrompt22_V1_MC"
-        }
-        JERTagDatabase = {
-            "2016ULpreVFP": "Summer20UL16APV_JRV3_MC",
-            "2016ULpostVFP": "Summer20UL16_JRV3_MC",
-            "2017UL": "Summer19UL17_JRV2_MC",
-            "2018UL": "Summer19UL18_JRV2_MC",
-            "2022": "Summer22Prompt22_JRV1_MC",
-            "2022EE": "Summer22EEPrompt22_JRV1_MC"
-        }
-
-        # if self.is_MC:
-        #     print("Configure jet corrections...")
-        #     configureJets(
-        #         variProxy               = tree._Jet,
-        #         jetType                 = "AK4PFchs",
-        #         jec                     = JECTagDatabase['2018UL'],
-        #         jecLevels               = [],
-        #         smear                   = JERTagDatabase['2018UL'],
-        #         jesUncertaintySources   = "Total",
-        #         regroupTag              = "V5",
-        #         mayWriteCache           = self.args.distributed != "worker",
-        #         isMC                    = isMC,
-        #         backend                 = backend,
-        #         uName                   = sample
-        #         )
-        #     print("Finished configuring jet corrections!")
+        print("Configure jet corrections...")
+        if self.is_MC and era == "2022EE":
+            JECTagDatabase = {"2022": "Winter22Run3_V2_MC",
+                              "2022EE": "Summer22EEPrompt22_V1_MC"}
+            configureJets(
+                 variProxy               = tree._Jet,
+                 jetType                 = "AK4PFPuppi",
+                 jec                     = JECTagDatabase[era],
+                 #  smear                   = JERTagDatabase['2022EE'],
+                 jecLevels               = "default",
+                 jesUncertaintySources   = "All",
+                 mayWriteCache           = self.args.distributed != "worker",
+                 isMC                    = self.is_MC,
+                 backend                 = backend,
+                 uName                   = sample
+                 )
+        if not self.is_MC:
+            JECTagDatabase = {"2022C": "Winter22Run3_RunC_V2_DATA",
+                              "2022D": "Winter22Run3_RunD_V2_DATA",
+                              "2022F": "Summer22EEPrompt22_RunF_V1_DATA",
+                              "2022G": "Summer22EEPrompt22_RunG_V1_DATA"}
+            if era == "2022C":
+                configureJets(
+                    variProxy               = tree._Jet,
+                    jetType                 = "AK4PFPuppi",
+                    jec                     = JECTagDatabase[era],
+                    jecLevels               = "default",
+                    jesUncertaintySources   = "All",
+                    mayWriteCache           = self.args.distributed != "worker",
+                    isMC                    = self.is_MC,
+                    backend                 = backend,
+                    uName                   = sample
+                    )
+            if era == "2022D":
+                configureJets(
+                    variProxy               = tree._Jet,
+                    jetType                 = "AK4PFPuppi",
+                    jec                     = JECTagDatabase[era],
+                    jecLevels               = "default",
+                    jesUncertaintySources   = "All",
+                    mayWriteCache           = self.args.distributed != "worker",
+                    isMC                    = self.is_MC,
+                    backend                 = backend,
+                    uName                   = sample
+                    )
+            if era == "2022F":
+                configureJets(
+                    variProxy               = tree._Jet,
+                    jetType                 = "AK4PFPuppi",
+                    jec                     = JECTagDatabase[era],
+                    jecLevels               = "default",
+                    jesUncertaintySources   = "All",
+                    mayWriteCache           = self.args.distributed != "worker",
+                    isMC                    = self.is_MC,
+                    backend                 = backend,
+                    uName                   = sample
+                    )
+            if era == "2022G":
+                configureJets(
+                    variProxy               = tree._Jet,
+                    jetType                 = "AK4PFPuppi",
+                    jec                     = JECTagDatabase[era],
+                    jecLevels               = "default",
+                    jesUncertaintySources   = "All",
+                    mayWriteCache           = self.args.distributed != "worker",
+                    isMC                    = self.is_MC,
+                    backend                 = backend,
+                    uName                   = sample
+                    )
+        print("Finished configuring jet corrections!")
 
         return tree, noSel, backend, lumiArgs
