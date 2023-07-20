@@ -118,17 +118,17 @@ def elFakeSel(electrons):
 def elTightSel(electrons): return op.select(electrons, lambda el: el.mvaTTH >= 0.30)
 
 
-def ak4jetDef(jet):
-    return op.AND(
+def ak4jetDef(jets):
+    return op.select(jets, lambda jet: op.AND(
         jet.jetId & 2,  # tight
         jet.pt >= 25.,
         op.abs(jet.eta) <= 2.4,
         # op.OR(((jet.puId >> 2) & 1), jet.pt > 50.) # Jet PU ID bit1 is loose # no puId in Run3 so far
-    )
+    ))
 
 
-def ak8jetDef(jet):
-    return op.AND(
+def ak8jetDef(jets):
+    return op.select(jets, lambda jet: op.AND(
         jet.pt >= 200.,
         op.abs(jet.eta) <= 2.4,
         jet.jetId & 2,  # tight
@@ -140,7 +140,7 @@ def ak8jetDef(jet):
         op.abs(jet.subJet2.eta) <= 2.4,
         op.AND(jet.msoftdrop >= 30., jet.msoftdrop <= 210.),
         jet.tau2 / jet.tau1 <= 0.75
-    )
+    ))
 
 
 def tauDef(taus):
@@ -159,3 +159,11 @@ def tauDef(taus):
         (tau.idDeepTau2017v2p1VSe >> 0 & 0x1) == 1,
         (tau.idDeepTau2017v2p1VSmu >> 0 & 0x1) == 1
     ))
+
+def cleanTaus(taus, electrons, muons):
+    return op.select(taus, lambda tau: op.AND(
+            op.NOT(op.rng_any(
+                electrons, lambda el: op.deltaR(tau.p4, el.p4) <= 0.3)),
+            op.NOT(op.rng_any(
+                muons, lambda mu: op.deltaR(tau.p4, mu.p4) <= 0.3))
+        ))

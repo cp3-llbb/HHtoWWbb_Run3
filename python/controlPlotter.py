@@ -93,19 +93,11 @@ class controlPlotter(NanoBaseHHWWbb):
                 muonTightSel(dilep[1])
             )
         # Taus
-
         taus = defs.tauDef(tree.Tau)
+        cleanedTaus = defs.cleanTaus(taus, fakeElectrons, fakeMuons)
 
-        cleanedTaus = op.select(taus, lambda tau: op.AND(
-            op.NOT(op.rng_any(
-                fakeElectrons, lambda el: op.deltaR(tau.p4, el.p4) <= 0.3)),
-            op.NOT(op.rng_any(
-                fakeMuons, lambda mu: op.deltaR(tau.p4, mu.p4) <= 0.3))
-        ))
-
-        # AK4 Jets
-        ak4JetsPreSel = op.sort(
-            op.select(tree.Jet, lambda jet: defs.ak4jetDef(jet)), lambda jet: -jet.pt)
+        # AK4 Jets sorted by their pt
+        ak4JetsPreSel = op.sort(defs.ak4jetDef(tree.Jet), lambda jet: -jet.pt)
 
         # remove jets within cone of DR<0.4 of leading leptons at each channel
         if self.channel == 'SL':
@@ -189,15 +181,14 @@ class controlPlotter(NanoBaseHHWWbb):
             op.invariant_mass(wjets[0].p4, wjets[1].p4)-80.4) < op.c_float(15.0), op.c_bool(False))
 
         # AK8 Jets
-        ak8JetsByPt = op.sort(tree.FatJet, lambda jet: -jet.pt)
-        ak8JetsByDeepB = op.sort(tree.FatJet, lambda jet: -jet.btagDeepB)
+        ak8Jets = defs.ak8jetDef(tree.FatJet)
 
-        if self.channel == 'SL':
-            ak8JetsPreSel = op.select(ak8JetsByDeepB, defs.ak8jetDef)
-        if self.channel == 'DL':
-            ak8JetsPreSel = op.select(ak8JetsByPt, defs.ak8jetDef)
+        if self.channel == 'SL': # sorted by btag score
+            ak8JetsPreSel = op.sort(ak8Jets, lambda j: -j.btagDeepB)
+        if self.channel == 'DL': # sorted by pt
+            ak8JetsPreSel = op.sort(ak8Jets, lambda j: -j.pt)
 
-        # Cleaning #
+        # cleaning ak8 jets wrt to leptons
         if self.channel == 'SL':
             cleanAk8Jets = cleaningWithRespectToLeadingLepton(0.8)
         if self.channel == 'DL':
