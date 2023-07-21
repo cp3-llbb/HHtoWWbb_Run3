@@ -380,20 +380,34 @@ class controlPlotter(NanoBaseHHWWbb):
             yields.add(DL_resolved_2b_emu, 'DL resolved_2b_emu')
 
         if self.channel == 'SL':
-            def elPtCut(lep): return op.AND(
-                electron_conept[lep[0].idx] > 32.0, op.rng_len(lep) == 1)
+            def elPtCut(lep): return electron_conept[lep[0].idx] > 32.0
 
-            def muPtCut(lep): return op.AND(
-                muon_conept[lep[0].idx] > 25.0, op.rng_len(lep) == 1)
+            def muPtCut(lep): return muon_conept[lep[0].idx] > 25.0
 
-            def tau_h_veto(tauColl): return op.NOT(
-                op.rng_any(tauColl, lambda tau: op.rng_len(tau) == 0))
+            def tau_h_veto(taus): return op.rng_len(taus) == 0
+            
+            def leptonOS(l1, l2): return l1.charge != l2.charge
+
+            OSElElDileptonPreSel = op.combine(clElectrons, N=2, pred=leptonOS)
+            OSMuMuDileptonPreSel = op.combine(muons, N=2, pred=leptonOS)
+            
+            outZcut = [outZ(OSElElDileptonPreSel), outZ(OSMuMuDileptonPreSel)]
 
             SL_resolved = noSel.refine('SL_resolved', cut=[
-                op.OR(elPtCut, muPtCut), lowMllCut, outZ, tau_h_veto,
+                mllCut, outZcut, tau_h_veto(cleanedTaus),
                 op.rng_len(ak4Jets) >= 3,
                 op.rng_len(ak4BJets) >= 1,
                 op.rng_len(ak8BJets) == 0])
+
+            SL_resolved_e = SL_resolved.refine('SL_resolved_e', cut=[
+                elPtCut(tightElectrons),
+                op.rng_len(tightElectrons) == 1,
+                op.rng_len(tightMuons) == 0])
+
+            SL_resolved_mu = SL_resolved.refine('SL_resolved_mu', cut=[
+                muPtCut(tightMuons),
+                op.rng_len(tightElectrons) == 0,
+                op.rng_len(tightMuons) == 1])
 
             SL_boosted = noSel.refine('SL_boosted', cut=[
                 op.OR(elPtCut, muPtCut), lowMllCut, outZ, tau_h_veto,
