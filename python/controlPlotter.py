@@ -388,10 +388,17 @@ class controlPlotter(NanoBaseHHWWbb):
             
             def leptonOS(l1, l2): return l1.charge != l2.charge
 
+            ElElDileptonPreSel = op.combine(clElectrons, N=2)
+            MuMuDileptonPreSel = op.combine(muons, N=2)
+            ElMuDileptonPreSel = op.combine((clElectrons, muons))
+
             OSElElDileptonPreSel = op.combine(clElectrons, N=2, pred=leptonOS)
             OSMuMuDileptonPreSel = op.combine(muons, N=2, pred=leptonOS)
             
             outZcut = [outZ(OSElElDileptonPreSel), outZ(OSMuMuDileptonPreSel)]
+
+            mllCut = [lowMllCut(ElElDileptonPreSel), lowMllCut(
+                MuMuDileptonPreSel), lowMllCut(ElMuDileptonPreSel)]
 
             SL_resolved = noSel.refine('SL_resolved', cut=[
                 mllCut, outZcut, tau_h_veto(cleanedTaus),
