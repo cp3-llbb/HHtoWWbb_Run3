@@ -213,7 +213,7 @@ def makeDLSelection(self, noSel):
 
     DL_selections = [DL_boosted_ee, DL_boosted_mumu, DL_boosted_emu, DL_resolved_1b_ee, DL_resolved_1b_mumu, DL_resolved_1b_emu, DL_resolved_2b_ee, DL_resolved_2b_mumu, DL_resolved_2b_emu]
         
-    return DL_selections3
+    return DL_selections
 
 def makeSLSelection(self, noSel):
     """ Selections for the SL channel
@@ -262,7 +262,15 @@ def makeSLSelection(self, noSel):
         op.OR(elPtCut, muPtCut), lowMllCut, outZ, tau_h_veto,
         op.rng_len(self.ak8BJets) >= 1,
         op.rng_len(self.ak4JetsCleanedFromAk8b) >= 1])
+    
+    SL_boosted_e = SL_boosted.refine('SL_boosted_e', cut=[
+        op.rng_len(self.tightElectrons) == 1,
+        op.rng_len(self.tightMuons) == 0])
+    
+    SL_boosted_mu = SL_boosted.refine('SL_boosted_mu', cut=[
+        op.rng_len(self.tightMuons) == 1,
+        op.rng_len(self.tightElectrons) == 0])
 
-    SL_selections = [SL_resolved, SL_resolved_e, SL_resolved_mu, SL_boosted]
+    SL_selections = [SL_resolved, SL_resolved_e, SL_resolved_mu, SL_boosted, SL_boosted_e, SL_boosted_mu]
 
     return SL_selections
