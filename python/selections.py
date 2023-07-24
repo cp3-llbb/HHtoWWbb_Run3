@@ -213,7 +213,7 @@ def makeDLSelection(self, noSel):
 
     DL_selections = [DL_boosted_ee, DL_boosted_mumu, DL_boosted_emu, DL_resolved_1b_ee, DL_resolved_1b_mumu, DL_resolved_1b_emu, DL_resolved_2b_ee, DL_resolved_2b_mumu, DL_resolved_2b_emu]
         
-    return DL_selections3
+    return DL_selections
 
 def makeSLSelection(self, noSel):
     """ Selections for the SL channel
