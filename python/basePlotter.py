@@ -45,7 +45,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             groups = ["HLT_", "MET_", "RawMET_"]
             collections = ["nElectron", "nJet",
                            "nMuon", "nFatJet", "nSubJet", "nTau"]
-            mcCollections = []
+            mcCollections = ["nGenDressedLepton", "nGenJet", "nGenPart"]
             varReaders = []
             if isMC:
                 varReaders.append(td.CalcCollectionsGroups(Jet=("pt", "mass")))
