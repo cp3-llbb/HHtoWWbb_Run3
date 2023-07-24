@@ -116,19 +116,6 @@ class controlPlotter(NanoBaseHHWWbb):
         self.remainingJets = op.select(
             self.ak4LightJetsByPt, lambda jet: jet.idx != self.ak4LightJetsByBtagScore[0].idx)
 
-        def makeJetPairs(jets): return op.combine(
-            jets, N=2, pred=lambda j1, j2: j1.pt > j2.pt, samePred=lambda j1, j2: j1.idx != j2.idx)
-        # --------------------------------------------- #
-        bJetsByScore = self.ak4JetsByBtagScore[:op.min(op.rng_len(
-            self.ak4JetsByBtagScore), op.static_cast("std::size_t", op.c_int(2)))]
-        probableWJets = op.select(self.ak4Jets, lambda jet: op.NOT(
-            op.rng_any(bJetsByScore, lambda bjet: jet.idx == bjet.idx)))
-        wJetsByPt = probableWJets[:op.min(op.rng_len(
-            probableWJets), op.static_cast("std::size_t", op.c_int(2)))]
-
-        def passWMassCutSel(wjets): return op.switch(op.rng_len(wjets) == 2, op.abs(
-            op.invariant_mass(wjets[0].p4, wjets[1].p4)-80.4) < op.c_float(15.0), op.c_bool(False))
-
         # AK8 Jets
         self.ak8JetsDef = defs.ak8jetDef(tree.FatJet)
 
@@ -154,21 +141,13 @@ class controlPlotter(NanoBaseHHWWbb):
         def ak8noBtag(fatjet): return op.NOT(op.OR(op.AND(fatjet.subJet1.pt >= 30, subjetBtag(fatjet.subJet1)),
                                                    op.AND(fatjet.subJet2.pt >= 30, subjetBtag(fatjet.subJet2))))
 
-        def ak8Btag_bothSubJets(fatjet): return op.AND(op.AND(fatjet.subJet1.pt >= 30, subjetBtag(fatjet.subJet1)),
-                                                       op.AND(fatjet.subJet2.pt >= 30, subjetBtag(fatjet.subJet2)))
-
         self.ak8BJets = op.select(self.ak8Jets, ak8Btag)
         self.ak8nonBJets = op.select(self.ak8Jets, ak8noBtag)
-        # Ak4 Jet Collection cleaned from Ak8b #
 
+        # Ak4 Jet Collection cleaned from Ak8b #
         def cleanAk4FromAk8b(ak4j): return op.AND(op.rng_len(
             self.ak8BJets) > 0, op.deltaR(ak4j.p4, self.ak8BJets[0].p4) > 1.2)
         self.ak4JetsCleanedFromAk8b = op.select(self.ak4Jets, cleanAk4FromAk8b)
-
-        # used as a BDT input for SemiBoosted category
-        def btaggedSubJets(fjet): return op.switch(
-            ak8Btag_bothSubJets(fjet), op.c_float(2.0), op.c_float(1.0))
-        nMediumBTaggedSubJets = op.rng_sum(self.ak8BJets, btaggedSubJets)
 
         if self.channel == 'DL':
 
