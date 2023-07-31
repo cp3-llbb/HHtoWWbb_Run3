@@ -6,10 +6,6 @@ from bamboo import treefunctions as op
 def hasAssociatedJet(lep): return lep.jet.idx != -1
 
 
-def lepton_associatedJetLessThanMediumBtag(lep): return op.OR(
-    op.NOT(hasAssociatedJet(lep)), lep.jet.btagDeepFlavB <= 0.2770)  # 2018 value
-
-
 def muon_x(mu): return op.min(
     op.max(0., (0.9*mu.pt*(1+mu.jetRelIso))-20.)/(45.-20.), 1.)
 
@@ -58,12 +54,16 @@ def muonConePt(muons):
 def muonFakeSel(muons):
     return op.select(muons, lambda mu: op.AND(
         muonConePt(muons)[mu.idx] >= 10.,
-        lepton_associatedJetLessThanMediumBtag(mu),
-        op.OR(mu.mvaTTH >= 0.50, op.AND(mu.jetRelIso < 0.8, muon_deepJetInterpIfMvaFailed(mu))))
+        op.OR(lepton_associatedJetLessThanMediumBtag(mu), op.AND(mu.jetRelIso < 0.8, muon_deepJetInterpIfMvaFailed(mu))))
     )
 
 
-def muonTightSel(muons): return op.select(muons, lambda mu: op.AND(mu.mvaTTH >= 0.50, mu.mediumId))
+def muonTightSel(muons): return op.select(muons, lambda mu: op.AND(
+            muonConePt(muons)[mu.idx] >= 10.,
+            lepton_associatedJetLessThanMediumBtag(mu),
+            mu.mvaTTH >= 0.50,
+            mu.mediumId
+            ))
 
 
 def elDef(electrons):
@@ -83,7 +83,6 @@ def elConePt(electrons):
     return op.map(electrons, lambda lep: op.multiSwitch(
         (op.AND(op.abs(lep.pdgId) != 11, op.abs(lep.pdgId) != 13), lep.pt),
         (op.AND(op.abs(lep.pdgId) == 11, lep.mvaTTH > 0.30), lep.pt),
-        (op.AND(op.abs(lep.pdgId) == 11), lep.pt),
         0.9*lep.pt*(1.+lep.jetRelIso)
     ))
 
@@ -115,7 +114,19 @@ def elFakeSel(electrons):
     ))
 
 
-def elTightSel(electrons): return op.select(electrons, lambda el: el.mvaTTH >= 0.30)
+def elTightSel(electrons): return op.select(electrons, lambda el: op.AND(
+            elConePt(electrons)[el.idx] >= 10.,
+            op.OR(
+                op.AND(op.abs(el.eta+el.deltaEtaSC) <= 1.479, el.sieie <= 0.011),
+                op.AND(op.abs(el.eta+el.deltaEtaSC) > 1.479, el.sieie <= 0.030)
+            ),
+            el.hoe <= 0.10,
+            el.eInvMinusPInv >= -0.04,
+            el.convVeto,
+            el.mvaTTH >= 0.30,
+            el.lostHits == 0,
+            lepton_associatedJetLessThanMediumBtag(el),
+            ))
 
 
 def ak4jetDef(jets):

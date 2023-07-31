@@ -1,6 +1,7 @@
 from bamboo import treefunctions as op
 
 # common variables for DL and SL channels
+
 Zmass = 91.1876
 
 def lowMllCut(dileptons): return op.NOT(op.rng_any(
@@ -20,202 +21,91 @@ def makeDLSelection(self, noSel):
     - DL_resolved_1b_ee: resolved selection for ee channel with at least one b-tagged ak4 jet
     - DL_resolved_1b_mumu: resolved selection for mumu channel with at least one b-tagged ak4 jet
     - DL_resolved_1b_emu: resolved selection for emu channel with at least one b-tagged ak4 jet
-    - DL_resolved_2b_ee: resolved selection for ee channel with at least two b-tagged ak4 jets
-    - DL_resolved_2b_mumu: resolved selection for mumu channel with at least two b-tagged ak4 jets
-    - DL_resolved_2b_emu: resolved selection for emu channel with at least two b-tagged ak4 jets
     """
 
-    def OSDilepton(dilep): return dilep[0].charge != dilep[1].charge
+    # Pt cuts : subleading above 15 GeV and leading above 25 GeV
+    def ptCutElEl(dilep): return op.AND(
+        self.electron_conept[dilep[0].idx] > 15,
+        self.electron_conept[dilep[1].idx] > 15,
+        op.OR(self.electron_conept[dilep[0].idx] > 25, self.electron_conept[dilep[1].idx] > 25)
+        )
 
-    # Pt cuts #
-    def lowPtCutElEl(dilep): return op.AND(
-        self.electron_conept[dilep[0].idx] > 15, self.electron_conept[dilep[1].idx] > 15)  # subleading above 15 GeV
+    def ptCutMuMu(dilep): return op.AND(
+        self.muon_conept[dilep[0].idx] > 15,
+        self.muon_conept[dilep[1].idx] > 15,
+        op.OR(self.muon_conept[dilep[0].idx] > 25, self.muon_conept[dilep[1].idx] > 25)
+        )
 
-    def lowPtCutMuMu(dilep): return op.AND(
-        self.muon_conept[dilep[0].idx] > 15, self.muon_conept[dilep[1].idx] > 15)  # subleading above 15 GeV
+    def ptCutElMu(dilep): return op.AND(
+        self.electron_conept[dilep[0].idx] > 15,
+        self.muon_conept[dilep[1].idx] > 15,
+        op.OR(self.electron_conept[dilep[0].idx] > 25, self.muon_conept[dilep[1].idx] > 25)
+        )
+    
+    # OS loose lepton pairs of same type to be vetoed around Z peak
+    ElElLooseSel = op.combine(self.clElectrons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
+    MuMuLooseSel = op.combine(self.muons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
 
-    def lowPtCutElMu(dilep): return op.AND(
-        self.electron_conept[dilep[0].idx] > 15, self.muon_conept[dilep[1].idx] > 15)  # subleading above 15 GeV
+    # OS tight dilepton collections
+    ElElTightSel = op.combine(self.tightElectrons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
+    MuMuTightSel = op.combine(self.tightMuons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
+    ElMuTightSel = op.combine((self.tightElectrons, self.tightMuons), N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
 
-    def leadingPtCutElEl(dilep): return op.OR(
-        self.electron_conept[dilep[0].idx] > 25, self.electron_conept[dilep[1].idx] > 25)  # leading above 25 GeV
+    self.firstOSElEl = ElElTightSel[0]
+    self.firstOSMuMu = MuMuTightSel[0]
+    self.firstOSElMu = ElMuTightSel[0]
 
-    def leadingPtCutMuMu(dilep): return op.OR(
-        self.muon_conept[dilep[0].idx] > 25, self.muon_conept[dilep[1].idx] > 25)  # leading above 25 GeV
+    # minimum pT cut : at least one dilepton pair with leading lepton above 25 GeV
+    elelSel = noSel.refine('elelptSel', cut=[ptCutElEl(self.firstOSElEl)])
+    mumuSel = noSel.refine('mumuptSel', cut=[ptCutMuMu(self.firstOSMuMu)])
+    elmuSel = noSel.refine('elmuptSel', cut=[ptCutElMu(self.firstOSElMu)])
 
-    def leadingPtCutElMu(dilep): return op.OR(
-        self.electron_conept[dilep[0].idx] > 25, self.muon_conept[dilep[1].idx] > 25)  # leading above 25 GeV
+    # low Mll cut : reject events with dilepton mass below 12 GeV
+    mllCut = op.AND(lowMllCut(ElElTightSel), lowMllCut(MuMuTightSel), lowMllCut(ElMuTightSel))
 
-    if self.is_MC:
-        def is_matched(lep): return op.OR(lep.genPartFlav == 1,  # Prompt muon or electron
-                                            lep.genPartFlav == 15)  # From tau decay
-        # lep.genPartFlav==22) # From photon conversion (only available for electrons)
-    else:
-        def is_matched(lep): return op.c_bool(True)
+    # Z-veto : reject events with dileptons of same type with mass around Z peak
+    outZCut = op.AND(outZ(ElElLooseSel), outZ(MuMuLooseSel))
 
-    def dilepton_matched(dilep): return op.AND(
-        is_matched(dilep[0]), is_matched(dilep[1]))
+    OSoutZelelSel = elelSel.refine('OSoutZelelSel', cut=op.AND(mllCut, outZCut))
+    OSoutZmumuSel = mumuSel.refine('OSoutZmumuSel', cut=op.AND(mllCut, outZCut))
+    OSoutZelmuSel = elmuSel.refine('OSoutZelmuSel', cut=op.AND(mllCut, outZCut))
 
-    def electronTightSel(ele): return ele.mvaTTH >= 0.30
+    # di-lepton multiplicity cut
+    leptonMultiplicityCut_ee = OSoutZelelSel.refine('dileptonCut_ee', cut=[op.AND(
+        op.rng_len(ElElTightSel) == 1,
+        op.rng_len(MuMuTightSel) == 0,
+        op.rng_len(ElMuTightSel) == 0
+        )])
+    leptonMultiplicityCut_mumu = OSoutZmumuSel.refine('dileptonCut_mumu', cut=[op.AND(
+        op.rng_len(ElElTightSel) == 0,
+        op.rng_len(MuMuTightSel) == 1,
+        op.rng_len(ElMuTightSel) == 0
+        )])
+    leptonMultiplicityCut_emu = OSoutZelmuSel.refine('dileptonCut_emu', cut=[op.AND(
+        op.rng_len(ElElTightSel) == 0,
+        op.rng_len(MuMuTightSel) == 0,
+        op.rng_len(ElMuTightSel) == 1,
+        )])
 
-    def muonTightSel(mu): return op.AND(mu.mvaTTH >= 0.50, mu.mediumId)
-
-    def tightpair_ElEl(dilep): return op.AND(
-        dilepton_matched(dilep),
-        electronTightSel(dilep[0]),
-        electronTightSel(dilep[1])
-    )
-
-    def tightpair_MuMu(dilep): return op.AND(
-        dilepton_matched(dilep),
-        muonTightSel(dilep[0]),
-        muonTightSel(dilep[1])
-    )
-
-    def tightpair_ElMu(dilep): return op.AND(
-        dilepton_matched(dilep),
-        electronTightSel(dilep[0]),
-        muonTightSel(dilep[1])
-    )
-
-    def leptonOS(l1, l2): return l1.charge != l2.charge
-
-    self.ElElDileptonPreSel = op.combine(self.electrons, N=2)
-    self.MuMuDileptonPreSel = op.combine(self.muons, N=2)
-    self.ElMuDileptonPreSel = op.combine((self.electrons, self.muons))
-
-    OSElElDileptonPreSel = op.combine(self.electrons, N=2, pred=leptonOS)
-    OSMuMuDileptonPreSel = op.combine(self.muons, N=2, pred=leptonOS)
-    OSElMuDileptonPreSel = op.combine((self.electrons, self.muons), pred=leptonOS)
-
-    # Dilepton for selection #
-    ElElFakeSel = op.combine(self.fakeElectrons, N=2)
-    MuMuFakeSel = op.combine(self.fakeMuons, N=2)
-    ElMuFakeSel = op.combine((self.fakeElectrons, self.fakeMuons))
-
-    ElElTightSel = op.combine(self.tightElectrons, N=2)
-    MuMuTightSel = op.combine(self.tightMuons, N=2)
-    ElMuTightSel = op.combine((self.tightElectrons, self.tightMuons))
-
-    # Fake lepton selection #
-    # elelSel = noSel.refine('elelSel', cut=[op.rng_len(self.ElElFakeSel) >= 1,
-    #                                        op.OR(op.rng_len(self.fakeMuons) == 0,
-    #                                              op.AND(op.rng_len(self.fakeMuons) == 1,
-    #                                                     self.electron_conept[self.ElElFakeSel[0]
-    #                                                                     [0].idx] > self.muon_conept[self.fakeMuons[0].idx],
-    #                                                     self.electron_conept[self.ElElFakeSel[0][1].idx] > self.muon_conept[self.fakeMuons[0].idx]),
-    #                                              op.AND(op.rng_len(self.fakeMuons) >= 2,
-    #                                                     self.electron_conept[self.ElElFakeSel[0]
-    #                                                                     [0].idx] > self.muon_conept[self.fakeMuons[0].idx],
-    #                                                     self.electron_conept[self.ElElFakeSel[0]
-    #                                                                     [1].idx] > self.muon_conept[self.fakeMuons[0].idx],
-    #                                                     self.electron_conept[self.ElElFakeSel[0]
-    #                                                                     [0].idx] > self.muon_conept[self.fakeMuons[1].idx],
-    #                                                     self.electron_conept[self.ElElFakeSel[0][1].idx] > self.muon_conept[self.fakeMuons[1].idx]))])
-
-    # mumuSel = noSel.refine('mumuSel', cut=[op.rng_len(self.MuMuFakeSel) >= 1,
-    #                                        op.OR(op.rng_len(self.fakeElectrons) == 0,
-    #                                              op.AND(op.rng_len(self.fakeElectrons) == 1,
-    #                                                     self.muon_conept[self.MuMuFakeSel[0]
-    #                                                                 [0].idx] > self.electron_conept[self.fakeElectrons[0].idx],
-    #                                                     self.muon_conept[self.MuMuFakeSel[0][1].idx] > self.electron_conept[self.fakeElectrons[0].idx]),
-    #                                              op.AND(op.rng_len(self.fakeElectrons) >= 2,
-    #                                                     self.muon_conept[self.MuMuFakeSel[0]
-    #                                                                 [0].idx] > self.electron_conept[self.fakeElectrons[0].idx],
-    #                                                     self.muon_conept[self.MuMuFakeSel[0]
-    #                                                                 [1].idx] > self.electron_conept[self.fakeElectrons[0].idx],
-    #                                                     self.muon_conept[self.MuMuFakeSel[0]
-    #                                                                 [0].idx] > self.electron_conept[self.fakeElectrons[1].idx],
-    #                                                     self.muon_conept[self.MuMuFakeSel[0][1].idx] > self.electron_conept[self.fakeElectrons[1].idx]))])
-    # elmuSel = noSel.refine('elmuSel', cut=[op.rng_len(self.ElMuFakeSel) >= 1,
-    #                                        op.OR(op.AND(op.rng_len(self.fakeElectrons) == 1,
-    #                                                     op.rng_len(self.fakeMuons) == 1),
-    #                                              op.AND(op.rng_len(self.fakeElectrons) >= 2,
-    #                                                     op.rng_len(
-    #                                                  self.fakeMuons) == 1,
-    #                                            self.muon_conept[self.ElMuFakeSel[0][1].idx] > self.electron_conept[self.fakeElectrons[1].idx]),
-    #     op.AND(op.rng_len(self.fakeMuons) >= 2,
-    #                                            op.rng_len(
-    #         self.fakeElectrons) == 1,
-    #                                            self.electron_conept[self.ElMuFakeSel[0][0].idx] > self.muon_conept[self.fakeMuons[1].idx]),
-    #     op.AND(op.rng_len(self.fakeElectrons) >= 2,
-    #                                            op.rng_len(
-    #         self.fakeMuons) >= 2,
-    #                                            self.muon_conept[self.ElMuFakeSel[0]
-    #                                                        [1].idx] > self.electron_conept[self.fakeElectrons[1].idx],
-    #                                            self.electron_conept[self.ElMuFakeSel[0][0].idx] > self.muon_conept[self.fakeMuons[1].idx]))])
-
-    # OS cut
-    elelSel = noSel.refine('OSelelSel', cut=[OSDilepton(ElElFakeSel[0])])
-    mumuSel = noSel.refine('OSmumuSel', cut=[OSDilepton(MuMuFakeSel[0])])
-    elmuSel = noSel.refine('OSelmuSel', cut=[OSDilepton(ElMuFakeSel[0])])
-
-    # Pt cuts
-    elelSel.refine('elelptSel', cut=[lowPtCutElEl(ElElFakeSel[0]),
-                    leadingPtCutElEl(ElElFakeSel[0])])
-    mumuSel.refine('mumuptSel', cut=[lowPtCutMuMu(MuMuFakeSel[0]),
-                    leadingPtCutMuMu(MuMuFakeSel[0])])
-    elmuSel.refine('elmuptSel', cut=[lowPtCutElMu(ElMuFakeSel[0]),
-                    leadingPtCutElMu(ElMuFakeSel[0])])
-
-    # Mll cut
-    mllCut = [lowMllCut(self.ElElDileptonPreSel), lowMllCut(
-        self.MuMuDileptonPreSel), lowMllCut(self.ElMuDileptonPreSel)]
-    elelSel.refine('elelMllSel', cut=mllCut)
-    mumuSel.refine('mumuMllSel', cut=mllCut)
-    elmuSel.refine('elmuMllSel', cut=mllCut)
-
-    # Z-veto
-    outZCut = [outZ(OSElElDileptonPreSel), outZ(OSMuMuDileptonPreSel)]
-    elelSel.refine('OSoutZelelSel', cut=outZCut)
-    mumuSel.refine('OSoutZmumuSel', cut=outZCut)
-    elmuSel.refine('OSoutZelmuSel', cut=outZCut)
-
-    # di-lepton cut
-    elelSel.refine('dileptonCut_ee', cut=[
-        tightpair_ElEl(ElElFakeSel[0]),
-        op.rng_len(self.tightElectrons) == 2,
-        op.rng_len(self.tightMuons) == 0,
-        ElElTightSel[0][0].idx == ElElFakeSel[0][0].idx,
-        ElElTightSel[0][1].idx == ElElFakeSel[0][1].idx]
-    )
-    mumuSel.refine('dileptonCut_mumu', cut=[
-        tightpair_MuMu(MuMuFakeSel[0]),
-        op.rng_len(self.tightMuons) == 2,
-        op.rng_len(self.tightElectrons) == 0,
-        MuMuTightSel[0][0].idx == MuMuFakeSel[0][0].idx,
-        MuMuTightSel[0][1].idx == MuMuFakeSel[0][1].idx]
-    )
-    elmuSel.refine('dileptonCut_emu', cut=[
-        tightpair_ElMu(ElMuFakeSel[0]),
-        op.rng_len(self.tightElectrons) == 1,
-        op.rng_len(self.tightMuons) == 1,
-        ElMuTightSel[0][0].idx == ElMuFakeSel[0][0].idx,
-        ElMuTightSel[0][1].idx == ElMuFakeSel[0][1].idx]
-    )
-
-    # boosted -> and at least one b-tagged ak8 jet
-    DL_boosted_ee = elelSel.refine(
+    # boosted -> at least one b-tagged ak8 jet
+    DL_boosted_ee = leptonMultiplicityCut_ee.refine(
         'DL_boosted_ee', cut=(op.rng_len(self.ak8BJets) >= 1))
-    DL_boosted_mumu = mumuSel.refine(
+    DL_boosted_mumu = leptonMultiplicityCut_mumu.refine(
         'DL_boosted_mumu', cut=(op.rng_len(self.ak8BJets) >= 1))
-    DL_boosted_emu = elmuSel.refine(
+    DL_boosted_emu = leptonMultiplicityCut_emu.refine(
         'DL_boosted_emu', cut=(op.rng_len(self.ak8BJets) >= 1))
 
     # resolved -> and at least two ak4 jets with at least one b-tagged and no ak8 jets
-    DL_resolved_1b_ee = elelSel.refine('DL_resolved_1b_ee', cut=(op.AND(op.rng_len(self.ak4BJets) >= 1, op.rng_len(self.ak8Jets) == 0)))
-    DL_resolved_1b_mumu = mumuSel.refine('DL_resolved_1b_mumu', cut=(op.AND(op.rng_len(self.ak4BJets) >= 1, op.rng_len(self.ak8Jets) == 0)))
-    DL_resolved_1b_emu = elmuSel.refine('DL_resolved_1b_emu', cut=(op.AND(op.rng_len(self.ak4BJets) >= 1, op.rng_len(self.ak8Jets) == 0)))
+    DL_resolved_ee = leptonMultiplicityCut_ee.refine('DL_resolved_1b_ee', cut=(op.AND(op.rng_len(self.ak4Jets) >= 2, op.rng_len(self.ak4BJets) >= 1, op.rng_len(self.ak8Jets) == 0)))
+    DL_resolved_mumu = leptonMultiplicityCut_mumu.refine('DL_resolved_1b_mumu', cut=(op.AND(op.rng_len(self.ak4Jets) >= 2, op.rng_len(self.ak4BJets) >= 1, op.rng_len(self.ak8Jets) == 0)))
+    DL_resolved_emu = leptonMultiplicityCut_emu.refine('DL_resolved_1b_emu', cut=(op.AND(op.rng_len(self.ak4Jets) >= 2, op.rng_len(self.ak4BJets) >= 1, op.rng_len(self.ak8Jets) == 0)))
 
-    DL_resolved_2b_ee = DL_resolved_1b_ee.refine('DL_resolved_ee', cut=(op.rng_len(self.ak4BJets) >= 2))
-    DL_resolved_2b_mumu = DL_resolved_1b_mumu.refine('DL_resolved_mumu', cut=(op.rng_len(self.ak4BJets) >= 2))
-    DL_resolved_2b_emu = DL_resolved_1b_emu.refine('DL_resolved_emu', cut=(op.rng_len(self.ak4BJets) >= 2))
-
-    DL_selections = [DL_boosted_ee, DL_boosted_mumu, DL_boosted_emu, DL_resolved_1b_ee, DL_resolved_1b_mumu, DL_resolved_1b_emu, DL_resolved_2b_ee, DL_resolved_2b_mumu, DL_resolved_2b_emu]
+    DL_selections = [DL_boosted_ee, DL_boosted_mumu, DL_boosted_emu, DL_resolved_ee, DL_resolved_mumu, DL_resolved_emu]
         
     return DL_selections
 
 def makeSLSelection(self, noSel):
+    exit()
     """ Selections for the SL channel
     return the following selections:
     - SL_resolved: resolved selection
@@ -227,15 +117,13 @@ def makeSLSelection(self, noSel):
     def muPtCut(lep): return self.muon_conept[lep[0].idx] > 25.0
 
     def tau_h_veto(taus): return op.rng_len(taus) == 0
-    
-    def leptonOS(l1, l2): return l1.charge != l2.charge
 
     ElElDileptonPreSel = op.combine(self.clElectrons, N=2)
     MuMuDileptonPreSel = op.combine(self.muons, N=2)
     ElMuDileptonPreSel = op.combine((self.clElectrons, self.muons))
 
-    OSElElDileptonPreSel = op.combine(self.clElectrons, N=2, pred=leptonOS)
-    OSMuMuDileptonPreSel = op.combine(self.muons, N=2, pred=leptonOS)
+    OSElElDileptonPreSel = op.combine(self.clElectrons, N=2, pred=lambda el1,el2 : el1.charge != el2.charge)
+    OSMuMuDileptonPreSel = op.combine(self.muons, N=2, pred=lambda mu1,mu2 : mu1.charge != mu2.charge)
     
     outZcut = [outZ(OSElElDileptonPreSel), outZ(OSMuMuDileptonPreSel)]
 
