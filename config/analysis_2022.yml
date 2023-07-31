@@ -2,20 +2,26 @@ tree: Events
 eras:
   "2022":
     luminosity: 7875 # pb^-1
-  "2022C":
-    luminosity: 4953 # pb^-1
-  "2022D":
-    luminosity: 2922 # pb^-1
+  # "2022C":
+  #   luminosity: 4953 # pb^-1
+  # "2022D":
+  #   luminosity: 2922 # pb^-1
   "2022EE":
     luminosity: 20665 # pb^-1
-  "2022F":
-    luminosity: 18423 # pb^-1
-  "2022G":
-    luminosity: 3247 # pb^-1
+  # "2022F":
+  #   luminosity: 18423 # pb^-1
+  # "2022G":
+  #   luminosity: 3247 # pb^-1
 dbcache: dascache
 samples:
+  # HH_2018:
+  #   era: "2022EE"
+  #   type: signal
+  #   group: "signal"
+  #   db: das:/GluGluToHHTo2B2VLNu2J_node_cHHH1_TuneCP5_PSWeights_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+  #   split: 14
   Muon_C:
-    era: "2022C"
+    era: "2022"
     type: data
     group: "data"
     db: das:/Muon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
@@ -24,7 +30,7 @@ samples:
     split: 80
 
   Muon_D:
-    era: "2022D"
+    era: "2022"
     type: data
     group: "data"
     db: ['das:/Muon/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/Muon/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
@@ -33,7 +39,7 @@ samples:
     split: 48
     
   Muon_F:
-    era: "2022F"
+    era: "2022EE"
     type: data
     group: "data"
     db: das:/Muon/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
@@ -42,7 +48,7 @@ samples:
     split: 256
 
   Muon_G:
-    era: "2022G"
+    era: "2022EE"
     type: data
     group: "data"
     db: das:/Muon/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
@@ -51,7 +57,7 @@ samples:
     split: 56
 
   EGamma_C:
-    era: "2022C"
+    era: "2022"
     type: data
     group: "data"
     db: das:/EGamma/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
@@ -60,7 +66,7 @@ samples:
     split: 164
 
   EGamma_D:
-    era: "2022D"
+    era: "2022"
     type: data
     group: "data"
     db: ['das:/EGamma/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD','das:/EGamma/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
@@ -69,7 +75,7 @@ samples:
     split: 59
 
   EGamma_F:
-    era: "2022F"
+    era: "2022EE"
     type: data
     group: "data"
     db: das:/EGamma/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
@@ -78,7 +84,7 @@ samples:
     split: 349
 
   EGamma_G:
-    era: "2022G"
+    era: "2022EE"
     type: data
     group: "data"
     db: das:/EGamma/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
@@ -87,7 +93,7 @@ samples:
     split: 57
 
   MuonEG_C:
-    era: "2022C"
+    era: "2022"
     type: data
     group: "data"
     db: das:/MuonEG/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
@@ -96,7 +102,7 @@ samples:
     split: 33
 
   MuonEG_D:
-    era: "2022D"
+    era: "2022"
     type: data
     group: "data"
     db: ['das:/MuonEG/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/MuonEG/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
@@ -105,7 +111,7 @@ samples:
     split: 7
 
   MuonEG_F:
-    era: "2022F"
+    era: "2022EE"
     type: data
     group: "data"
     db: das:/MuonEG/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
@@ -114,7 +120,7 @@ samples:
     split: 99
 
   MuonEG_G:
-    era: "2022G"
+    era: "2022EE"
     type: data
     group: "data"
     db: das:/MuonEG/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
@@ -123,7 +129,7 @@ samples:
     split: 22
 
   DoubleMuon:
-    era: "2022C"
+    era: "2022"
     type: data
     group: "data"
     db: das:/DoubleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
@@ -132,7 +138,7 @@ samples:
     split: 4
 
   SingleMuon:
-    era: "2022C"
+    era: "2022"
     type: data
     group: "data"
     db: das:/SingleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
@@ -158,62 +164,43 @@ samples:
     cross-section: 98.02 
     generated-events: genEventSumw
     split: 70
-  
-  # ttbar semileptonic 405.70 923.6*BR
-  TTtoLNu2Q:
-    era: "2022"
-    group: "TTbar"
-    db: das:/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
-    type: mc
-    cross-section: 405.70
-    generated-events: genEventSumw
-    split: 67
+    
+  # to be added when working with SL
+  # TTtoLNu2Q:
+  #   era: "2022"
+  #   group: "TTbar"
+  #   db: das:/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
+  #   type: mc
+  #   cross-section: 405.70 # 923.6*(BR)
+  #   generated-events: genEventSumw
+  #   split: 67
 
-  TTtoLNu2Q_EE:
-    era: "2022EE"
-    group: "TTbar"
-    db: das:/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
-    type: mc
-    cross-section: 405.70
-    generated-events: genEventSumw
-    split: 218
-
+  # TTtoLNu2Q_EE:
+  #   era: "2022EE"
+  #   group: "TTbar"
+  #   db: das:/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
+  #   type: mc
+  #   cross-section: 405.70
+  #   generated-events: genEventSumw
+  #   split: 218
 
   DY:
     era: "2022"
     group: "DY"
-    db: das:/DYto2L-2Jets_MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
+    db: das:/DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8/Run3Summer22NanoAODv11-forPOG_126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
     type: mc
-    cross-section: 6688
+    cross-section: 5659
     generated-events: genEventSumw
-    split: 44
+    split: 18
 
   DY_EE:
     era: "2022EE"
     group: "DY"
-    db: das:/DYto2L-2Jets_MLL-50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
+    db: das:/DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8/Run3Summer22EENanoAODv11-forPOG_126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
     type: mc
-    cross-section: 6688
+    cross-section: 5666
     generated-events: genEventSumw
-    split: 125
-
-  DY10to50:
-    era: "2022"
-    group: "DY"
-    db: das:/DYto2L-2Jets_MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
-    type: mc
-    cross-section: 20950.0
-    generated-events: genEventSumw
-    split: 39
-
-  DY10to50_EE:
-    era: "2022EE"
-    group: "DY"
-    db: das:/DYto2L-2Jets_MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
-    type: mc
-    cross-section: 20950.0
-    generated-events: genEventSumw
-    split: 110
+    split: 55
 
   # WJets:
   #   era: "2022"
@@ -229,7 +216,7 @@ samples:
     group: "VV"
     db: das:/WW_TuneCP5_13p6TeV_pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v2/NANOAODSIM
     type: mc
-    cross-section: 80.23
+    cross-section: 80.18
     generated-events: genEventSumw
     split: 11
 
@@ -238,7 +225,7 @@ samples:
     group: "VV"
     db: das:/WW_TuneCP5_13p6TeV_pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v2/NANOAODSIM
     type: mc
-    cross-section: 80.23
+    cross-section: 80.26
     generated-events: genEventSumw
     split: 11
 
@@ -324,3 +311,4 @@ plotIt:
     legend-columns: 2
     ratio-y-axis: '#frac{Data}{MC}'
     ratio-y-axis-range: [0.8, 1.2]
+    show-overflow: True
