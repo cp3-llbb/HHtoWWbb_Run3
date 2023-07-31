@@ -6,10 +6,6 @@ from bamboo import treefunctions as op
 def hasAssociatedJet(lep): return lep.jet.idx != -1
 
 
-def lepton_associatedJetLessThanMediumBtag(lep): return op.OR(
-    op.NOT(hasAssociatedJet(lep)), lep.jet.btagDeepFlavB <= 0.2770)  # 2018 value
-
-
 def muon_x(mu): return op.min(
     op.max(0., (0.9*mu.pt*(1+mu.jetRelIso))-20.)/(45.-20.), 1.)
 
@@ -35,8 +31,8 @@ def electronTightSel(el): return el.mvaTTH >= 0.30
 # Object definitions
 
 
-def muonDef(mu):
-    return op.AND(
+def muonDef(muons):
+    return op.select(muons, lambda mu :op.AND(
         mu.pt >= 5.,
         op.abs(mu.eta) <= 2.4,
         op.abs(mu.dxy) <= 0.05,
@@ -44,7 +40,7 @@ def muonDef(mu):
         mu.miniPFRelIso_all <= 0.4,
         mu.sip3d <= 8,
         mu.looseId
-    )
+    ))
 
 
 def muonConePt(muons):
@@ -58,16 +54,20 @@ def muonConePt(muons):
 def muonFakeSel(muons):
     return op.select(muons, lambda mu: op.AND(
         muonConePt(muons)[mu.idx] >= 10.,
-        lepton_associatedJetLessThanMediumBtag(mu),
-        op.OR(mu.mvaTTH >= 0.50, op.AND(mu.jetRelIso < 0.8, muon_deepJetInterpIfMvaFailed(mu))))
+        op.OR(lepton_associatedJetLessThanMediumBtag(mu), op.AND(mu.jetRelIso < 0.8, muon_deepJetInterpIfMvaFailed(mu))))
     )
 
 
-def muonTightSel(mu): return op.AND(mu.mvaTTH >= 0.50, mu.mediumId)
+def muonTightSel(muons): return op.select(muons, lambda mu: op.AND(
+            muonConePt(muons)[mu.idx] >= 10.,
+            lepton_associatedJetLessThanMediumBtag(mu),
+            mu.mvaTTH >= 0.50,
+            mu.mediumId
+            ))
 
 
-def elDef(el):
-    return op.AND(
+def elDef(electrons):
+    return op.select(electrons, lambda el: op.AND(
         el.pt >= 7.,
         op.abs(el.eta) <= 2.5,
         op.abs(el.dxy) <= 0.05,
@@ -76,14 +76,13 @@ def elDef(el):
         el.miniPFRelIso_all <= 0.4,
         el.mvaNoIso >= 0.5,  # this should mean loose WP
         el.lostHits <= 1
-    )
+    ))
 
 
 def elConePt(electrons):
     return op.map(electrons, lambda lep: op.multiSwitch(
         (op.AND(op.abs(lep.pdgId) != 11, op.abs(lep.pdgId) != 13), lep.pt),
         (op.AND(op.abs(lep.pdgId) == 11, lep.mvaTTH > 0.30), lep.pt),
-        (op.AND(op.abs(lep.pdgId) == 11), lep.pt),
         0.9*lep.pt*(1.+lep.jetRelIso)
     ))
 
@@ -115,20 +114,32 @@ def elFakeSel(electrons):
     ))
 
 
-def elTightSel(el): return el.mvaTTH >= 0.30
+def elTightSel(electrons): return op.select(electrons, lambda el: op.AND(
+            elConePt(electrons)[el.idx] >= 10.,
+            op.OR(
+                op.AND(op.abs(el.eta+el.deltaEtaSC) <= 1.479, el.sieie <= 0.011),
+                op.AND(op.abs(el.eta+el.deltaEtaSC) > 1.479, el.sieie <= 0.030)
+            ),
+            el.hoe <= 0.10,
+            el.eInvMinusPInv >= -0.04,
+            el.convVeto,
+            el.mvaTTH >= 0.30,
+            el.lostHits == 0,
+            lepton_associatedJetLessThanMediumBtag(el),
+            ))
 
 
-def ak4jetDef(jet):
-    return op.AND(
+def ak4jetDef(jets):
+    return op.select(jets, lambda jet: op.AND(
         jet.jetId & 2,  # tight
         jet.pt >= 25.,
         op.abs(jet.eta) <= 2.4,
         # op.OR(((jet.puId >> 2) & 1), jet.pt > 50.) # Jet PU ID bit1 is loose # no puId in Run3 so far
-    )
+    ))
 
 
-def ak8jetDef(jet):
-    return op.AND(
+def ak8jetDef(jets):
+    return op.select(jets, lambda jet: op.AND(
         jet.pt >= 200.,
         op.abs(jet.eta) <= 2.4,
         jet.jetId & 2,  # tight
@@ -140,7 +151,7 @@ def ak8jetDef(jet):
         op.abs(jet.subJet2.eta) <= 2.4,
         op.AND(jet.msoftdrop >= 30., jet.msoftdrop <= 210.),
         jet.tau2 / jet.tau1 <= 0.75
-    )
+    ))
 
 
 def tauDef(taus):
@@ -159,3 +170,11 @@ def tauDef(taus):
         (tau.idDeepTau2017v2p1VSe >> 0 & 0x1) == 1,
         (tau.idDeepTau2017v2p1VSmu >> 0 & 0x1) == 1
     ))
+
+def cleanTaus(taus, electrons, muons):
+    return op.select(taus, lambda tau: op.AND(
+            op.NOT(op.rng_any(
+                electrons, lambda el: op.deltaR(tau.p4, el.p4) <= 0.3)),
+            op.NOT(op.rng_any(
+                muons, lambda mu: op.deltaR(tau.p4, mu.p4) <= 0.3))
+        ))

@@ -28,7 +28,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 raise RuntimeError(
                     f"The type '{sampleCfg['type']}' of {sample} dataset not understood.")
 
-        era = sampleCfg['era']  # reserved for future use
+        era = sampleCfg['era']
         self.is_MC = isMC()
         self.triggersPerPrimaryDataset = {}
 
@@ -45,13 +45,11 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             groups = ["HLT_", "MET_", "RawMET_"]
             collections = ["nElectron", "nJet",
                            "nMuon", "nFatJet", "nSubJet", "nTau"]
-            mcCollections = ["nGenDressedLepton",
-                             "nGenJet", "nGenPart", "nCorrT1METJet"]
+            mcCollections = ["nGenDressedLepton", "nGenJet", "nGenPart"]
             varReaders = []
             if isMC:
                 varReaders.append(td.CalcCollectionsGroups(Jet=("pt", "mass")))
-                varReaders.append(
-                    td.CalcCollectionsGroups(GenJet=("pt", "mass")))
+                varReaders.append(td.CalcCollectionsGroups(GenJet=("pt", "mass")))
                 varReaders.append(td.CalcCollectionsGroups(MET=("pt", "phi")))
                 return td.NanoAODDescription(groups=groups, collections=collections + mcCollections, systVariations=varReaders)
             else:
@@ -86,30 +84,42 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
                 sample, self.triggersPerPrimaryDataset)])
 
-        # if self.is_MC:
-        #     configureJets(
-        #         variProxy=tree._Jet,
-        #         jetType="AK4PFchs",
-        #         jsonFile="/home/ucl/cp3/aguzel/Bamboo/CMSJMECalculators/tests/data/2018_UL_jet_jerc.json.gz",
-        #         jec="Summer19UL18_V5_MC",
-        #         #   smear="Autumn18_V7b_MC",
-        #         jesUncertaintySources=["Total"],
-        #         enableSystematics=lambda v: not "jesTotal" in v,
-        #         isMC=self.is_MC,
-        #         backend=backend,
-        #         uName=sample
-        #     )
-        #     configureType1MET(
-        #         variProxy=tree._MET,
-        #         jsonFile="/home/ucl/cp3/aguzel/Bamboo/CMSJMECalculators/tests/data/2018_UL_jet_jerc.json",
-        #         smear="Summer19UL18_JRV2_MC",
-        #         jec="Summer19UL18_V5_MC",
-        #         # jesUncertainties=["Total"],
-        #         splitJER=True,
-        #         addHEM2018Issue=False,
-        #         isMC=self.is_MC,
-        #         backend=backend,
-        #         uName=sample,
-        #     )
+        # if sampleCfg['type'] == 'mc':
+        #     JECTagDatabase = {"2022": "Winter22Run3_V2_MC",
+        #                       "2022EE": "Summer22EEPrompt22_V1_MC"}
+        #     if era in JECTagDatabase.keys():
+        #         print(f"Configure jet corrections for era {era}.")
+        #         configureJets(
+        #             variProxy               = tree._Jet,
+        #             jetType                 = "AK4PFPuppi",
+        #             jec                     = JECTagDatabase[era],
+        #             #  smear                   = JERTagDatabase['2022EE'],
+        #             jecLevels               = "default",
+        #             jesUncertaintySources   = "All",
+        #             mayWriteCache           = self.args.distributed != "worker",
+        #             isMC                    = self.is_MC,
+        #             backend                 = backend,
+        #             uName                   = sample
+        #             )
+        #         print(f"Finished configuring jet corrections for era {era}!")
+        # if sampleCfg['type'] == 'data':
+        #     JECTagDatabase = {"2022C": "Winter22Run3_RunC_V2_DATA",
+        #                       "2022D": "Winter22Run3_RunD_V2_DATA",
+        #                       "2022F": "Summer22EEPrompt22_RunF_V1_DATA",
+        #                       "2022G": "Summer22EEPrompt22_RunG_V1_DATA"}
+        #     if era in JECTagDatabase.keys():
+        #         print(f"Configure jet corrections...")
+        #         configureJets(
+        #             variProxy               = tree._Jet,
+        #             jetType                 = "AK4PFPuppi",
+        #             jec                     = JECTagDatabase[era],
+        #             jecLevels               = "default",
+        #             jesUncertaintySources   = "All",
+        #             mayWriteCache           = self.args.distributed != "worker",
+        #             isMC                    = self.is_MC,
+        #             backend                 = backend,
+        #             uName                   = sample
+        #             )
+        #         print(f"Finished configuring jet corrections for era {era}!")
 
         return tree, noSel, backend, lumiArgs

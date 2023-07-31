@@ -1,0 +1,8 @@
+# das:/MuonEG/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD;;das:/MuonEG/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD
+root://cms-xrd-global.cern.ch///store/data/Run2022D/MuonEG/NANOAOD/PromptNanoAODv10_v1-v1/50000/e572a7c7-59e2-4838-9ab7-099b5bb4b3b1.root
+root://cms-xrd-global.cern.ch///store/data/Run2022D/MuonEG/NANOAOD/PromptNanoAODv10_v1-v1/50000/ba2f225b-2510-4141-8ca0-4db28fb451fa.root
+root://cms-xrd-global.cern.ch///store/data/Run2022D/MuonEG/NANOAOD/PromptNanoAODv10_v2-v1/60000/cbc8079f-5f9a-4df9-9329-6e3e5cd4f044.root
+root://cms-xrd-global.cern.ch///store/data/Run2022D/MuonEG/NANOAOD/PromptNanoAODv10_v2-v1/60000/fc30c23f-5456-4bf9-ada4-a46c18ecd96b.root
+root://cms-xrd-global.cern.ch///store/data/Run2022D/MuonEG/NANOAOD/PromptNanoAODv10_v2-v1/60000/f07ed16d-eabd-4d5b-af03-162cde74ef8f.root
+root://cms-xrd-global.cern.ch///store/data/Run2022D/MuonEG/NANOAOD/PromptNanoAODv10_v2-v1/50000/68f42f42-3274-46ec-b23d-bfadc13012c2.root
+root://cms-xrd-global.cern.ch///store/data/Run2022D/MuonEG/NANOAOD/PromptNanoAODv10_v2-v1/50000/e23ae019-544a-480a-a402-86db7a936f76.root
