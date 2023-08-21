@@ -238,11 +238,11 @@ class controlPlotter(NanoBaseHHWWbb):
 
                 # Invariant mass of leptons
                 Plot.make1D("DL_boosted_InvM_ee", op.invariant_mass(self.firstOSElEl[0].p4, self.firstOSElEl[1].p4), DL_boosted_ee, EqBin(
-                    100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electrons (GeV/c^{2})", plotopts=DLboostedEE_label),
+                    60, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electrons (GeV/c^{2})", plotopts=DLboostedEE_label),
                 Plot.make1D("DL_boosted_InvM_mumu", op.invariant_mass(self.firstOSMuMu[0].p4, self.firstOSMuMu[1].p4), DL_boosted_mumu, EqBin(
-                    100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of muons  (GeV/c^{2})", plotopts=DLboostedMuMu_label),
+                    60, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of muons  (GeV/c^{2})", plotopts=DLboostedMuMu_label),
                 Plot.make1D("DL_boosted_InvM_emu", op.invariant_mass(self.firstOSElMu[0].p4, self.firstOSElMu[1].p4), DL_boosted_emu, EqBin(
-                    100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pair  (GeV/c^{2})", plotopts=DLboostedEMU_label),
+                    60, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pair  (GeV/c^{2})", plotopts=DLboostedEMU_label),
 
                 # total charge of leptons
                 Plot.make1D("DL_boosted_totalCharge_ee", op.sum(self.firstOSElEl[0].charge, self.firstOSElEl[1].charge), DL_boosted_ee, EqBin(
@@ -262,18 +262,18 @@ class controlPlotter(NanoBaseHHWWbb):
                 
                 # leading lepton pt
                 Plot.make1D("DL_boosted_leadingLepton_pt_ee", self.firstOSElEl[0].pt, DL_boosted_ee, EqBin(
-                    100, 0., 300.), title="InvM(ll)", xTitle="p_{T} of the leading lepton (GeV/c)", plotopts=DLboostedEE_label),
+                    100, 0., 300.), title="leadingLeptonPt", xTitle="p_{T} of the leading lepton (GeV/c)", plotopts=DLboostedEE_label),
                 Plot.make1D("DL_boosted_leadingLepton_pt_mumu", self.firstOSMuMu[0].pt, DL_boosted_mumu, EqBin(
-                    100, 0., 300.), title="InvM(ll)", xTitle="p_{T} of the leading lepton (GeV/c)", plotopts=DLboostedMuMu_label),
-                Plot.make1D("DL_boosted_leadingLepton_pt_emu", self.firstOSElMu[0].pt, DL_boosted_emu, EqBin(
-                    100, 0., 300.), title="InvM(ll)", xTitle="p_{T} of the leading lepton (GeV/c)", plotopts=DLboostedEMU_label),
+                    100, 0., 300.), title="leadingLeptonPt", xTitle="p_{T} of the leading lepton (GeV/c)", plotopts=DLboostedMuMu_label),
+                Plot.make1D("DL_boosted_leadingLepton_pt_emu", op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[0].pt, self.firstOSElMu[1].pt), DL_boosted_emu, EqBin(
+                    100, 0., 300.), title="leadingLeptonPt", xTitle="p_{T} of the leading lepton (GeV/c)", plotopts=DLboostedEMU_label),
                 
                 # sub-leading lepton pt
                 Plot.make1D("DL_boosted_subleadingLepton_pt_ee", self.firstOSElEl[1].pt, DL_boosted_ee, EqBin(
                     100, 0., 300.), title="InvM(ll)", xTitle="p_{T} of the sub-leading lepton (GeV/c)", plotopts=DLboostedEE_label),
                 Plot.make1D("DL_boosted_subleadingLepton_pt_mumu", self.firstOSMuMu[1].pt, DL_boosted_mumu, EqBin(
                     100, 0., 300.), title="InvM(ll)", xTitle="p_{T} of the sub-leading lepton (GeV/c)", plotopts=DLboostedMuMu_label),
-                Plot.make1D("DL_boosted_subleadingLepton_pt_emu", self.firstOSElMu[1].pt, DL_boosted_emu, EqBin(
+                Plot.make1D("DL_boosted_subleadingLepton_pt_emu", op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[1].pt, self.firstOSElMu[0].pt), DL_boosted_emu, EqBin(
                     100, 0., 300.), title="InvM(ll)", xTitle="p_{T} of the sub-leading lepton (GeV/c)", plotopts=DLboostedEMU_label),
                 
                 # leading lepton eta
@@ -281,7 +281,7 @@ class controlPlotter(NanoBaseHHWWbb):
                     30, -3, 3), title="InvM(ll)", xTitle="\eta of the leading lepton", plotopts=DLboostedEE_label),
                 Plot.make1D("DL_boosted_leadingLepton_eta_mumu", self.firstOSMuMu[0].eta, DL_boosted_mumu, EqBin(
                     30, -3, 3), title="InvM(ll)", xTitle="\eta of the leading lepton", plotopts=DLboostedMuMu_label),
-                Plot.make1D("DL_boosted_leadingLepton_eta_emu", self.firstOSElMu[0].eta, DL_boosted_emu, EqBin(
+                Plot.make1D("DL_boosted_leadingLepton_eta_emu", op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[0].eta, self.firstOSElMu[1].eta), DL_boosted_emu, EqBin(
                     30, -3, 3), title="InvM(ll)", xTitle="\eta of the leading lepton", plotopts=DLboostedEMU_label),
                 
                 # sub-leading lepton eta
@@ -289,7 +289,7 @@ class controlPlotter(NanoBaseHHWWbb):
                     30, -3, 3), title="InvM(ll)", xTitle="\eta of the sub-leading lepton", plotopts=DLboostedEE_label),
                 Plot.make1D("DL_boosted_subleadingLepton_eta_mumu", self.firstOSMuMu[1].eta, DL_boosted_mumu, EqBin(
                     30, -3, 3), title="InvM(ll)", xTitle="\eta of the sub-leading lepton", plotopts=DLboostedMuMu_label),
-                Plot.make1D("DL_boosted_subleadingLepton_eta_emu", self.firstOSElMu[1].eta, DL_boosted_emu, EqBin(
+                Plot.make1D("DL_boosted_subleadingLepton_eta_emu", op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[1].eta, self.firstOSElMu[0].eta), DL_boosted_emu, EqBin(
                     30, -3, 3), title="InvM(ll)", xTitle="\eta of the sub-leading lepton", plotopts=DLboostedEMU_label),
                 
                 # DR between leading and sub-leading lepton
@@ -305,7 +305,7 @@ class controlPlotter(NanoBaseHHWWbb):
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=DLboostedEE_label),
                 Plot.make1D("DL_boosted_DR_leptonANDak8bjet_mumu", op.deltaR(self.firstOSMuMu[0].p4, self.ak8Jets[0].p4), DL_boosted_mumu, EqBin(
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=DLboostedMuMu_label),
-                Plot.make1D("DL_boosted_DR_leptonANDak8bjet_emu", op.deltaR(self.firstOSElMu[0].p4, self.ak8Jets[0].p4), DL_boosted_emu, EqBin(
+                Plot.make1D("DL_boosted_DR_leptonANDak8bjet_emu", op.deltaR(op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[0].p4, self.firstOSElMu[1].p4), self.ak8Jets[0].p4), DL_boosted_emu, EqBin(
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=DLboostedEMU_label),
                 
                 # number of electrons
@@ -423,7 +423,7 @@ class controlPlotter(NanoBaseHHWWbb):
                     100, 0., 300.), title="InvM(ll)", xTitle="p_{T} of the leading lepton (GeV/c)", plotopts=DLresolvedEE_label),
                 Plot.make1D("DL_resolved_leadingLepton_pt_mumu", self.firstOSMuMu[0].pt, DL_resolved_mumu, EqBin(
                     100, 0., 300.), title="InvM(ll)", xTitle="p_{T} of the leading lepton (GeV/c)", plotopts=DLresolvedMuMu_label),
-                Plot.make1D("DL_resolved_leadingLepton_pt_emu", self.firstOSElMu[0].pt, DL_resolved_emu, EqBin(
+                Plot.make1D("DL_resolved_leadingLepton_pt_emu", op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[0].pt, self.firstOSElMu[1].pt), DL_resolved_emu, EqBin(
                     100, 0., 300.), title="InvM(ll)", xTitle="p_{T} of the leading lepton (GeV/c)", plotopts=DLresolvedEMu_label),
                 
                 # sub-leading lepton pt
@@ -431,7 +431,7 @@ class controlPlotter(NanoBaseHHWWbb):
                     50, 0., 200.), title="InvM(ll)", xTitle="p_{T} of the sub-leading lepton (GeV/c)", plotopts=DLresolvedEE_label),
                 Plot.make1D("DL_resolved_subleadingLepton_pt_mumu", self.firstOSMuMu[1].pt, DL_resolved_mumu, EqBin(
                     50, 0., 200.), title="InvM(ll)", xTitle="p_{T} of the sub-leading lepton (GeV/c)", plotopts=DLresolvedMuMu_label),
-                Plot.make1D("DL_resolved_subleadingLepton_pt_emu", self.firstOSElMu[1].pt, DL_resolved_emu, EqBin(
+                Plot.make1D("DL_resolved_subleadingLepton_pt_emu", op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[1].pt, self.firstOSElMu[0].pt), DL_resolved_emu, EqBin(
                     50, 0., 200.), title="InvM(ll)", xTitle="p_{T} of the sub-leading lepton (GeV/c)", plotopts=DLresolvedEMu_label),
                 
                 # leading lepton eta
@@ -439,7 +439,7 @@ class controlPlotter(NanoBaseHHWWbb):
                     30, -3, 3), title="InvM(ll)", xTitle="\eta of the leading lepton", plotopts=DLresolvedEE_label),
                 Plot.make1D("DL_resolved_leadingLepton_eta_mumu", self.firstOSMuMu[0].eta, DL_resolved_mumu, EqBin(
                     30, -3, 3), title="InvM(ll)", xTitle="\eta of the leading lepton", plotopts=DLresolvedMuMu_label),
-                Plot.make1D("DL_resolved_leadingLepton_eta_emu", self.firstOSElMu[0].eta, DL_resolved_emu, EqBin(
+                Plot.make1D("DL_resolved_leadingLepton_eta_emu", op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[0].eta, self.firstOSElMu[1].eta), DL_resolved_emu, EqBin(
                     30, -3, 3), title="InvM(ll)", xTitle="\eta of the leading lepton", plotopts=DLresolvedEMu_label),
                 
                 # sub-leading lepton eta
@@ -447,7 +447,7 @@ class controlPlotter(NanoBaseHHWWbb):
                     30, -3, 3), title="InvM(ll)", xTitle="\eta of the sub-leading lepton", plotopts=DLresolvedEE_label),
                 Plot.make1D("DL_resolved_subleadingLepton_eta_mumu", self.firstOSMuMu[1].eta, DL_resolved_mumu, EqBin(
                     30, -3, 3), title="InvM(ll)", xTitle="\eta of the sub-leading lepton", plotopts=DLresolvedMuMu_label),
-                Plot.make1D("DL_resolved_subleadingLepton_eta_emu", self.firstOSElMu[1].eta, DL_resolved_emu, EqBin(
+                Plot.make1D("DL_resolved_subleadingLepton_eta_emu", op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[1].eta, self.firstOSElMu[0].eta), DL_resolved_emu, EqBin(
                     30, -3, 3), title="InvM(ll)", xTitle="\eta of the sub-leading lepton", plotopts=DLresolvedEMu_label),
                 
                 # DR between leading and sub-leading lepton
@@ -463,7 +463,7 @@ class controlPlotter(NanoBaseHHWWbb):
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=DLresolvedEE_label),
                 Plot.make1D("DL_resolved_DR_leptonANDak8bjet_mumu", op.deltaR(self.firstOSMuMu[0].p4, self.ak4BJets[0].p4), DL_resolved_mumu, EqBin(
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=DLresolvedMuMu_label),
-                Plot.make1D("DL_resolved_DR_leptonANDak8bjet_emu", op.deltaR(self.firstOSElMu[0].p4, self.ak4BJets[0].p4), DL_resolved_emu, EqBin(
+                Plot.make1D("DL_resolved_DR_leptonANDak8bjet_emu", op.deltaR(op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[0].p4, self.firstOSElMu[1].p4), self.ak4BJets[0].p4), DL_resolved_emu, EqBin(
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=DLresolvedEMu_label),
                 
                 # number of electrons
