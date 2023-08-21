@@ -138,11 +138,7 @@ class controlPlotter(NanoBaseHHWWbb):
         def ak8Btag(fatjet): return op.OR(op.AND(fatjet.subJet1.pt >= 30, subjetBtag(fatjet.subJet1)),
                                           op.AND(fatjet.subJet2.pt >= 30, subjetBtag(fatjet.subJet2)))
 
-        def ak8noBtag(fatjet): return op.NOT(op.OR(op.AND(fatjet.subJet1.pt >= 30, subjetBtag(fatjet.subJet1)),
-                                                   op.AND(fatjet.subJet2.pt >= 30, subjetBtag(fatjet.subJet2))))
-
         self.ak8BJets = op.select(self.ak8Jets, ak8Btag)
-        self.ak8nonBJets = op.select(self.ak8Jets, ak8noBtag)
 
         # Ak4 Jet Collection cleaned from Ak8b #
         def cleanAk4FromAk8b(ak4j): return op.AND(op.rng_len(
