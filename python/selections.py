@@ -8,7 +8,9 @@ def lowMllCut(dileptons): return op.NOT(op.rng_any(
     dileptons, lambda dilep: op.invariant_mass(dilep[0].p4, dilep[1].p4) < 12.))
 
 def outZ(dileptons): return op.NOT(op.rng_any(
-    dileptons, lambda dilep: op.abs(op.invariant_mass(dilep[0].p4, dilep[1].p4) - Zmass) < 10.))
+    dileptons, lambda dilep: op.abs(op.invariant_mass(dilep[0].p4, dilep[1].p4) - Zmass) <= 10.))
+
+def DYm50(dileptons): return op.NOT(op.rng_any(dileptons, lambda dilep: op.invariant_mass(dilep[0].p4, dilep[1].p4) < 50. ))
 
 # end common variables
 
@@ -47,14 +49,14 @@ def makeDLSelection(self, noSel):
     MuMuLooseSel = op.combine(self.muons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
 
     # OS tight dilepton collections
-    ElElTightSel = op.combine(self.tightElectrons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
-    MuMuTightSel = op.combine(self.tightMuons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
-    ElMuTightSel = op.combine((self.tightElectrons, self.tightMuons), N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
-
+    ElElTightSel = op.combine(self.tightElectrons, N=2, pred=lambda lep1, lep2 : lep1.charge != lep2.charge)
+    MuMuTightSel = op.combine(self.tightMuons, N=2, pred=lambda lep1, lep2 : lep1.charge != lep2.charge)
+    ElMuTightSel = op.combine((self.tightElectrons, self.tightMuons), N=2, pred= lambda el, mu : el.charge != mu.charge)
+    
     self.firstOSElEl = ElElTightSel[0]
     self.firstOSMuMu = MuMuTightSel[0]
     self.firstOSElMu = ElMuTightSel[0]
-
+    
     # minimum pT cut : at least one dilepton pair with leading lepton above 25 GeV
     elelSel = noSel.refine('elelptSel', cut=[ptCutElEl(self.firstOSElEl)])
     mumuSel = noSel.refine('mumuptSel', cut=[ptCutMuMu(self.firstOSMuMu)])
@@ -65,10 +67,13 @@ def makeDLSelection(self, noSel):
 
     # Z-veto : reject events with dileptons of same type with mass around Z peak
     outZCut = op.AND(outZ(ElElLooseSel), outZ(MuMuLooseSel))
+    
+    # DY m<50 cut because of the lack of the sample for now
+    DYm50Cut = op.AND(DYm50(ElElTightSel), DYm50(MuMuTightSel), DYm50(ElMuTightSel))
 
-    OSoutZelelSel = elelSel.refine('OSoutZelelSel', cut=op.AND(mllCut, outZCut))
-    OSoutZmumuSel = mumuSel.refine('OSoutZmumuSel', cut=op.AND(mllCut, outZCut))
-    OSoutZelmuSel = elmuSel.refine('OSoutZelmuSel', cut=op.AND(mllCut, outZCut))
+    OSoutZelelSel = elelSel.refine('OSoutZelelSel', cut=op.AND(mllCut, outZCut, DYm50Cut))
+    OSoutZmumuSel = mumuSel.refine('OSoutZmumuSel', cut=op.AND(mllCut, outZCut, DYm50Cut))
+    OSoutZelmuSel = elmuSel.refine('OSoutZelmuSel', cut=op.AND(mllCut, outZCut, DYm50Cut))
 
     # di-lepton multiplicity cut
     leptonMultiplicityCut_ee = OSoutZelelSel.refine('dileptonCut_ee', cut=[op.AND(
