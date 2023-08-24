@@ -301,12 +301,20 @@ class controlPlotter(NanoBaseHHWWbb):
                     35, 0, 7), title="DR(l1,l2)", xTitle="Angular distance between leptons", plotopts=DLboostedEMU_label),
 
                 # DR between leading lepton and ak8 jet
-                Plot.make1D("DL_boosted_DR_leptonANDak8bjet_ee", op.deltaR(self.firstOSElEl[0].p4, self.ak8Jets[0].p4), DL_boosted_ee, EqBin(
+                Plot.make1D("DL_boosted_DR_leadingleptonANDak8bjet_ee", op.deltaR(self.firstOSElEl[0].p4, self.ak8Jets[0].p4), DL_boosted_ee, EqBin(
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=DLboostedEE_label),
-                Plot.make1D("DL_boosted_DR_leptonANDak8bjet_mumu", op.deltaR(self.firstOSMuMu[0].p4, self.ak8Jets[0].p4), DL_boosted_mumu, EqBin(
+                Plot.make1D("DL_boosted_DR_leadingleptonANDak8bjet_mumu", op.deltaR(self.firstOSMuMu[0].p4, self.ak8Jets[0].p4), DL_boosted_mumu, EqBin(
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=DLboostedMuMu_label),
-                Plot.make1D("DL_boosted_DR_leptonANDak8bjet_emu", op.deltaR(op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[0].p4, self.firstOSElMu[1].p4), self.ak8Jets[0].p4), DL_boosted_emu, EqBin(
+                Plot.make1D("DL_boosted_DR_leadingleptonANDak8bjet_emu", op.deltaR(op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[0].p4, self.firstOSElMu[1].p4), self.ak8Jets[0].p4), DL_boosted_emu, EqBin(
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=DLboostedEMU_label),
+
+                # DR between subleading lepton and ak8 jet
+                Plot.make1D("DL_boosted_DR_subleadingleptonANDak8bjet_ee", op.deltaR(self.firstOSElEl[1].p4, self.ak8Jets[0].p4), DL_boosted_ee, EqBin(
+                    35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(subleading-lepton, ak8bjet)", plotopts=DLboostedEE_label),
+                Plot.make1D("DL_boosted_DR_subleadingleptonANDak8bjet_mumu", op.deltaR(self.firstOSMuMu[1].p4, self.ak8Jets[0].p4), DL_boosted_mumu, EqBin(
+                    35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(subleading-lepton, ak8bjet)", plotopts=DLboostedMuMu_label),
+                Plot.make1D("DL_boosted_DR_subleadingleptonANDak8bjet_emu", op.deltaR(op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[1].p4, self.firstOSElMu[0].p4), self.ak8Jets[0].p4), DL_boosted_emu, EqBin(
+                    35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(subleading-lepton, ak8bjet)", plotopts=DLboostedEMU_label),
                 
                 # number of electrons
                 Plot.make1D("DL_boosted_nElectrons_ee", op.rng_len(self.tightElectrons), DL_boosted_ee, EqBin(
@@ -459,12 +467,20 @@ class controlPlotter(NanoBaseHHWWbb):
                     35, 0, 7), title="DR(l1,l2)", xTitle="Angular distance between leptons", plotopts=DLresolvedEMu_label),
 
                 # DR between leading lepton and ak4 b jet
-                Plot.make1D("DL_resolved_DR_leptonANDak8bjet_ee", op.deltaR(self.firstOSElEl[0].p4, self.ak4BJets[0].p4), DL_resolved_ee, EqBin(
+                Plot.make1D("DL_resolved_DR_leadingleptonANDak4bjet_ee", op.deltaR(self.firstOSElEl[0].p4, self.ak4BJets[0].p4), DL_resolved_ee, EqBin(
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=DLresolvedEE_label),
-                Plot.make1D("DL_resolved_DR_leptonANDak8bjet_mumu", op.deltaR(self.firstOSMuMu[0].p4, self.ak4BJets[0].p4), DL_resolved_mumu, EqBin(
+                Plot.make1D("DL_resolved_DR_leadingleptonANDak4bjet_mumu", op.deltaR(self.firstOSMuMu[0].p4, self.ak4BJets[0].p4), DL_resolved_mumu, EqBin(
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=DLresolvedMuMu_label),
-                Plot.make1D("DL_resolved_DR_leptonANDak8bjet_emu", op.deltaR(op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[0].p4, self.firstOSElMu[1].p4), self.ak4BJets[0].p4), DL_resolved_emu, EqBin(
+                Plot.make1D("DL_resolved_DR_leadingleptonANDak4bjet_emu", op.deltaR(op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[0].p4, self.firstOSElMu[1].p4), self.ak4BJets[0].p4), DL_resolved_emu, EqBin(
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=DLresolvedEMu_label),
+
+                # DR between sub-leading lepton and ak4 b jet
+                Plot.make1D("DL_resolved_DR_subleadingleptonANDak4bjet_ee", op.deltaR(self.firstOSElEl[1].p4, self.ak4BJets[0].p4), DL_resolved_ee, EqBin(
+                    35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(subleading-lepton, ak8bjet)", plotopts=DLresolvedEE_label),
+                Plot.make1D("DL_resolved_DR_subleadingleptonANDak4bjet_mumu", op.deltaR(self.firstOSMuMu[1].p4, self.ak4BJets[0].p4), DL_resolved_mumu, EqBin(
+                    35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(subleading-lepton, ak8bjet)", plotopts=DLresolvedMuMu_label),
+                Plot.make1D("DL_resolved_DR_subleadingleptonANDak4bjet_emu", op.deltaR(op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[1].p4, self.firstOSElMu[0].p4), self.ak4BJets[0].p4), DL_resolved_emu, EqBin(
+                    35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(subleading-lepton, ak8bjet)", plotopts=DLresolvedEMu_label),
                 
                 # number of electrons
                 Plot.make1D("DL_resolved_nElectrons_ee", op.rng_len(self.tightElectrons), DL_resolved_ee, EqBin(
