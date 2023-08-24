@@ -39,3 +39,8 @@ Then plot various control regions via the following command line using batch (yo
 bambooRun -m python/controlPlotter.py config/analysis_2022.yml -o ./outputDir/ --distributed driver --envConfig config/cern.ini --eras combined -c <DL or SL>
 ```
 Instead of passing everytime `--envConfig config/cern.ini`, you can copy the content of that file to `~/.config/bamboorc`.
+
+to produce plots, just execute:
+
+```sh
+./scripts/plot_DL.sh <path to output/plots>
