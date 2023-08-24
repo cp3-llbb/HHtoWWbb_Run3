@@ -61,47 +61,18 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                                                                                  description=getNanoAODDescription(),
                                                                                  backend=backend)
         ### Triggers ###
-        
         # Muon
-        addHLTPath('Muon_C', 'IsoMu24')
-        addHLTPath('Muon_C', 'IsoMu27')
-        addHLTPath('Muon_C', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
-
-        addHLTPath('Muon_D', 'IsoMu24')
-        addHLTPath('Muon_D', 'IsoMu27')
-        addHLTPath('Muon_D', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
-
-        addHLTPath('Muon_F', 'IsoMu24')
-        addHLTPath('Muon_F', 'IsoMu27')
-        addHLTPath('Muon_F', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
-
-        addHLTPath('Muon_G', 'IsoMu24')
-        addHLTPath('Muon_G', 'IsoMu27')
-        addHLTPath('Muon_G', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
-        
+        addHLTPath('Muon', 'IsoMu24')
+        addHLTPath('Muon', 'IsoMu27')
+        addHLTPath('Muon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
         # EGamma
-        addHLTPath('EGamma_C', 'Ele32_WPTight_Gsf')
-        addHLTPath('EGamma_C', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
-        
-        addHLTPath('EGamma_D', 'Ele32_WPTight_Gsf')
-        addHLTPath('EGamma_D', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
-        
-        addHLTPath('EGamma_F', 'Ele32_WPTight_Gsf')
-        addHLTPath('EGamma_F', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
-        
-        addHLTPath('EGamma_G', 'Ele32_WPTight_Gsf')
-        addHLTPath('EGamma_G', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
-        
+        addHLTPath('EGamma', 'Ele32_WPTight_Gsf')
+        addHLTPath('EGamma', 'Ele23_Ele12_CaloIdL_TrackIdL_IsoVL')
         # MuonEG
-        addHLTPath('MuonEG_C', 'Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ')
-        addHLTPath('MuonEG_D', 'Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ')
-        addHLTPath('MuonEG_F', 'Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ')
-        addHLTPath('MuonEG_G', 'Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ')
-        
+        addHLTPath('MuonEG', 'Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ')
         # SingleMuon
         addHLTPath('SingleMuon', 'IsoMu24')
         addHLTPath('SingleMuon', 'IsoMu27')
-        
         # DoubleMuon
         addHLTPath('DoubleMuon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
 
