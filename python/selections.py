@@ -110,7 +110,6 @@ def makeDLSelection(self, noSel):
     return DL_selections
 
 def makeSLSelection(self, noSel):
-    exit()
     """ Selections for the SL channel
     return the following selections:
     - SL_resolved: resolved selection
