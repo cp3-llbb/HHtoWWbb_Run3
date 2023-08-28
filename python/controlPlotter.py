@@ -57,7 +57,7 @@ class controlPlotter(NanoBaseHHWWbb):
                     (op.AND(op.rng_len(self.fakeElectrons) == 0, op.rng_len(
                         self.fakeMuons) >= 1), op.deltaR(jet.p4, self.fakeMuons[0].p4) >= DR),
                     (op.AND(op.rng_len(self.fakeMuons) >= 1, op.rng_len(self.fakeElectrons) >= 1), op.switch(
-                        self.electron_conept[0] >= self.muon_conept[0],
+                        defs.elConePt(self.fakeElectrons)[0] >= defs.muonConePt(self.fakeMuons)[0],
                         op.deltaR(jet.p4, self.fakeElectrons[0].p4) >= DR,
                         op.deltaR(jet.p4, self.fakeMuons[0].p4) >= DR)),
                     op.c_bool(True)
@@ -80,11 +80,11 @@ class controlPlotter(NanoBaseHHWWbb):
                     (op.AND(op.rng_len(self.fakeElectrons) >= 1, op.rng_len(self.fakeMuons) >= 1),
                      op.switch(
                         # Electron is the leading lepton
-                        self.electron_conept[0] > self.muon_conept[0],
+                        defs.elConePt(self.fakeElectrons)[0] > defs.muonConePt(self.fakeMuons)[0],
                         op.switch(op.rng_len(self.fakeElectrons) == 1,
                                   op.AND(op.deltaR(j.p4, self.fakeElectrons[0].p4) >= DR, op.deltaR(
                                       j.p4, self.fakeMuons[0].p4) >= DR),
-                                  op.switch(self.electron_conept[1] > self.muon_conept[0],
+                                  op.switch(defs.elConePt(self.fakeElectrons)[1] > defs.muonConePt(self.fakeMuons)[0],
                                             op.AND(op.deltaR(j.p4, self.fakeElectrons[0].p4) >= DR, op.deltaR(
                                                 j.p4, self.fakeElectrons[1].p4) >= DR),
                                             op.AND(op.deltaR(j.p4, self.fakeElectrons[0].p4) >= DR, op.deltaR(j.p4, self.fakeMuons[0].p4) >= DR))),
@@ -92,7 +92,7 @@ class controlPlotter(NanoBaseHHWWbb):
                         op.switch(op.rng_len(self.fakeMuons) == 1,
                                   op.AND(op.deltaR(j.p4, self.fakeMuons[0].p4) >= DR, op.deltaR(
                                       j.p4, self.fakeElectrons[0].p4) >= DR),
-                                  op.switch(self.muon_conept[1] > self.electron_conept[0],
+                                  op.switch(defs.muonConePt(self.fakeMuons)[1] > defs.elConePt(self.fakeElectrons)[0],
                                             op.AND(op.deltaR(j.p4, self.fakeMuons[0].p4) >= DR, op.deltaR(
                                                 j.p4, self.fakeMuons[1].p4) >= DR),
                                             op.AND(op.deltaR(j.p4, self.fakeMuons[0].p4) >= DR, op.deltaR(j.p4, self.fakeElectrons[0].p4) >= DR))))),
@@ -514,110 +514,133 @@ class controlPlotter(NanoBaseHHWWbb):
                 ######       SL boosted plots      ######
                 ######                             ######
                 #########################################
-                Plot.make1D("SL_boosted_fatJet_pt", self.ak8BJets[0].pt, SL_boosted, EqBin(
-                    400, 200, 1000), title="pT(j)", xTitle="pT(j) (GeV/c)", plotopts=SLboosted_label),
-                Plot.make1D("SL_boosted_subjet1_pt", self.ak8BJets[0].subJet1.pt, SL_boosted, EqBin(
-                    50, 0, 500), title=" pT(subjet1)", xTitle="pT(subjet1) (GeV/c)", plotopts=SLboosted_label),
-                Plot.make1D("SL_boosted_subjet2_pt", self.ak8BJets[0].subJet2.pt, SL_boosted, EqBin(
-                    50, 0, 500), title=" pT(subjet2)", xTitle="pT(subjet2) (GeV/c)", plotopts=SLboosted_label),
-                Plot.make1D("SL_boosted_fatJet_eta", self.ak8BJets[0].eta, SL_boosted, EqBin(
-                    30, -3, 3), title="eta(j)", xTitle="eta(j)", plotopts=SLboosted_label),
-                Plot.make1D("SL_boosted_subjet1_eta", self.ak8BJets[0].subJet1.eta, SL_boosted, EqBin(
-                    30, -3, 3), title="eta(subjet1)", xTitle="eta(subjet1)", plotopts=SLboosted_label),
-                Plot.make1D("SL_boosted_subjet2_eta", self.ak8BJets[0].subJet2.eta, SL_boosted, EqBin(
-                    30, -3, 3), title="eta(subjet2)", xTitle="eta(subjet2)", plotopts=SLboosted_label),
-                Plot.make1D("SL_boosted_InvM_jj", op.invariant_mass(self.ak8BJets[0].subJet1.p4, self.ak8BJets[0].subJet2.p4), SL_boosted, EqBin(
-                    100, 0., 200.), title="InvM(jj)", xTitle="Invariant Mass of sub-jets (GeV/c^{2})", plotopts=SLboosted_label),
-                Plot.make2D("SL_boosted_InvM_jj_vs_jet1_eta", [op.invariant_mass(self.ak8BJets[0].subJet1.p4, self.ak8BJets[0].subJet2.p4), self.ak8BJets[0].eta], SL_boosted, [
-                    EqBin(100, 0., 200.), EqBin(-8, -3, 3)], title="InvM(jj) vs jet1 eta", xTitle="Invariant Mass of jets (GeV/c^{2})", yTitle="eta(j1)", plotopts=SLboosted_label),
-                Plot.make2D("SL_boosted_InvM_jj_vs_jet2_eta", [op.invariant_mass(self.ak8BJets[0].subJet1.p4, self.ak8BJets[0].subJet2.p4), self.ak8BJets[0].subJet2.eta], SL_boosted, [
-                    EqBin(100, 0., 200.), EqBin(-8, -3, 3)], title="InvM(jj) vs jet2 eta", xTitle="Invariant Mass of jets (GeV/c^{2})", yTitle="eta(j2)", plotopts=SLboosted_label),
+                
+                # number of fat b-jets
+                Plot.make1D("SL_boosted_nfatJet_e", op.rng_len(self.ak8BJets), SL_boosted_e, EqBin(
+                    10, 0, 10), title="N(ak8bjet)", xTitle="Number of fat b-jet", plotopts=SLboostedE_label),
+                Plot.make1D("SL_boosted_nfatJet_mu", op.rng_len(self.ak8BJets), SL_boosted_mu, EqBin(
+                    10, 0, 10), title="N(ak8bjet)", xTitle="Number of fat b-jet", plotopts=SLboostedMu_label),
 
-                # SL boosted electron final state plots
+                # fatjet pt
                 Plot.make1D("SL_boosted_fatJet_pt_e", self.ak8BJets[0].pt, SL_boosted_e, EqBin(
-                    400, 200, 1000), title="pT(j)", xTitle="pT(j) (GeV/c)", plotopts=SLboostedE_label),
+                    400, 200, 1000), title="pT(j)", xTitle="Fatjet p_{T} (GeV/c)", plotopts=SLboostedE_label),
+                Plot.make1D("SL_boosted_fatJet_pt_mu", self.ak8BJets[0].pt, SL_boosted_mu, EqBin(
+                    400, 200, 1000), title="pT(j)", xTitle="Fatjet p_{T} (GeV/c)", plotopts=SLboostedMu_label),
+                
+                # subjet1 pt
                 Plot.make1D("SL_boosted_subjet1_pt_e", self.ak8BJets[0].subJet1.pt, SL_boosted_e, EqBin(
-                    50, 0, 500), title=" pT(subjet1)", xTitle="pT(subjet1) (GeV/c)", plotopts=SLboostedE_label),
+                    50, 0, 500), title=" pT(subjet1)", xTitle="Subjet 1 p_{T} (GeV/c)", plotopts=SLboostedE_label),
+                Plot.make1D("SL_boosted_subjet1_pt_mu", self.ak8BJets[0].subJet1.pt, SL_boosted_mu, EqBin(
+                    50, 0, 500), title=" pT(subjet1)", xTitle="Subjet 1 p_{T} (GeV/c)", plotopts=SLboostedMu_label),
+                
+                # subjet2 pt
                 Plot.make1D("SL_boosted_subjet2_pt_e", self.ak8BJets[0].subJet2.pt, SL_boosted_e, EqBin(
-                    50, 0, 500), title=" pT(subjet2)", xTitle="pT(subjet2) (GeV/c)", plotopts=SLboostedE_label),
+                    50, 0, 500), title=" pT(subjet2)", xTitle="Subjet 2 p_{T} (GeV/c)", plotopts=SLboostedE_label),
+                Plot.make1D("SL_boosted_subjet2_pt_mu", self.ak8BJets[0].subJet2.pt, SL_boosted_mu, EqBin(
+                    50, 0, 500), title=" pT(subjet2)", xTitle="Subjet 2 p_{T} (GeV/c)", plotopts=SLboostedMu_label),
+                
+                # ak8jet eta
                 Plot.make1D("SL_boosted_fatJet_eta_e", self.ak8BJets[0].eta, SL_boosted_e, EqBin(
                     30, -3, 3), title="eta(j)", xTitle="eta(j)", plotopts=SLboostedE_label),
-                Plot.make1D("SL_boosted_subjet1_eta_e", self.ak8BJets[0].subJet1.eta, SL_boosted_e, EqBin(
-                    30, -3, 3), title="eta(subjet1)", xTitle="eta(subjet1)", plotopts=SLboostedE_label),
-                Plot.make1D("SL_boosted_subjet2_eta_e", self.ak8BJets[0].subJet2.eta, SL_boosted_e, EqBin(
-                    30, -3, 3), title="eta(subjet2)", xTitle="eta(subjet2)", plotopts=SLboostedE_label),
-                Plot.make1D("SL_boosted_InvM_jj_e", op.invariant_mass(self.ak8BJets[0].subJet1.p4, self.ak8BJets[0].subJet2.p4), SL_boosted_e, EqBin(
-                    100, 0., 200.), title="InvM(jj)", xTitle="Invariant Mass of sub-jets (GeV/c^{2})", plotopts=SLboostedE_label),
-                Plot.make2D("SL_boosted_InvM_jj_vs_jet1_eta_e", [op.invariant_mass(self.ak8BJets[0].subJet1.p4, self.ak8BJets[0].subJet2.p4), self.ak8BJets[0].eta], SL_boosted_e, [
-                    EqBin(100, 0., 200.), EqBin(-8, -3, 3)], title="InvM(jj) vs jet1 eta", xTitle="Invariant Mass of jets (GeV/c^{2})", yTitle="eta(j1)", plotopts=SLboostedE_label),
-                Plot.make2D("SL_boosted_InvM_jj_vs_jet2_eta_e", [op.invariant_mass(self.ak8BJets[0].subJet1.p4, self.ak8BJets[0].subJet2.p4), self.ak8BJets[0].subJet2.eta], SL_boosted_e, [
-                    EqBin(100, 0., 200.), EqBin(-8, -3, 3)], title="InvM(jj) vs jet2 eta", xTitle="Invariant Mass of jets (GeV/c^{2})", yTitle="eta(j2)", plotopts=SLboostedE_label),
-
-                # SL boosted muon final state plots
-                Plot.make1D("SL_boosted_fatJet_pt_mu", self.ak8BJets[0].pt, SL_boosted_mu, EqBin(
-                    400, 200, 1000), title="pT(j)", xTitle="pT(j) (GeV/c)", plotopts=SLboostedMu_label),
-                Plot.make1D("SL_boosted_subjet1_pt_mu", self.ak8BJets[0].subJet1.pt, SL_boosted_mu, EqBin(
-                    50, 0, 500), title=" pT(subjet1)", xTitle="pT(subjet1) (GeV/c)", plotopts=SLboostedMu_label),
-                Plot.make1D("SL_boosted_subjet2_pt_mu", self.ak8BJets[0].subJet2.pt, SL_boosted_mu, EqBin(
-                    50, 0, 500), title=" pT(subjet2)", xTitle="pT(subjet2) (GeV/c)", plotopts=SLboostedMu_label),
                 Plot.make1D("SL_boosted_fatJet_eta_mu", self.ak8BJets[0].eta, SL_boosted_mu, EqBin(
                     30, -3, 3), title="eta(j)", xTitle="eta(j)", plotopts=SLboostedMu_label),
+                
+                # subjet1 eta
+                Plot.make1D("SL_boosted_subjet1_eta_e", self.ak8BJets[0].subJet1.eta, SL_boosted_e, EqBin(
+                    30, -3, 3), title="eta(subjet1)", xTitle="Subjet 1 \eta", plotopts=SLboostedE_label),
                 Plot.make1D("SL_boosted_subjet1_eta_mu", self.ak8BJets[0].subJet1.eta, SL_boosted_mu, EqBin(
-                    30, -3, 3), title="eta(subjet1)", xTitle="eta(subjet1)", plotopts=SLboostedMu_label),
+                    30, -3, 3), title="eta(subjet1)", xTitle="Subjet 1 \eta", plotopts=SLboostedMu_label),
+                
+                # subjet2 eta
+                Plot.make1D("SL_boosted_subjet2_eta_e", self.ak8BJets[0].subJet2.eta, SL_boosted_e, EqBin(
+                    30, -3, 3), title="eta(subjet2)", xTitle="Subjet 2 \eta", plotopts=SLboostedE_label),
                 Plot.make1D("SL_boosted_subjet2_eta_mu", self.ak8BJets[0].subJet2.eta, SL_boosted_mu, EqBin(
-                    30, -3, 3), title="eta(subjet2)", xTitle="eta(subjet2)", plotopts=SLboostedMu_label),
+                    30, -3, 3), title="eta(subjet2)", xTitle="Subjet 2 \eta", plotopts=SLboostedMu_label),
+                
+                # Invariant mass of subjets
+                Plot.make1D("SL_boosted_InvM_jj_e", op.invariant_mass(self.ak8BJets[0].subJet1.p4, self.ak8BJets[0].subJet2.p4), SL_boosted_e, EqBin(
+                    100, 0., 200.), title="InvM(jj)", xTitle="Invariant Mass of sub-jets (GeV/c^{2})", plotopts=SLboostedE_label),
                 Plot.make1D("SL_boosted_InvM_jj_mu", op.invariant_mass(self.ak8BJets[0].subJet1.p4, self.ak8BJets[0].subJet2.p4), SL_boosted_mu, EqBin(
                     100, 0., 200.), title="InvM(jj)", xTitle="Invariant Mass of sub-jets (GeV/c^{2})", plotopts=SLboostedMu_label),
-                Plot.make2D("SL_boosted_InvM_jj_vs_jet1_eta_mu", [op.invariant_mass(self.ak8BJets[0].subJet1.p4, self.ak8BJets[0].subJet2.p4), self.ak8BJets[0].eta], SL_boosted_mu, [
-                    EqBin(100, 0., 200.), EqBin(-8, -3, 3)], title="InvM(jj) vs jet1 eta", xTitle="Invariant Mass of jets (GeV/c^{2})", yTitle="eta(j1)", plotopts=SLboostedMu_label),
-                Plot.make2D("SL_boosted_InvM_jj_vs_jet2_eta_mu", [op.invariant_mass(self.ak8BJets[0].subJet1.p4, self.ak8BJets[0].subJet2.p4), self.ak8BJets[0].subJet2.eta], SL_boosted_mu, [
-                    EqBin(100, 0., 200.), EqBin(-8, -3, 3)], title="InvM(jj) vs jet2 eta", xTitle="Invariant Mass of jets (GeV/c^{2})", yTitle="eta(j2)", plotopts=SLboostedMu_label),
+                
+                # lepton pt
+                Plot.make1D("SL_boosted_lepton_pt_e", self.tightElectrons[0].pt, SL_boosted_e, EqBin(
+                    100, 0., 300.), title="lepton pT", xTitle="p_{T} of the lepton (GeV/c)", plotopts=SLboostedE_label),
+                Plot.make1D("SL_boosted_lepton_pt_mu", self.tightElectrons[0].pt, SL_boosted_mu, EqBin(
+                    100, 0., 300.), title="lepton pT", xTitle="p_{T} of the lepton (GeV/c)", plotopts=SLboostedMu_label),
+                
+                # lepton eta
+                Plot.make1D("SL_boosted_lepton_eta_e", self.tightElectrons[0].eta, SL_boosted_e, EqBin(
+                    30, -3, 3), title="lepton eta", xTitle="lepton \eta", plotopts=SLboostedE_label),
+                Plot.make1D("SL_boosted_lepton_eta_mu", self.tightElectrons[0].eta, SL_boosted_mu, EqBin(
+                    30, -3, 3), title="lepton eta", xTitle="lepton \eta", plotopts=SLboostedMu_label),
+                
+                # DR between lepton and ak8 jet
+                Plot.make1D("SL_boosted_DR_leptonANDak8bjet_e", op.deltaR(self.tightElectrons[0].p4, self.ak8Jets[0].p4), SL_boosted_e, EqBin(
+                    35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=SLboostedE_label),
+                Plot.make1D("SL_boosted_DR_leptonANDak8bjet_mu", op.deltaR(self.tightMuons[0].p4, self.ak8Jets[0].p4), SL_boosted_mu, EqBin(
+                    35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(leading-lepton, ak8bjet)", plotopts=SLboostedMu_label),
+
 
                 #########################################
                 ######                             ######
                 ######      SL resolved plots      ######
                 ######                             ######
                 #########################################
-                Plot.make1D("SL_resolved_nJets", op.rng_len(self.ak4BJets), SL_resolved, EqBin(
-                    15, 0., 15.), xTitle="Number of jets", plotopts=SLresolved_label),
-                Plot.make1D("SL_resolved_leadingJet_pt", self.ak4BJets[0].pt, SL_resolved, EqBin(
-                    100, 0, 500), title="pT(j1)", xTitle="pT(j1) (GeV/c)", plotopts=SLresolved_label),
-                Plot.make1D("SL_resolved_leadingJet_eta", self.ak4BJets[0].eta, SL_resolved, EqBin(
-                    30, -3, 3), title="eta(j1)", xTitle="eta(j1)", plotopts=SLresolved_label),
-                Plot.make1D("SL_resolved_subleadingJet_pt", self.ak4BJets[1].pt, SL_resolved, EqBin(
-                    100, 0, 500), title="pT(j2)", xTitle="pT(j2) (GeV/c)", plotopts=SLresolved_label),
-                Plot.make1D("SL_resolved_subleadingJet_eta", self.ak4BJets[1].eta, SL_resolved, EqBin(
-                    30, -3, 3), title="eta(j2)", xTitle="eta(j2)", plotopts=SLresolved_label),
-                Plot.make1D("SL_resolved_DR_jets", op.deltaR(self.ak4BJets[0].p4, self.ak4BJets[1].p4), SL_resolved, EqBin(
-                    100, 0, 10), title="DR(j1,j2)", xTitle="DR(j1,j2)", plotopts=SLresolved_label),
+
+                # number of ak4 jets
+                Plot.make1D("SL_resolved_nJets_e", op.rng_len(self.ak4BJets), SL_resolved_e, EqBin(
+                    15, 0., 15.), xTitle="Number of b-jets", plotopts=SLresolvedE_label),
+                Plot.make1D("SL_resolved_nJets_mu", op.rng_len(self.ak4BJets), SL_resolved_mu, EqBin(
+                    15, 0., 15.), xTitle="Number of b-jets", plotopts=SLresolvedMu_label),
                 
-                # SL resolved electron final state plots
-                Plot.make1D("SL_resolved_nJets_e", op.rng_len(self.ak4BJets), SL_boosted_e, EqBin(
-                    15, 0., 15.), xTitle="Number of jets", plotopts=SLresolvedE_label),
-                Plot.make1D("SL_resolved_leadingJet_pt_e", self.ak4BJets[0].pt, SL_boosted_e, EqBin(
+                # leading jet pt
+                Plot.make1D("SL_resolved_leadingJet_pt_e", self.ak4BJets[0].pt, SL_resolved_e, EqBin(
                     100, 0, 500), title="pT(j1)", xTitle="pT(j1) (GeV/c)", plotopts=SLresolvedE_label),
-                Plot.make1D("SL_resolved_leadingJet_eta_e", self.ak4BJets[0].eta, SL_boosted_e, EqBin(
-                    30, -3, 3), title="eta(j1)", xTitle="eta(j1)", plotopts=SLresolvedE_label),
-                Plot.make1D("SL_resolved_subleadingJet_pt_e", self.ak4BJets[1].pt, SL_boosted_e, EqBin(
-                    100, 0, 500), title="pT(j2)", xTitle="pT(j2) (GeV/c)", plotopts=SLresolvedE_label),
-                Plot.make1D("SL_resolved_subleadingJet_eta_e", self.ak4BJets[1].eta, SL_boosted_e, EqBin(
-                    30, -3, 3), title="eta(j2)", xTitle="eta(j2)", plotopts=SLresolvedE_label),
-                Plot.make1D("SL_resolved_DR_jets_e", op.deltaR(self.ak4BJets[0].p4, self.ak4BJets[1].p4), SL_boosted_e, EqBin(
-                    100, 0, 10), title="DR(j1,j2)", xTitle="DR(j1,j2)", plotopts=SLresolvedE_label),
-                
-                # SL resolved muon final state plots
-                Plot.make1D("SL_resolved_nJets_mu", op.rng_len(self.ak4BJets), SL_boosted_mu, EqBin(
-                    15, 0., 15.), xTitle="Number of jets", plotopts=SLresolvedMu_label),
-                Plot.make1D("SL_resolved_leadingJet_pt_mu", self.ak4BJets[0].pt, SL_boosted_mu, EqBin(
+                Plot.make1D("SL_resolved_leadingJet_pt_mu", self.ak4BJets[0].pt, SL_resolved_mu, EqBin(
                     100, 0, 500), title="pT(j1)", xTitle="pT(j1) (GeV/c)", plotopts=SLresolvedMu_label),
-                Plot.make1D("SL_resolved_leadingJet_eta_mu", self.ak4BJets[0].eta, SL_boosted_mu, EqBin(
+                
+                # leading jet eta
+                Plot.make1D("SL_resolved_leadingJet_eta_e", self.ak4BJets[0].eta, SL_resolved_e, EqBin(
+                    30, -3, 3), title="eta(j1)", xTitle="B-jet \eta", plotopts=SLresolvedE_label),
+                Plot.make1D("SL_resolved_leadingJet_eta_mu", self.ak4BJets[0].eta, SL_resolved_mu, EqBin(
                     30, -3, 3), title="eta(j1)", xTitle="eta(j1)", plotopts=SLresolvedMu_label),
-                Plot.make1D("SL_resolved_subleadingJet_pt_mu", self.ak4BJets[1].pt, SL_boosted_mu, EqBin(
+                
+                # sub-leading jet pt
+                Plot.make1D("SL_resolved_subleadingJet_pt_e", self.ak4Jets[1].pt, SL_resolved_e, EqBin(
+                    100, 0, 500), title="pT(j2)", xTitle="pT(j2) (GeV/c)", plotopts=SLresolvedE_label),
+                Plot.make1D("SL_resolved_subleadingJet_pt_mu", self.ak4Jets[1].pt, SL_resolved_mu, EqBin(
                     100, 0, 500), title="pT(j2)", xTitle="pT(j2) (GeV/c)", plotopts=SLresolvedMu_label),
-                Plot.make1D("SL_resolved_subleadingJet_eta_mu", self.ak4BJets[1].eta, SL_boosted_mu, EqBin(
+                
+                # sub-leading jet eta
+                Plot.make1D("SL_resolved_subleadingJet_eta_e", self.ak4Jets[1].eta, SL_resolved_e, EqBin(
+                    30, -3, 3), title="eta(j2)", xTitle="eta(j2)", plotopts=SLresolvedE_label),
+                Plot.make1D("SL_resolved_subleadingJet_eta_mu", self.ak4Jets[1].eta, SL_resolved_mu, EqBin(
                     30, -3, 3), title="eta(j2)", xTitle="eta(j2)", plotopts=SLresolvedMu_label),
-                Plot.make1D("SL_resolved_DR_jets_mu", op.deltaR(self.ak4BJets[0].p4, self.ak4BJets[1].p4), SL_boosted_mu, EqBin(
+                
+                # DR between leading and sub-leading jet
+                Plot.make1D("SL_resolved_DR_jets_e", op.deltaR(self.ak4Jets[0].p4, self.ak4Jets[1].p4), SL_resolved_e, EqBin(
+                    100, 0, 10), title="DR(j1,j2)", xTitle="DR(j1,j2)", plotopts=SLresolvedE_label),
+                Plot.make1D("SL_resolved_DR_jets_mu", op.deltaR(self.ak4Jets[0].p4, self.ak4Jets[1].p4), SL_resolved_mu, EqBin(
                     100, 0, 10), title="DR(j1,j2)", xTitle="DR(j1,j2)", plotopts=SLresolvedMu_label),
+
+                # DR between  lepton and ak4 b jet
+                Plot.make1D("SL_resolved_DR_leptonANDak4bjet_e", op.deltaR(self.tightElectrons[0].p4, self.ak4BJets[0].p4), SL_resolved_e, EqBin(
+                    35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(lepton, ak8bjet)", plotopts=SLresolvedE_label),
+                Plot.make1D("SL_resolved_DR_leptonANDak4bjet_mu", op.deltaR(self.tightElectrons[0].p4, self.ak4BJets[0].p4), SL_resolved_mu, EqBin(
+                    35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(lepton, ak8bjet)", plotopts=SLresolvedMu_label),
+                
+                # lepton pt
+                Plot.make1D("SL_resolved_lepton_pt_e", self.tightElectrons[0].pt, SL_resolved_e, EqBin(
+                    100, 0., 300.), title="lepton pT", xTitle="p_{T} of the lepton (GeV/c)", plotopts=SLresolvedE_label),
+                Plot.make1D("SL_resolved_lepton_pt_mu", self.tightMuons[0].pt, SL_resolved_mu, EqBin(
+                    100, 0., 300.), title="lepton pT", xTitle="p_{T} of the lepton (GeV/c)", plotopts=SLresolvedMu_label),
+                
+                # lepton eta
+                Plot.make1D("SL_resolved_lepton_eta_e", self.tightElectrons[0].eta, SL_resolved_e, EqBin(
+                    30, -3, 3), title="lepton pT", xTitle="p_{T} of the lepton (GeV/c)", plotopts=SLresolvedE_label),
+                Plot.make1D("SL_resolved_lepton_eta_mu", self.tightMuons[0].eta, SL_resolved_mu, EqBin(
+                    30, -3, 3), title="lepton pT", xTitle="p_{T} of the lepton (GeV/c)", plotopts=SLresolvedMu_label),
             ])
 
         return plots
