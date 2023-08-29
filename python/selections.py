@@ -10,8 +10,6 @@ def lowMllCut(dileptons): return op.NOT(op.rng_any(
 def outZ(dileptons): return op.NOT(op.rng_any(
     dileptons, lambda dilep: op.abs(op.invariant_mass(dilep[0].p4, dilep[1].p4) - Zmass) <= 10.))
 
-def DYm50(dileptons): return op.NOT(op.rng_any(dileptons, lambda dilep: op.invariant_mass(dilep[0].p4, dilep[1].p4) < 50. ))
-
 # end common variables
 
 def makeDLSelection(self, noSel):
@@ -68,13 +66,10 @@ def makeDLSelection(self, noSel):
 
     # Z-veto : reject events with dileptons of same type with mass around Z peak
     outZCut = op.AND(outZ(ElElLooseSel), outZ(MuMuLooseSel))
-    
-    # DY m<50 cut because of the lack of the sample for now
-    DYm50Cut = op.AND(DYm50(ElElTightSel), DYm50(MuMuTightSel), DYm50(ElMuTightSel))
 
-    OSoutZelelSel = elelSel.refine('OSoutZelelSel', cut=op.AND(mllCut, outZCut, DYm50Cut))
-    OSoutZmumuSel = mumuSel.refine('OSoutZmumuSel', cut=op.AND(mllCut, outZCut, DYm50Cut))
-    OSoutZelmuSel = elmuSel.refine('OSoutZelmuSel', cut=op.AND(mllCut, outZCut, DYm50Cut))
+    OSoutZelelSel = elelSel.refine('OSoutZelelSel', cut=op.AND(mllCut, outZCut))
+    OSoutZmumuSel = mumuSel.refine('OSoutZmumuSel', cut=op.AND(mllCut, outZCut))
+    OSoutZelmuSel = elmuSel.refine('OSoutZelmuSel', cut=op.AND(mllCut, outZCut))
 
     # di-lepton multiplicity cut
     leptonMultiplicityCut_ee = OSoutZelelSel.refine('dileptonCut_ee', cut=[op.AND(
