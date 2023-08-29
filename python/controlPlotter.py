@@ -566,13 +566,13 @@ class controlPlotter(NanoBaseHHWWbb):
                 # lepton pt
                 Plot.make1D("SL_boosted_lepton_pt_e", self.tightElectrons[0].pt, SL_boosted_e, EqBin(
                     100, 0., 300.), title="lepton pT", xTitle="p_{T} of the lepton (GeV/c)", plotopts=SLboostedE_label),
-                Plot.make1D("SL_boosted_lepton_pt_mu", self.tightElectrons[0].pt, SL_boosted_mu, EqBin(
+                Plot.make1D("SL_boosted_lepton_pt_mu", self.tightMuons[0].pt, SL_boosted_mu, EqBin(
                     100, 0., 300.), title="lepton pT", xTitle="p_{T} of the lepton (GeV/c)", plotopts=SLboostedMu_label),
                 
                 # lepton eta
                 Plot.make1D("SL_boosted_lepton_eta_e", self.tightElectrons[0].eta, SL_boosted_e, EqBin(
                     30, -3, 3), title="lepton eta", xTitle="lepton \eta", plotopts=SLboostedE_label),
-                Plot.make1D("SL_boosted_lepton_eta_mu", self.tightElectrons[0].eta, SL_boosted_mu, EqBin(
+                Plot.make1D("SL_boosted_lepton_eta_mu", self.tightMuons[0].eta, SL_boosted_mu, EqBin(
                     30, -3, 3), title="lepton eta", xTitle="lepton \eta", plotopts=SLboostedMu_label),
                 
                 # DR between lepton and ak8 jet
@@ -627,7 +627,7 @@ class controlPlotter(NanoBaseHHWWbb):
                 # DR between  lepton and ak4 b jet
                 Plot.make1D("SL_resolved_DR_leptonANDak4bjet_e", op.deltaR(self.tightElectrons[0].p4, self.ak4BJets[0].p4), SL_resolved_e, EqBin(
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(lepton, ak8bjet)", plotopts=SLresolvedE_label),
-                Plot.make1D("SL_resolved_DR_leptonANDak4bjet_mu", op.deltaR(self.tightElectrons[0].p4, self.ak4BJets[0].p4), SL_resolved_mu, EqBin(
+                Plot.make1D("SL_resolved_DR_leptonANDak4bjet_mu", op.deltaR(self.tightMuons[0].p4, self.ak4BJets[0].p4), SL_resolved_mu, EqBin(
                     35, 0, 7), title="DR(l1,ak8)", xTitle="\Delta R(lepton, ak8bjet)", plotopts=SLresolvedMu_label),
                 
                 # lepton pt
