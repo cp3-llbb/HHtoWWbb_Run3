@@ -125,22 +125,14 @@ def makeSLSelection(self, noSel):
     ElElLooseSel = op.combine(self.clElectrons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
     MuMuLooseSel = op.combine(self.muons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
     ElMuLooseSel = op.combine((self.clElectrons, self.muons), N=2, pred= lambda el, mu : el.charge != mu.charge)
-
-    # OS tight dilepton collections
-    ElElTightSel = op.combine(self.tightElectrons, N=2, pred=lambda lep1, lep2 : lep1.charge != lep2.charge)
-    MuMuTightSel = op.combine(self.tightMuons, N=2, pred=lambda lep1, lep2 : lep1.charge != lep2.charge)
-    ElMuTightSel = op.combine((self.tightElectrons, self.tightMuons), N=2, pred= lambda el, mu : el.charge != mu.charge)
     
     # Z-veto : reject events with dileptons of same type with mass around Z peak
     outZCut = op.AND(outZ(ElElLooseSel), outZ(MuMuLooseSel))
 
     # low Mll cut : reject events with dilepton mass below 12 GeV
     mllCut = op.AND(lowMllCut(ElElLooseSel), lowMllCut(MuMuLooseSel), lowMllCut(ElMuLooseSel))
-
-    # DY m<50 cut because of the lack of the sample for now
-    DYm50Cut = op.AND(DYm50(ElElTightSel), DYm50(MuMuTightSel), DYm50(ElMuTightSel))
     
-    OSoutZelelSel = noSel.refine('OSoutZsel', cut=op.AND(mllCut, outZCut, DYm50Cut, tau_h_veto(self.cleanedTaus)))
+    OSoutZelelSel = noSel.refine('OSoutZsel', cut=op.AND(mllCut, outZCut, tau_h_veto(self.cleanedTaus)))
     
 
     SL_resolved = OSoutZelelSel.refine('SL_resolved', cut=[
