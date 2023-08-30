@@ -158,25 +158,24 @@ samples:
     cross-section: 98.02 
     generated-events: genEventSumw
     split: 70
-    
-  # to be added when working with SL
-  # TTtoLNu2Q:
-  #   era: "2022"
-  #   group: "TTbar"
-  #   db: das:/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
-  #   type: mc
-  #   cross-section: 405.70 # 923.6*(BR)
-  #   generated-events: genEventSumw
-  #   split: 67
+  
+  TTtoLNu2Q:
+    era: "2022"
+    group: "TTbar"
+    db: das:/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
+    type: mc
+    cross-section: 405.70 # 923.6*(BR)
+    generated-events: genEventSumw
+    split: 67
 
-  # TTtoLNu2Q_EE:
-  #   era: "2022EE"
-  #   group: "TTbar"
-  #   db: das:/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
-  #   type: mc
-  #   cross-section: 405.70
-  #   generated-events: genEventSumw
-  #   split: 218
+  TTtoLNu2Q_EE:
+    era: "2022EE"
+    group: "TTbar"
+    db: das:/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
+    type: mc
+    cross-section: 405.70
+    generated-events: genEventSumw
+    split: 218
 
   DY:
     era: "2022"
@@ -196,14 +195,23 @@ samples:
     generated-events: genEventSumw
     split: 55
 
-  # WJets:
-  #   era: "2022"
-  #   group: "WJets"
-  #   db: das:/WJetsToLNu_TuneCP5_13p6TeV-madgraphMLM-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
-  #   type: mc
-  #   cross-section: 63199.9
-  #   generated-events: genEventSumw
-  #   split: 75
+  DY10to50:
+    era: "2022"
+    group: "DY"
+    db: das:/DYto2L-2Jets_MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
+    type: mc
+    cross-section: 21270
+    generated-events: genEventSumw
+    split: 39
+
+  DY10to50_EE:
+    era: "2022EE"
+    group: "DY"
+    db: das:/DYto2L-2Jets_MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
+    type: mc
+    cross-section: 2.119e+04
+    generated-events: genEventSumw
+    split: 110
 
   WW:
     era: "2022"
@@ -241,6 +249,24 @@ samples:
     generated-events: genEventSumw
     split: 18
 
+  WJets:
+    era: 2022D
+    group: WJets
+    db: das:/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
+    type: mc
+    cross-section: 68160
+    generated-events: genEventSumw
+    split: 45
+
+  WJets_EE:
+    era: 2022EE
+    group: WJets
+    db: das:/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
+    type: mc
+    cross-section: 69080
+    generated-events: genEventSumw
+    split: 161
+
   ZZ:
     era: "2022"
     group: "VV"
@@ -258,6 +284,42 @@ samples:
     cross-section: 12.75
     generated-events: genEventSumw
     split: 5
+
+  TbarWplusto2l2nu:
+    era: "2022"
+    group: "TW"
+    db: das:/TbarWplusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
+    type: mc
+    cross-section: 36.05
+    generated-events: genEventSumw
+    split: 3
+
+  TbarWplusto2l2nu_EE:
+    era: 2022EE
+    group: "TW"
+    db: das:/TbarWplusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
+    type: mc
+    cross-section: 3.605e+01
+    generated-events: genEventSumw
+    split: 7
+
+  TbarWplustoLNu2Q:
+    era: "2022"
+    group: "TW"
+    db: das:/TbarWplustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
+    type: mc
+    cross-section: 36.05
+    generated-events: genEventSumw
+    split: 6
+
+  TbarWplustoLNu2Q_EE:
+    era: 2022EE
+    group: "TW"
+    db: das:/TbarWplustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
+    type: mc
+    cross-section: 3.605e+01
+    generated-events: genEventSumw
+    split: 15
 
 
 plotIt:
@@ -293,6 +355,9 @@ plotIt:
       fill-color: "#FFC300"
     VV:
       legend: VV
+      fill-color: "#C900FF"
+    TW:
+      legend: TW
       fill-color: "#C900FF"
   plotdefaults:
     normalized: False
