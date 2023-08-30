@@ -22,7 +22,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         def isMC():
             if sampleCfg['type'] == 'data':
                 return False
-            elif sampleCfg['type'] == 'mc':
+            elif sampleCfg['type'] in ['mc', 'signal']:
                 return True
             else:
                 raise RuntimeError(

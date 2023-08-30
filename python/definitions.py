@@ -74,7 +74,7 @@ def elDef(electrons):
         op.abs(el.dz) <= 0.1,
         el.sip3d <= 8,
         el.miniPFRelIso_all <= 0.4,
-        el.mvaNoIso >= 0.5,  # this should mean loose WP
+        # el.mvaNoIso >= 0.5,  # this should mean loose WP # commented out for Run-2 HH signal
         el.lostHits <= 1
     ))
 
@@ -104,7 +104,7 @@ def elFakeSel(electrons):
         ),
         el.hoe <= 0.10,
         el.eInvMinusPInv >= -0.04,
-        op.OR(el.mvaTTH >= 0.30, op.AND(el.jetRelIso < 0.7, el.mvaNoIso_WP90)),
+        # op.OR(el.mvaTTH >= 0.30, op.AND(el.jetRelIso < 0.7, el.mvaNoIso_WP90)), # commented out for Run-2 HH signal
         op.switch(
             el.mvaTTH < 0.30,
             lepton_associatedJetLessThanTightBtag(el),
@@ -160,7 +160,7 @@ def tauDef(taus):
         op.abs(tau.eta) < 2.3,
         op.abs(tau.dxy) <= 1000.0,
         op.abs(tau.dz) <= 0.2,
-        tau.idDecayModeOldDMs,
+        # tau.idDecayModeOldDMs, # commented out for Run-2 HH signal
         op.OR(tau.decayMode == 0,
               tau.decayMode == 1,
               tau.decayMode == 2,
