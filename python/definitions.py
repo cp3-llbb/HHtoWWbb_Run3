@@ -1,7 +1,6 @@
 from bamboo import treefunctions as op
 
-# Lepton funtions
-
+# Lepton functions
 
 def hasAssociatedJet(lep): return lep.jet.idx != -1
 
@@ -152,6 +151,9 @@ def ak8jetDef(jets):
         op.AND(jet.msoftdrop >= 30., jet.msoftdrop <= 210.),
         jet.tau2 / jet.tau1 <= 0.75
     ))
+    
+# bTagging for ak4 jets
+def ak4BtagSel(jet): return jet.btagDeepFlavB > 0.2770
 
 
 def tauDef(taus):
@@ -178,3 +180,115 @@ def cleanTaus(taus, electrons, muons):
             op.NOT(op.rng_any(
                 muons, lambda mu: op.deltaR(tau.p4, mu.p4) <= 0.3))
         ))
+
+# remove jets within cone of DR<0.4 of leading leptons at each channel
+def cleaningWithRespectToLeadingLepton(electrons, muons, DR):
+    return lambda jet: op.multiSwitch(
+        (op.AND(op.rng_len(electrons) >= 1, op.rng_len(
+            muons) == 0), op.deltaR(jet.p4, electrons[0].p4) >= DR),
+        (op.AND(op.rng_len(electrons) == 0, op.rng_len(
+            muons) >= 1), op.deltaR(jet.p4, muons[0].p4) >= DR),
+        (op.AND(op.rng_len(muons) >= 1, op.rng_len(electrons) >= 1), op.switch(
+            elConePt(electrons)[0] >= muonConePt(muons)[0],
+            op.deltaR(jet.p4, electrons[0].p4) >= DR,
+            op.deltaR(jet.p4, muons[0].p4) >= DR)),
+        op.c_bool(True)
+    )
+
+def cleaningWithRespectToLeadingLeptons(electrons, muons, DR):
+    return lambda j: op.multiSwitch(
+        # Only electrons
+        (op.AND(op.rng_len(electrons) >= 2, op.rng_len(muons) == 0),
+            op.AND(op.deltaR(j.p4, electrons[0].p4) >= DR, op.deltaR(j.p4, electrons[1].p4) >= DR)),
+        # Only muons
+        (op.AND(op.rng_len(electrons) == 0, op.rng_len(muons) >= 2),
+            op.AND(op.deltaR(j.p4, muons[0].p4) >= DR, op.deltaR(j.p4, muons[1].p4) >= DR)),
+        # One electron + one muon
+        (op.AND(op.rng_len(electrons) == 1, op.rng_len(muons) == 1),
+            op.AND(op.deltaR(j.p4, electrons[0].p4) >= DR, op.deltaR(j.p4, muons[0].p4) >= DR)),
+        # At least one electron + at least one muon
+        (op.AND(op.rng_len(electrons) >= 1, op.rng_len(muons) >= 1),
+            op.switch(
+            # Electron is the leading lepton
+            elConePt(electrons)[0] > muonConePt(muons)[0],
+            op.switch(op.rng_len(electrons) == 1,
+                        op.AND(op.deltaR(j.p4, electrons[0].p4) >= DR, op.deltaR(
+                            j.p4, muons[0].p4) >= DR),
+                        op.switch(elConePt(electrons)[1] > muonConePt(muons)[0],
+                                op.AND(op.deltaR(j.p4, electrons[0].p4) >= DR, op.deltaR(
+                                    j.p4, electrons[1].p4) >= DR),
+                                op.AND(op.deltaR(j.p4, electrons[0].p4) >= DR, op.deltaR(j.p4, muons[0].p4) >= DR))),
+            # Muon is the leading lepton
+            op.switch(op.rng_len(muons) == 1,
+                        op.AND(op.deltaR(j.p4, muons[0].p4) >= DR, op.deltaR(
+                            j.p4, electrons[0].p4) >= DR),
+                        op.switch(muonConePt(muons)[1] > elConePt(electrons)[0],
+                                op.AND(op.deltaR(j.p4, muons[0].p4) >= DR, op.deltaR(
+                                    j.p4, muons[1].p4) >= DR),
+                                op.AND(op.deltaR(j.p4, muons[0].p4) >= DR, op.deltaR(j.p4, electrons[0].p4) >= DR))))),
+        op.c_bool(True)
+    )
+
+def defineObjects(self, tree):
+    # lepton cone-pt definitions
+    self.muon_conept = muonConePt(tree.Muon)
+    self.electron_conept = elConePt(tree.Electron)
+    
+    # lepton definitions sorted by their cone-pt
+    self.muons = op.sort(muonDef(tree.Muon), lambda mu: -self.muon_conept[mu.idx])
+    self.electrons = op.sort(elDef(tree.Electron), lambda el: -self.electron_conept[el.idx])
+
+    # cleaning electrons wrt muons
+    self.clElectrons = cleanElectrons(self.electrons, self.muons)
+
+    # Fakeable leptons
+    self.fakeMuons = muonFakeSel(self.muons)
+    self.fakeElectrons = elFakeSel(self.clElectrons)
+
+    # tight leptons
+    self.tightMuons = muonTightSel(self.muons)
+    self.tightElectrons = elTightSel(self.clElectrons)
+
+    # Taus
+    taus = tauDef(tree.Tau)
+    self.cleanedTaus = cleanTaus(taus, self.fakeElectrons, self.fakeMuons)
+
+    # AK4 Jets sorted by their pt
+    ak4JetsPreSel = op.sort(ak4jetDef(tree.Jet), lambda jet: -jet.pt)
+    
+    # clean jets wrt leptons
+    if self.channel == 'DL':
+        self.cleanAk4Jets = cleaningWithRespectToLeadingLeptons(self.fakeElectrons, self.fakeMuons, 0.4)
+        self.cleanAk8Jets = cleaningWithRespectToLeadingLeptons(self.fakeElectrons, self.fakeMuons, 0.8)
+        
+    if self.channel == 'SL':
+        self.cleanAk4Jets = cleaningWithRespectToLeadingLepton(self.fakeElectrons, self.fakeMuons, 0.4)
+        self.cleanAk8Jets = cleaningWithRespectToLeadingLepton(self.fakeElectrons, self.fakeMuons, 0.8)
+    
+    self.ak4Jets = op.select(ak4JetsPreSel, self.cleanAk4Jets)
+    self.ak4JetsByBtagScore = op.sort(self.ak4Jets, lambda j: -j.btagDeepFlavB)
+    
+    self.ak4BJets = op.select(self.ak4Jets, ak4BtagSel)
+    
+    # AK8 Jets
+    self.ak8JetsDef = ak8jetDef(tree.FatJet)
+
+    if self.channel == 'SL': # sorted by btag score
+        ak8JetsPreSel = op.sort(self.ak8JetsDef, lambda j: -j.btagDeepB)
+    if self.channel == 'DL': # sorted by pt
+        ak8JetsPreSel = op.sort(self.ak8JetsDef, lambda j: -j.pt)
+        
+    self.ak8Jets = op.select(ak8JetsPreSel, self.cleanAk8Jets)
+    
+    # 2018 DeepJet WP
+    def subjetBtag(subjet): return subjet.btagDeepB > 0.4184
+
+    def ak8Btag(fatjet): return op.OR(op.AND(fatjet.subJet1.pt >= 30, subjetBtag(fatjet.subJet1)),
+                                        op.AND(fatjet.subJet2.pt >= 30, subjetBtag(fatjet.subJet2)))
+
+    self.ak8BJets = op.select(self.ak8Jets, ak8Btag)
+
+    # Ak4 Jet Collection cleaned from Ak8b #
+    def cleanAk4FromAk8b(ak4j): return op.AND(op.rng_len(
+        self.ak8BJets) > 0, op.deltaR(ak4j.p4, self.ak8BJets[0].p4) > 1.2)
+    self.ak4JetsCleanedFromAk8b = op.select(self.ak4Jets, cleanAk4FromAk8b)
