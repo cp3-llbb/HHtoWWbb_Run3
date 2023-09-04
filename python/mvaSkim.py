@@ -58,5 +58,4 @@ class mvaSkimmer(NanoBaseHHWWbb):
                 Plot.make1D("DL_boosted_nfatJet_ee", op.rng_len(self.ak8Jets), DL_boosted_ee, EqBin(
                     10, 0, 10), title="N(ak8jet)", xTitle="Number of fatjet"),
             ])
-
         return plots

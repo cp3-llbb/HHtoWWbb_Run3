@@ -355,6 +355,9 @@ plotIt:
   groups:
     data:
       legend: data
+    HH:
+      legend: signal
+      fill-color: "#FF0000"
     TTbar:
       legend: TTbar
       fill-color: "#99ccff"
