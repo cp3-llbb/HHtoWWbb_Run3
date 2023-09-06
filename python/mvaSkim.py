@@ -23,11 +23,18 @@ class mvaSkimmer(NanoBaseHHWWbb):
         # define objects
         defs.defineObjects(self, tree)
 
+        def labeler(label):
+            return {'labels': [{'text': label, 'position': [0.23, 0.87], 'size': 25}]}
+
         if self.channel == 'DL':
             # get DL selections
             DL_boosted_ee, DL_boosted_mumu,\
             DL_boosted_emu, DL_resolved_ee,\
             DL_resolved_mumu, DL_resolved_emu = makeDLSelection(self, noSel)
+            
+            DLresolvedEE_label = labeler('DL resolved EE')
+            DLresolvedMuMu_label = labeler('DL resolved MuMu')
+            DLresolvedEMu_label = labeler('DL resolved EMu')
 
         if self.channel == 'SL':
             # get SL selections
@@ -37,7 +44,7 @@ class mvaSkimmer(NanoBaseHHWWbb):
             
 
         #############################################################################
-        #                                 Plots                                     #
+        #                                 Skim                                      #
         #############################################################################
         if self.args.mvaSkim and self.channel == 'DL':
             mvaVars_DL_resolved_ee = {
@@ -55,7 +62,23 @@ class mvaSkimmer(NanoBaseHHWWbb):
             
             plots.extend([
                 Skim("DL_resolved", mvaVars_DL_resolved_ee, DL_resolved_ee),
-                Plot.make1D("DL_boosted_nfatJet_ee", op.rng_len(self.ak8Jets), DL_boosted_ee, EqBin(
-                    10, 0, 10), title="N(ak8jet)", xTitle="Number of fatjet"),
+                # Invariant mass of leptons
+                Plot.make1D("DL_resolved_InvM_ee", op.invariant_mass(self.firstOSElEl[0].p4, self.firstOSElEl[1].p4), DL_resolved_ee, EqBin(
+                    100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electrons (GeV/c^{2})", plotopts=DLresolvedEE_label),
+                Plot.make1D("DL_resolved_InvM_mumu", op.invariant_mass(self.firstOSMuMu[0].p4, self.firstOSMuMu[1].p4), DL_resolved_mumu, EqBin(
+                    100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of muons (GeV/c^{2})", plotopts=DLresolvedMuMu_label),
+                Plot.make1D("DL_resolved_InvM_emu", op.invariant_mass(self.firstOSElMu[0].p4, self.firstOSElMu[1].p4), DL_resolved_emu, EqBin(
+                    100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electron-muon pair (GeV/c^{2})", plotopts=DLresolvedEMu_label),
             ])
+
+        #############################################################################
+        #                            DNN evaluation                                 #
+        #############################################################################
+        
+        if self.args.mvaEval and self.channel == 'DL':
+            
+            DNN_model_even = self.resultsdir + '/model_even.onnx'
+            DNN_model_odd = self.resultsdir + '/model_odd.onnx'
+            
+            
         return plots

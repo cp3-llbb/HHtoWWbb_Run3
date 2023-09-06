@@ -21,10 +21,10 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                             dest="mvaSkim",
                             action="store_true",
                             help="Produce skims for MVA")
-        parser.add_argument("--mva",
-                            dest="mva",
+        parser.add_argument("--mvaEval",
+                            dest="mvaEval",
                             action="store_true",
-                            help="Run MVA")
+                            help="Evaulate DNN")
 
     def prepareTree(self, tree, sample=None, sampleCfg=None, backend=None):
         def isMC():
