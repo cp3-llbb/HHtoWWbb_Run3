@@ -1,5 +1,5 @@
 
-from bamboo.plots import Plot, CutFlowReport
+from bamboo.plots import Plot, CutFlowReport, Skim
 from bamboo.plots import EquidistantBinning as EqBin
 from bamboo import treefunctions as op
 
@@ -10,151 +10,37 @@ from selections import makeDLSelection, makeSLSelection
 
 
 class controlPlotter(NanoBaseHHWWbb):
-    """"""
+    """ Class to create control plots and skims"""
 
     def __init__(self, args):
         super(controlPlotter, self).__init__(args)
         self.channel = self.args.channel
+        self.mvaSkim = self.args.mvaSkim
 
     def definePlots(self, tree, noSel, sample=None, sampleCfg=None):
         plots = []
+
+        # call object definitions
+        defs.defineObjects(self, tree)
+        
+        # cutflow report
         yields = CutFlowReport("yields", printInLog=True, recursive=True)
         plots.append(yields)
         yields.add(noSel, 'No Selection')
 
-        # lepton cone-pt definitions
-        self.muon_conept = defs.muonConePt(tree.Muon)
-        self.electron_conept = defs.elConePt(tree.Electron)
-
-        # lepton definitions sorted by their cone-pt
-        self.muons = op.sort(defs.muonDef(tree.Muon), lambda mu: -self.muon_conept[mu.idx])
-        self.electrons = op.sort(defs.elDef(tree.Electron), lambda el: -self.electron_conept[el.idx])
-
-        # cleaning electrons wrt muons
-        self.clElectrons = defs.cleanElectrons(self.electrons, self.muons)
-
-        # Fakeable leptons
-        self.fakeMuons = defs.muonFakeSel(self.muons)
-        self.fakeElectrons = defs.elFakeSel(self.clElectrons)
-
-        # tight leptons
-        self.tightMuons = defs.muonTightSel(self.muons)
-        self.tightElectrons = defs.elTightSel(self.clElectrons)
-
-        # Taus
-        taus = defs.tauDef(tree.Tau)
-        self.cleanedTaus = defs.cleanTaus(taus, self.fakeElectrons, self.fakeMuons)
-
-        # AK4 Jets sorted by their pt
-        ak4JetsPreSel = op.sort(defs.ak4jetDef(tree.Jet), lambda jet: -jet.pt)
-
-        # remove jets within cone of DR<0.4 of leading leptons at each channel
-        if self.channel == 'SL':
-            def cleaningWithRespectToLeadingLepton(DR):
-                return lambda jet: op.multiSwitch(
-                    (op.AND(op.rng_len(self.fakeElectrons) >= 1, op.rng_len(
-                        self.fakeMuons) == 0), op.deltaR(jet.p4, self.fakeElectrons[0].p4) >= DR),
-                    (op.AND(op.rng_len(self.fakeElectrons) == 0, op.rng_len(
-                        self.fakeMuons) >= 1), op.deltaR(jet.p4, self.fakeMuons[0].p4) >= DR),
-                    (op.AND(op.rng_len(self.fakeMuons) >= 1, op.rng_len(self.fakeElectrons) >= 1), op.switch(
-                        defs.elConePt(self.fakeElectrons)[0] >= defs.muonConePt(self.fakeMuons)[0],
-                        op.deltaR(jet.p4, self.fakeElectrons[0].p4) >= DR,
-                        op.deltaR(jet.p4, self.fakeMuons[0].p4) >= DR)),
-                    op.c_bool(True)
-                )
-            cleanAk4Jets = cleaningWithRespectToLeadingLepton(0.4)
-
         if self.channel == 'DL':
-            def cleaningWithRespectToLeadingLeptons(DR):
-                return lambda j: op.multiSwitch(
-                    # Only electrons
-                    (op.AND(op.rng_len(self.fakeElectrons) >= 2, op.rng_len(self.fakeMuons) == 0),
-                     op.AND(op.deltaR(j.p4, self.fakeElectrons[0].p4) >= DR, op.deltaR(j.p4, self.fakeElectrons[1].p4) >= DR)),
-                    # Only muons
-                    (op.AND(op.rng_len(self.fakeElectrons) == 0, op.rng_len(self.fakeMuons) >= 2),
-                     op.AND(op.deltaR(j.p4, self.fakeMuons[0].p4) >= DR, op.deltaR(j.p4, self.fakeMuons[1].p4) >= DR)),
-                    # One electron + one muon
-                    (op.AND(op.rng_len(self.fakeElectrons) == 1, op.rng_len(self.fakeMuons) == 1),
-                     op.AND(op.deltaR(j.p4, self.fakeElectrons[0].p4) >= DR, op.deltaR(j.p4, self.fakeMuons[0].p4) >= DR)),
-                    # At least one electron + at least one muon
-                    (op.AND(op.rng_len(self.fakeElectrons) >= 1, op.rng_len(self.fakeMuons) >= 1),
-                     op.switch(
-                        # Electron is the leading lepton
-                        defs.elConePt(self.fakeElectrons)[0] > defs.muonConePt(self.fakeMuons)[0],
-                        op.switch(op.rng_len(self.fakeElectrons) == 1,
-                                  op.AND(op.deltaR(j.p4, self.fakeElectrons[0].p4) >= DR, op.deltaR(
-                                      j.p4, self.fakeMuons[0].p4) >= DR),
-                                  op.switch(defs.elConePt(self.fakeElectrons)[1] > defs.muonConePt(self.fakeMuons)[0],
-                                            op.AND(op.deltaR(j.p4, self.fakeElectrons[0].p4) >= DR, op.deltaR(
-                                                j.p4, self.fakeElectrons[1].p4) >= DR),
-                                            op.AND(op.deltaR(j.p4, self.fakeElectrons[0].p4) >= DR, op.deltaR(j.p4, self.fakeMuons[0].p4) >= DR))),
-                        # Muon is the leading lepton
-                        op.switch(op.rng_len(self.fakeMuons) == 1,
-                                  op.AND(op.deltaR(j.p4, self.fakeMuons[0].p4) >= DR, op.deltaR(
-                                      j.p4, self.fakeElectrons[0].p4) >= DR),
-                                  op.switch(defs.muonConePt(self.fakeMuons)[1] > defs.elConePt(self.fakeElectrons)[0],
-                                            op.AND(op.deltaR(j.p4, self.fakeMuons[0].p4) >= DR, op.deltaR(
-                                                j.p4, self.fakeMuons[1].p4) >= DR),
-                                            op.AND(op.deltaR(j.p4, self.fakeMuons[0].p4) >= DR, op.deltaR(j.p4, self.fakeElectrons[0].p4) >= DR))))),
-                    op.c_bool(True)
-                )
-            cleanAk4Jets = cleaningWithRespectToLeadingLeptons(0.4)
-
-        self.ak4Jets = op.select(ak4JetsPreSel, cleanAk4Jets)
-        self.ak4JetsByBtagScore = op.sort(self.ak4Jets, lambda j: -j.btagDeepFlavB)
-
-        # bTagging for ak4 jets
-        def ak4BtagLooseSel(jet): return jet.btagDeepFlavB > 0.0494
-        def ak4BtagSel(jet): return jet.btagDeepFlavB > 0.2770
-        def ak4NoBtagSel(jet): return jet.btagDeepFlavB <= 0.2770
-
-        self.ak4BJets = op.select(self.ak4Jets, ak4BtagSel)
-        self.ak4BJetsLoose = op.select(self.ak4Jets, ak4BtagLooseSel)
-        self.ak4LightJetsByPt = op.select(self.ak4Jets, ak4NoBtagSel)
-        self.ak4LightJetsByBtagScore = op.sort(
-            self.ak4LightJetsByPt, lambda jet: -jet.btagDeepFlavB)
-        self.remainingJets = op.select(
-            self.ak4LightJetsByPt, lambda jet: jet.idx != self.ak4LightJetsByBtagScore[0].idx)
-
-        # AK8 Jets
-        self.ak8JetsDef = defs.ak8jetDef(tree.FatJet)
-
-        if self.channel == 'SL': # sorted by btag score
-            ak8JetsPreSel = op.sort(self.ak8JetsDef, lambda j: -j.btagDeepB)
-        if self.channel == 'DL': # sorted by pt
-            ak8JetsPreSel = op.sort(self.ak8JetsDef, lambda j: -j.pt)
-
-        # cleaning ak8 jets wrt to leptons
-        if self.channel == 'SL':
-            cleanAk8Jets = cleaningWithRespectToLeadingLepton(0.8)
-        if self.channel == 'DL':
-            cleanAk8Jets = cleaningWithRespectToLeadingLeptons(0.8)
-
-        self.ak8Jets = op.select(ak8JetsPreSel, cleanAk8Jets)
-
-        # 2018 DeepJet WP
-        def subjetBtag(subjet): return subjet.btagDeepB > 0.4184
-
-        def ak8Btag(fatjet): return op.OR(op.AND(fatjet.subJet1.pt >= 30, subjetBtag(fatjet.subJet1)),
-                                          op.AND(fatjet.subJet2.pt >= 30, subjetBtag(fatjet.subJet2)))
-
-        self.ak8BJets = op.select(self.ak8Jets, ak8Btag)
-
-        # Ak4 Jet Collection cleaned from Ak8b #
-        def cleanAk4FromAk8b(ak4j): return op.AND(op.rng_len(
-            self.ak8BJets) > 0, op.deltaR(ak4j.p4, self.ak8BJets[0].p4) > 1.2)
-        self.ak4JetsCleanedFromAk8b = op.select(self.ak4Jets, cleanAk4FromAk8b)
-        
-        def labeler(label):
-            return {'labels': [{'text': label, 'position': [0.23, 0.87], 'size': 25}]}
-
-        if self.channel == 'DL':
-
+            # get DL selections
             DL_boosted_ee, DL_boosted_mumu,\
             DL_boosted_emu, DL_resolved_ee,\
             DL_resolved_mumu, DL_resolved_emu = makeDLSelection(self, noSel)
+            
+            # DLSel = CategorizedSelection(categories={
+            #     "ee" : (DL_boosted_ee, self.firstOSElEl),
+            #     "mumu" : (DL_boosted_mumu, self.firstOSMuMu),
+            #     "emu" : (DL_boosted_emu, self.firstOSElMu)
+            #     })
 
-            # cutflow report
+            # cutflow report for DL channel
             yields.add(DL_boosted_ee, 'DL boosted ee')
             yields.add(DL_boosted_mumu, 'DL boosted mumu')
             yields.add(DL_boosted_emu, 'DL boosted emu')
@@ -163,33 +49,59 @@ class controlPlotter(NanoBaseHHWWbb):
             yields.add(DL_resolved_emu, 'DL resolved emu')
             
             # labels on plots
-            DLboostedEE_label = labeler('DL boosted EE')
-            DLboostedMuMu_label = labeler('DL boosted MuMu')
-            DLboostedEMU_label = labeler('DL boosted EMu')
-            
-            DLresolvedEE_label = labeler('DL resolved EE')
-            DLresolvedMuMu_label = labeler('DL resolved MuMu')
-            DLresolvedEMu_label = labeler('DL resolved EMu')
+            DLboostedEE_label = defs.labeler('DL boosted EE')
+            DLboostedMuMu_label = defs.labeler('DL boosted MuMu')
+            DLboostedEMU_label = defs.labeler('DL boosted EMu')
+            DLresolvedEE_label = defs.labeler('DL resolved EE')
+            DLresolvedMuMu_label = defs.labeler('DL resolved MuMu')
+            DLresolvedEMu_label = defs.labeler('DL resolved EMu')
 
         if self.channel == 'SL':
+            # get SL selections
             SL_resolved, SL_resolved_e,\
             SL_resolved_mu, SL_boosted,\
             SL_boosted_e, SL_boosted_mu = makeSLSelection(self, noSel)
 
+            # cutflow report for SL channel
             yields.add(SL_boosted, 'SL boosted')
             yields.add(SL_boosted_e, 'SL boosted e')
             yields.add(SL_boosted_mu, 'SL boosted mu')
             yields.add(SL_resolved, 'SL resolved')
             yields.add(SL_resolved_e, 'SL resolved e')
             yields.add(SL_resolved_mu, 'SL resolved mu')
+
+            # labels on plots
+            SLboostedE_label = defs.labeler('SL boosted E')
+            SLboostedMu_label = defs.labeler('SL boosted Mu')
+            SLresolvedE_label = defs.labeler('SL resolved E')
+            SLresolvedMu_label = defs.labeler('SL resolved Mu')
+
+        #############################################################################
+        #                                 Skims                                     #
+        #############################################################################
+        if self.args.mvaSkim and self.channel == 'DL':
+            mvaVars_DL_resolved_ee = {
+                "weight": noSel.weight,
+                "ak4bjet1_pt": self.ak4BJets[0].pt,
+                "ak4bjet1_eta": self.ak4BJets[0].eta,
+                "ak4bjet1_phi": self.ak4BJets[0].phi,
+                'ak4jet1_pt': self.ak4Jets[0].pt,
+                'ak4jet1_eta': self.ak4Jets[0].eta,
+                'ak4jet1_phi': self.ak4Jets[0].phi,
+                'ak4jet2_pt': self.ak4Jets[1].pt,
+                'ak4jet2_eta': self.ak4Jets[1].eta,
+                'ak4jet2_phi': self.ak4Jets[1].phi,
+                "leadingLepton_pt": self.tightElectrons[0].pt,
+                "leadingLepton_eta": self.tightElectrons[0].eta,
+                "leadingLepton_phi": self.tightElectrons[0].phi,
+                "subleadingLepton_pt": self.tightElectrons[1].pt,
+                "subleadingLepton_eta": self.tightElectrons[1].eta,
+                "subleadingLepton_phi": self.tightElectrons[1].phi
+            }
             
-            SLboosted_label = labeler('SL boosted')
-            SLboostedE_label = labeler('SL boosted E')
-            SLboostedMu_label = labeler('SL boosted Mu')
-            
-            SLresolved_label = labeler('SL resolved')
-            SLresolvedE_label = labeler('SL resolved E')
-            SLresolvedMu_label = labeler('SL resolved Mu')
+            plots.extend([
+                Skim("DL_resolved_ee", mvaVars_DL_resolved_ee, DL_resolved_ee),
+            ])
             
 
         #############################################################################

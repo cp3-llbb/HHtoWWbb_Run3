@@ -1,4 +1,5 @@
 from bamboo import treefunctions as op
+import definitions as defs
 
 # common variables for DL and SL channels
 
@@ -132,8 +133,7 @@ def makeSLSelection(self, noSel):
     # low Mll cut : reject events with dilepton mass below 12 GeV
     mllCut = op.AND(lowMllCut(ElElLooseSel), lowMllCut(MuMuLooseSel), lowMllCut(ElMuLooseSel))
     
-    OSoutZelelSel = noSel.refine('OSoutZsel', cut=op.AND(mllCut, outZCut, tau_h_veto(self.cleanedTaus)))
-    
+    OSoutZelelSel = noSel.refine('OSoutZsel', cut=op.AND(mllCut, outZCut, tau_h_veto(self.cleanedTaus)))    
 
     SL_resolved = OSoutZelelSel.refine('SL_resolved', cut=[
         op.rng_len(self.ak4Jets) >= 3,
