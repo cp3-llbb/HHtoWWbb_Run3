@@ -1,4 +1,5 @@
 from bamboo import treefunctions as op
+import definitions as defs
 
 # common variables for DL and SL channels
 
@@ -8,7 +9,7 @@ def lowMllCut(dileptons): return op.NOT(op.rng_any(
     dileptons, lambda dilep: op.invariant_mass(dilep[0].p4, dilep[1].p4) < 12.))
 
 def outZ(dileptons): return op.NOT(op.rng_any(
-    dileptons, lambda dilep: op.abs(op.invariant_mass(dilep[0].p4, dilep[1].p4) - Zmass) < 10.))
+    dileptons, lambda dilep: op.abs(op.invariant_mass(dilep[0].p4, dilep[1].p4) - Zmass) <= 10.))
 
 # end common variables
 
@@ -45,23 +46,24 @@ def makeDLSelection(self, noSel):
     # OS loose lepton pairs of same type to be vetoed around Z peak
     ElElLooseSel = op.combine(self.clElectrons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
     MuMuLooseSel = op.combine(self.muons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
+    ElMuLooseSel = op.combine((self.clElectrons, self.muons), N=2, pred= lambda el, mu : el.charge != mu.charge)
 
     # OS tight dilepton collections
-    ElElTightSel = op.combine(self.tightElectrons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
-    MuMuTightSel = op.combine(self.tightMuons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
-    ElMuTightSel = op.combine((self.tightElectrons, self.tightMuons), N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
-
+    ElElTightSel = op.combine(self.tightElectrons, N=2, pred=lambda lep1, lep2 : lep1.charge != lep2.charge)
+    MuMuTightSel = op.combine(self.tightMuons, N=2, pred=lambda lep1, lep2 : lep1.charge != lep2.charge)
+    ElMuTightSel = op.combine((self.tightElectrons, self.tightMuons), N=2, pred= lambda el, mu : el.charge != mu.charge)
+    
     self.firstOSElEl = ElElTightSel[0]
     self.firstOSMuMu = MuMuTightSel[0]
     self.firstOSElMu = ElMuTightSel[0]
-
+    
     # minimum pT cut : at least one dilepton pair with leading lepton above 25 GeV
     elelSel = noSel.refine('elelptSel', cut=[ptCutElEl(self.firstOSElEl)])
     mumuSel = noSel.refine('mumuptSel', cut=[ptCutMuMu(self.firstOSMuMu)])
     elmuSel = noSel.refine('elmuptSel', cut=[ptCutElMu(self.firstOSElMu)])
 
     # low Mll cut : reject events with dilepton mass below 12 GeV
-    mllCut = op.AND(lowMllCut(ElElTightSel), lowMllCut(MuMuTightSel), lowMllCut(ElMuTightSel))
+    mllCut = op.AND(lowMllCut(ElElLooseSel), lowMllCut(MuMuLooseSel), lowMllCut(ElMuLooseSel))
 
     # Z-veto : reject events with dileptons of same type with mass around Z peak
     outZCut = op.AND(outZ(ElElLooseSel), outZ(MuMuLooseSel))
@@ -105,33 +107,35 @@ def makeDLSelection(self, noSel):
     return DL_selections
 
 def makeSLSelection(self, noSel):
-    exit()
     """ Selections for the SL channel
     return the following selections:
     - SL_resolved: resolved selection
     - SL_resolved_e: resolved selection for e channel
     - SL_resolved_mu: resolved selection for mu channel
-    - SL_boosted: boosted selection"""
+    - SL_boosted: boosted selection
+    - SL_boosted_e: boosted selection for e channel
+    - SL_boosted_mu: boosted selection for mu channel"""
+    
     def elPtCut(lep): return self.electron_conept[lep[0].idx] > 32.0
 
     def muPtCut(lep): return self.muon_conept[lep[0].idx] > 25.0
 
     def tau_h_veto(taus): return op.rng_len(taus) == 0
-
-    ElElDileptonPreSel = op.combine(self.clElectrons, N=2)
-    MuMuDileptonPreSel = op.combine(self.muons, N=2)
-    ElMuDileptonPreSel = op.combine((self.clElectrons, self.muons))
-
-    OSElElDileptonPreSel = op.combine(self.clElectrons, N=2, pred=lambda el1,el2 : el1.charge != el2.charge)
-    OSMuMuDileptonPreSel = op.combine(self.muons, N=2, pred=lambda mu1,mu2 : mu1.charge != mu2.charge)
     
-    outZcut = [outZ(OSElElDileptonPreSel), outZ(OSMuMuDileptonPreSel)]
+    # OS loose lepton pairs of same type to be vetoed around Z peak
+    ElElLooseSel = op.combine(self.clElectrons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
+    MuMuLooseSel = op.combine(self.muons, N=2, pred= lambda lep1, lep2 : lep1.charge != lep2.charge)
+    ElMuLooseSel = op.combine((self.clElectrons, self.muons), N=2, pred= lambda el, mu : el.charge != mu.charge)
+    
+    # Z-veto : reject events with dileptons of same type with mass around Z peak
+    outZCut = op.AND(outZ(ElElLooseSel), outZ(MuMuLooseSel))
 
-    mllCut = [lowMllCut(ElElDileptonPreSel), lowMllCut(
-        MuMuDileptonPreSel), lowMllCut(ElMuDileptonPreSel)]
+    # low Mll cut : reject events with dilepton mass below 12 GeV
+    mllCut = op.AND(lowMllCut(ElElLooseSel), lowMllCut(MuMuLooseSel), lowMllCut(ElMuLooseSel))
+    
+    OSoutZelelSel = noSel.refine('OSoutZsel', cut=op.AND(mllCut, outZCut, tau_h_veto(self.cleanedTaus)))    
 
-    SL_resolved = noSel.refine('SL_resolved', cut=[
-        mllCut, outZcut, tau_h_veto(self.cleanedTaus),
+    SL_resolved = OSoutZelelSel.refine('SL_resolved', cut=[
         op.rng_len(self.ak4Jets) >= 3,
         op.rng_len(self.ak4BJets) >= 1,
         op.rng_len(self.ak8BJets) == 0])
@@ -145,17 +149,19 @@ def makeSLSelection(self, noSel):
         muPtCut(self.tightMuons),
         op.rng_len(self.tightElectrons) == 0,
         op.rng_len(self.tightMuons) == 1])
+    
 
-    SL_boosted = noSel.refine('SL_boosted', cut=[
-        op.OR(elPtCut, muPtCut), lowMllCut, outZ, tau_h_veto,
+    SL_boosted = OSoutZelelSel.refine('SL_boosted', cut=[
         op.rng_len(self.ak8BJets) >= 1,
         op.rng_len(self.ak4JetsCleanedFromAk8b) >= 1])
     
     SL_boosted_e = SL_boosted.refine('SL_boosted_e', cut=[
+        elPtCut(self.tightElectrons),
         op.rng_len(self.tightElectrons) == 1,
         op.rng_len(self.tightMuons) == 0])
     
     SL_boosted_mu = SL_boosted.refine('SL_boosted_mu', cut=[
+        muPtCut(self.tightMuons),
         op.rng_len(self.tightMuons) == 1,
         op.rng_len(self.tightElectrons) == 0])
 

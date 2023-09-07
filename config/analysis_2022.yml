@@ -14,12 +14,28 @@ eras:
   #   luminosity: 3247 # pb^-1
 dbcache: dascache
 samples:
-  # HH_2018:
-  #   era: "2022EE"
-  #   type: signal
-  #   group: "signal"
-  #   db: das:/GluGluToHHTo2B2VLNu2J_node_cHHH1_TuneCP5_PSWeights_13TeV-powheg-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-  #   split: 14
+  HH:
+    era: "2022"
+    type: "signal"
+    group: "HH"
+    db: das:/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    cross-section: 1
+    branching-ratio: 0.027669886574221
+    generated-events: genEventSumw
+    line-type: 1
+    split: 9
+
+  HH_EE: # using the same dataset
+    era: "2022EE"
+    type: "signal"
+    group: "HH"
+    db: das:/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+    cross-section: 1
+    branching-ratio: 0.027669886574221
+    generated-events: genEventSumw
+    line-type: 1
+    split: 9
+
   Muon_C:
     era: "2022"
     type: data
@@ -164,25 +180,24 @@ samples:
     cross-section: 98.02 
     generated-events: genEventSumw
     split: 70
-    
-  # to be added when working with SL
-  # TTtoLNu2Q:
-  #   era: "2022"
-  #   group: "TTbar"
-  #   db: das:/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
-  #   type: mc
-  #   cross-section: 405.70 # 923.6*(BR)
-  #   generated-events: genEventSumw
-  #   split: 67
+  
+  TTtoLNu2Q:
+    era: "2022"
+    group: "TTbar"
+    db: das:/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
+    type: mc
+    cross-section: 405.70 # 923.6*(BR)
+    generated-events: genEventSumw
+    split: 67
 
-  # TTtoLNu2Q_EE:
-  #   era: "2022EE"
-  #   group: "TTbar"
-  #   db: das:/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
-  #   type: mc
-  #   cross-section: 405.70
-  #   generated-events: genEventSumw
-  #   split: 218
+  TTtoLNu2Q_EE:
+    era: "2022EE"
+    group: "TTbar"
+    db: das:/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
+    type: mc
+    cross-section: 405.70
+    generated-events: genEventSumw
+    split: 218
 
   DY:
     era: "2022"
@@ -202,14 +217,23 @@ samples:
     generated-events: genEventSumw
     split: 55
 
-  # WJets:
-  #   era: "2022"
-  #   group: "WJets"
-  #   db: das:/WJetsToLNu_TuneCP5_13p6TeV-madgraphMLM-pythia8/Run3Winter22NanoAOD-122X_mcRun3_2021_realistic_v9-v1/NANOAODSIM
-  #   type: mc
-  #   cross-section: 63199.9
-  #   generated-events: genEventSumw
-  #   split: 75
+  DY10to50:
+    era: "2022"
+    group: "DY"
+    db: das:/DYto2L-2Jets_MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
+    type: mc
+    cross-section: 21270
+    generated-events: genEventSumw
+    split: 39
+
+  DY10to50_EE:
+    era: "2022EE"
+    group: "DY"
+    db: das:/DYto2L-2Jets_MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
+    type: mc
+    cross-section: 2.119e+04
+    generated-events: genEventSumw
+    split: 110
 
   WW:
     era: "2022"
@@ -247,6 +271,24 @@ samples:
     generated-events: genEventSumw
     split: 18
 
+  WJets:
+    era: "2022"
+    group: WJets
+    db: das:/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
+    type: mc
+    cross-section: 68160
+    generated-events: genEventSumw
+    split: 45
+
+  WJets_EE:
+    era: "2022EE"
+    group: WJets
+    db: das:/WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
+    type: mc
+    cross-section: 69080
+    generated-events: genEventSumw
+    split: 161
+
   ZZ:
     era: "2022"
     group: "VV"
@@ -265,6 +307,42 @@ samples:
     generated-events: genEventSumw
     split: 5
 
+  TbarWplusto2l2nu:
+    era: "2022"
+    group: "TW"
+    db: das:/TbarWplusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
+    type: mc
+    cross-section: 36.05
+    generated-events: genEventSumw
+    split: 3
+
+  TbarWplusto2l2nu_EE:
+    era: "2022EE"
+    group: "TW"
+    db: das:/TbarWplusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
+    type: mc
+    cross-section: 3.605e+01
+    generated-events: genEventSumw
+    split: 7
+
+  TbarWplustoLNu2Q:
+    era: "2022"
+    group: "TW"
+    db: das:/TbarWplustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22NanoAODv11-126X_mcRun3_2022_realistic_v2-v1/NANOAODSIM
+    type: mc
+    cross-section: 36.05
+    generated-events: genEventSumw
+    split: 6
+
+  TbarWplustoLNu2Q_EE:
+    era: "2022EE"
+    group: "TW"
+    db: das:/TbarWplustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/Run3Summer22EENanoAODv11-126X_mcRun3_2022_realistic_postEE_v1-v1/NANOAODSIM
+    type: mc
+    cross-section: 3.605e+01
+    generated-events: genEventSumw
+    split: 15
+
 
 plotIt:
   configuration:
@@ -276,7 +354,7 @@ plotIt:
     margin-bottom: 0.15
     luminosity-label: '%1$.2f fb^{-1} (13.6 TeV)'
     experiment: CMS
-    extra-label: Run 3 (2022) - Work in progress
+    extra-label: Run 3 (2022 Era D) - Work in progress
     error-fill-style: 3154
     error-fill-color: "#ee556270"
     ratio-fit-error-fill-style: 1001
@@ -288,6 +366,8 @@ plotIt:
   groups:
     data:
       legend: data
+    HH:
+      legend: signal
     TTbar:
       legend: TTbar
       fill-color: "#99ccff"
@@ -296,9 +376,12 @@ plotIt:
       fill-color: "#9FFF33"
     WJets:
       legend: WJets
-      fill-color: "#FFC300"
+      fill-color: "#FF0000"
     VV:
       legend: VV
+      fill-color: "#C900FF"
+    TW:
+      legend: TW
       fill-color: "#C900FF"
   plotdefaults:
     normalized: False
