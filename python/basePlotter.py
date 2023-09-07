@@ -92,43 +92,40 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
                 sample, self.triggersPerPrimaryDataset)])
 
-        # if sampleCfg['type'] == 'mc':
-        #     JECTagDatabase = {"2022": "Winter22Run3_V2_MC",
-        #                       "2022EE": "Summer22EEPrompt22_V1_MC"}
-        #     if era in JECTagDatabase.keys():
-        #         print(f"Configure jet corrections for era {era}.")
-        #         configureJets(
-        #             variProxy               = tree._Jet,
-        #             jetType                 = "AK4PFPuppi",
-        #             jec                     = JECTagDatabase[era],
-        #             #  smear                   = JERTagDatabase['2022EE'],
-        #             jecLevels               = "default",
-        #             jesUncertaintySources   = "All",
-        #             mayWriteCache           = self.args.distributed != "worker",
-        #             isMC                    = self.is_MC,
-        #             backend                 = backend,
-        #             uName                   = sample
-        #             )
-        #         print(f"Finished configuring jet corrections for era {era}!")
-        # if sampleCfg['type'] == 'data':
-        #     JECTagDatabase = {"2022C": "Winter22Run3_RunC_V2_DATA",
-        #                       "2022D": "Winter22Run3_RunD_V2_DATA",
-        #                       "2022F": "Summer22EEPrompt22_RunF_V1_DATA",
-        #                       "2022G": "Summer22EEPrompt22_RunG_V1_DATA"}
-        #     if era in JECTagDatabase.keys():
-        #         print(f"Configure jet corrections...")
-        #         configureJets(
-        #             variProxy               = tree._Jet,
-        #             jetType                 = "AK4PFPuppi",
-        #             jec                     = JECTagDatabase[era],
-        #             jecLevels               = "default",
-        #             jesUncertaintySources   = "All",
-        #             mayWriteCache           = self.args.distributed != "worker",
-        #             isMC                    = self.is_MC,
-        #             backend                 = backend,
-        #             uName                   = sample
-        #             )
-        #         print(f"Finished configuring jet corrections for era {era}!")
+        if sampleCfg['type'] == 'mc':
+            JECTagDatabase = {"2022": "Winter22Run3_V2_MC",
+                              "2022EE": "Summer22EEPrompt22_V1_MC"}
+            if era in JECTagDatabase.keys():
+                configureJets(
+                    variProxy               = tree._Jet,
+                    jetType                 = "AK4PFPuppi",
+                    jec                     = JECTagDatabase[era],
+                    #  smear                   = JERTagDatabase['2022EE'],
+                    jecLevels               = "default",
+                    jesUncertaintySources   = "All",
+                    mayWriteCache           = self.args.distributed != "worker",
+                    isMC                    = self.is_MC,
+                    backend                 = backend,
+                    uName                   = sample
+                    )
+        if sampleCfg['type'] == 'data':
+            JECTagDatabase = {"2022C": "Winter22Run3_RunC_V2_DATA",
+                              "2022D": "Winter22Run3_RunD_V2_DATA",
+                              "2022F": "Summer22EEPrompt22_RunF_V1_DATA",
+                              "2022G": "Summer22EEPrompt22_RunG_V1_DATA"}
+            for era in JECTagDatabase.keys():
+                if era in sampleCfg['db'] or era in sampleCfg['db'][0]:
+                    configureJets(
+                        variProxy               = tree._Jet,
+                        jetType                 = "AK4PFPuppi",
+                        jec                     = JECTagDatabase[era],
+                        jecLevels               = "default",
+                        jesUncertaintySources   = "All",
+                        mayWriteCache           = self.args.distributed != "worker",
+                        isMC                    = self.is_MC,
+                        backend                 = backend,
+                        uName                   = sample
+                        )
         return tree, noSel, backend, lumiArgs
         
     def postProcess(self, taskList, config=None, workdir=None, resultsdir=None):
@@ -148,11 +145,11 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         eraMode, eras = self.args.eras
         if eras is None:
             eras = list(config["eras"].keys())
-        if plotList_cutflowreport:
-            from bamboo.analysisutils import printCutFlowReports
-            printCutFlowReports(
-                config, plotList_cutflowreport, workdir=workdir, resultsdir=resultsdir,
-                readCounters=self.readCounters, eras=(eraMode, eras), verbose=self.args.verbose)
+        # if plotList_cutflowreport:
+            # from bamboo.analysisutils import printCutFlowReports
+            # printCutFlowReports(
+            #     config, plotList_cutflowreport, workdir=workdir, resultsdir=resultsdir,
+            #     readCounters=self.readCounters, eras=(eraMode, eras), verbose=self.args.verbose)
         if plotList_plotIt:
             from bamboo.analysisutils import writePlotIt, runPlotIt
             import os
