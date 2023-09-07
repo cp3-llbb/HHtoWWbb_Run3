@@ -1,5 +1,10 @@
 from bamboo import treefunctions as op
 
+# helper functions
+
+def labeler(label):
+    return {'labels': [{'text': label, 'position': [0.23, 0.87], 'size': 25}]}
+
 # Lepton functions
 
 def hasAssociatedJet(lep): return lep.jet.idx != -1
@@ -291,4 +296,5 @@ def defineObjects(self, tree):
     # Ak4 Jet Collection cleaned from Ak8b #
     def cleanAk4FromAk8b(ak4j): return op.AND(op.rng_len(
         self.ak8BJets) > 0, op.deltaR(ak4j.p4, self.ak8BJets[0].p4) > 1.2)
+    
     self.ak4JetsCleanedFromAk8b = op.select(self.ak4Jets, cleanAk4FromAk8b)
