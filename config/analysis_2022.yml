@@ -413,13 +413,13 @@ plotIt:
       fill-color: "#9FFF33"
     WJets:
       legend: WJets
-      fill-color: "#FF0000"
+      fill-color: "#FFC300"
     VV:
       legend: VV
       fill-color: "#C900FF"
     TW:
       legend: TW
-      fill-color: "#C900FF"
+      fill-color: "#FF0000"
   plotdefaults:
     normalized: False
     y-axis: Events
