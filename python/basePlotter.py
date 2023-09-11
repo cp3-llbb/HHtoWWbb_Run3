@@ -93,6 +93,8 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
                 sample, self.triggersPerPrimaryDataset)])
 
+        sources = ["Total"]
+        
         if sampleCfg['type'] == 'mc':
             JECTagDatabase = {"2022": "Winter22Run3_V2_MC",
                               "2022EE": "Summer22EEPrompt22_V1_MC"}
@@ -105,7 +107,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                     jec                     = JECTagDatabase[era],
                     smear                   = JERTagDatabase[era], # only for MC
                     jecLevels               = "default",
-                    jesUncertaintySources   = "All",
+                    jesUncertaintySources   = sources,
                     mayWriteCache           = self.args.distributed != "worker",
                     isMC                    = self.is_MC,
                     backend                 = backend,
@@ -117,7 +119,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                     jec                     = JECTagDatabase[era],
                     smear                   = JERTagDatabase[era], # only for MC
                     jecLevels               = "default",
-                    jesUncertaintySources   = "All",
+                    jesUncertaintySources   = sources,
                     mayWriteCache           = self.args.distributed != "worker",
                     isMC                    = self.is_MC,
                     backend                 = backend,
@@ -135,7 +137,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                         jetType                 = "AK4PFPuppi",
                         jec                     = JECTagDatabase[era],
                         jecLevels               = "default",
-                        jesUncertaintySources   = "All",
+                        jesUncertaintySources   = sources,
                         mayWriteCache           = self.args.distributed != "worker",
                         isMC                    = self.is_MC,
                         backend                 = backend,
@@ -146,7 +148,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                         jetType                 = "AK8PFPuppi",
                         jec                     = JECTagDatabase[era],
                         jecLevels               = "default",
-                        jesUncertaintySources   = "All",
+                        jesUncertaintySources   = sources,
                         mayWriteCache           = self.args.distributed != "worker",
                         isMC                    = self.is_MC,
                         backend                 = backend,

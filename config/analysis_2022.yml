@@ -324,7 +324,7 @@ samples:
     type: mc
     cross-section: 4.668
     generated-events: genEventSumw
-    split: 7
+    split: 8
 
   TbarWplustoLNu2Q:
     era: "2022"
