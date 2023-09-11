@@ -380,7 +380,6 @@ samples:
     generated-events: genEventSumw
     split: 15
 
-
 plotIt:
   configuration:
     width: 800

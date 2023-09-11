@@ -53,10 +53,11 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             groups = ["HLT_", "MET_", "RawMET_"]
             collections = ["nElectron", "nJet",
                            "nMuon", "nFatJet", "nSubJet", "nTau"]
-            mcCollections = ["nGenDressedLepton", "nGenJet", "nGenPart"]
+            mcCollections = ["nGenDressedLepton", "nGenJet", "nGenPart", "nGenJetAK8", "nSubGenJetAK8"]
             varReaders = []
             if isMC:
                 varReaders.append(td.CalcCollectionsGroups(Jet=("pt", "mass")))
+                varReaders.append(td.CalcCollectionsGroups(FatJet=("pt", "mass")))
                 varReaders.append(td.CalcCollectionsGroups(GenJet=("pt", "mass")))
                 varReaders.append(td.CalcCollectionsGroups(MET=("pt", "phi")))
                 return td.NanoAODDescription(groups=groups, collections=collections + mcCollections, systVariations=varReaders)
@@ -95,12 +96,26 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         if sampleCfg['type'] == 'mc':
             JECTagDatabase = {"2022": "Winter22Run3_V2_MC",
                               "2022EE": "Summer22EEPrompt22_V1_MC"}
+            JERTagDatabase = {"2022": "JR_Winter22Run3_V1_MC",
+                              "2022EE": "Summer22EEPrompt22_JRV1_MC"}
             if era in JECTagDatabase.keys():
                 configureJets(
                     variProxy               = tree._Jet,
                     jetType                 = "AK4PFPuppi",
                     jec                     = JECTagDatabase[era],
-                    #  smear                   = JERTagDatabase['2022EE'],
+                    smear                   = JERTagDatabase[era], # only for MC
+                    jecLevels               = "default",
+                    jesUncertaintySources   = "All",
+                    mayWriteCache           = self.args.distributed != "worker",
+                    isMC                    = self.is_MC,
+                    backend                 = backend,
+                    uName                   = sample
+                    )
+                configureJets(
+                    variProxy               = tree._FatJet,
+                    jetType                 = "AK8PFPuppi",
+                    jec                     = JECTagDatabase[era],
+                    smear                   = JERTagDatabase[era], # only for MC
                     jecLevels               = "default",
                     jesUncertaintySources   = "All",
                     mayWriteCache           = self.args.distributed != "worker",
@@ -118,6 +133,17 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                     configureJets(
                         variProxy               = tree._Jet,
                         jetType                 = "AK4PFPuppi",
+                        jec                     = JECTagDatabase[era],
+                        jecLevels               = "default",
+                        jesUncertaintySources   = "All",
+                        mayWriteCache           = self.args.distributed != "worker",
+                        isMC                    = self.is_MC,
+                        backend                 = backend,
+                        uName                   = sample
+                        )
+                    configureJets(
+                        variProxy               = tree._FatJet,
+                        jetType                 = "AK8PFPuppi",
                         jec                     = JECTagDatabase[era],
                         jecLevels               = "default",
                         jesUncertaintySources   = "All",
