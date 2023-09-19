@@ -177,11 +177,11 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         eraMode, eras = self.args.eras
         if eras is None:
             eras = list(config["eras"].keys())
-        # if plotList_cutflowreport:
-            # from bamboo.analysisutils import printCutFlowReports
-            # printCutFlowReports(
-            #     config, plotList_cutflowreport, workdir=workdir, resultsdir=resultsdir,
-            #     readCounters=self.readCounters, eras=(eraMode, eras), verbose=self.args.verbose)
+        if plotList_cutflowreport:
+            from bamboo.analysisutils import printCutFlowReports
+            printCutFlowReports(
+                config, plotList_cutflowreport, workdir=workdir, resultsdir=resultsdir,
+                readCounters=self.readCounters, eras=(eraMode, eras), verbose=self.args.verbose)
         if plotList_plotIt:
             from bamboo.analysisutils import writePlotIt, runPlotIt
             import os
