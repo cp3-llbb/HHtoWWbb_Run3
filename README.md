@@ -46,5 +46,6 @@ then to produce plots, just execute:
 
 ```sh
 ./scripts/plot_<SL or DL>.sh <path to output/plots>
+```
 
 using the `parquet` output file that contains skims and the DNN jupyter notebook, you can perform machine learning applications. Then passing `--mvaEval` option, you can apply DNN score cuts on your analysis.
