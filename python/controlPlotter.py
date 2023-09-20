@@ -15,9 +15,7 @@ class controlPlotter(NanoBaseHHWWbb):
     def __init__(self, args):
         super(controlPlotter, self).__init__(args)
         self.channel = self.args.channel
-        self.mvaSkim = self.args.mvaSkim
         self.mvaModels = self.args.mvaModels
-        self.controlPlots = self.args.controlPlots
 
     def definePlots(self, tree, noSel, sample=None, sampleCfg=None):
         plots = []
@@ -84,17 +82,17 @@ class controlPlotter(NanoBaseHHWWbb):
             SLresolvedMu_label = defs.labeler('SL resolved Mu')
         
         # mva variables
-        mvaVars_DL_resolved_ee = {
+        mvaVars_DL_resolved = {
             "weight": noSel.weight,
             "ak4bjet1_pt": self.ak4BJets[0].pt,
             "ak4bjet1_eta": self.ak4BJets[0].eta,
             "ak4bjet1_phi": self.ak4BJets[0].phi,
-            'ak4jet1_pt': self.ak4Jets[0].pt,
-            'ak4jet1_eta': self.ak4Jets[0].eta,
-            'ak4jet1_phi': self.ak4Jets[0].phi,
-            'ak4jet2_pt': self.ak4Jets[1].pt,
-            'ak4jet2_eta': self.ak4Jets[1].eta,
-            'ak4jet2_phi': self.ak4Jets[1].phi,
+            # 'ak4jet1_pt': self.ak4Jets[0].pt,
+            # 'ak4jet1_eta': self.ak4Jets[0].eta,
+            # 'ak4jet1_phi': self.ak4Jets[0].phi,
+            # 'ak4jet2_pt': self.ak4Jets[1].pt,
+            # 'ak4jet2_eta': self.ak4Jets[1].eta,
+            # 'ak4jet2_phi': self.ak4Jets[1].phi,
             "leadingLepton_pt": self.tightElectrons[0].pt,
             "leadingLepton_eta": self.tightElectrons[0].eta,
             "leadingLepton_phi": self.tightElectrons[0].phi,
@@ -107,27 +105,22 @@ class controlPlotter(NanoBaseHHWWbb):
         #                            MVA evaluation                                 #
         #############################################################################
         if self.args.mvaModels and self.channel == 'DL':
-            mvaVars_DL_resolved_ee.pop("weight", None)
+            mvaVars_DL_resolved.pop("weight", None)
             
-            # def splitVar(var):
-            #     split_var = op.product(op.abs(var), 1e5)
-            #     split_var = op.sum(split_var, -op.floor(split_var))
-            #     split_var = op.product(split_var, 1e1)
-            #     split_var = op.mod(split_var, 2)
-            #     return split_var
-            
-            # split_var = splitVar(self.firstOSElEl[0].phi)
-            
-            import random
-            split_var = random.randint(0,1)
+            # import random
+            # split_var = random.randint(0,1)
+            split_var = 1
 
-            if split_var == 1:
-                model = self.args.mvaModels + "model_test1_odd/saved_model.pb"
+            if split_var == 0:
+                model = self.args.mvaModels + "/model_test1_even/model.onnx"
+            elif split_var == 1:
+                model = self.args.mvaModels + "/model_test1_odd/model.onnx"
             else:
-                model = self.args.mvaModels + "model_test1_even/saved_model.pb"
+                print("ERROR: split_var is not 0 or 1")
+                exit(1)
             
-            dnn = op.mvaEvaluator(fileName=model, mvaType='Tensorflow', otherArgs = ("particles", "predictions"), nameHint="firstDNN")
-            inputs = op.array('float',*[op.c_float(val) for val in mvaVars_DL_resolved_ee.values()])
+            dnn = op.mvaEvaluator(model, otherArgs = ("predictions"))
+            inputs = op.array('float', *[op.c_float(val) for val in mvaVars_DL_resolved.values()])
             output = dnn(inputs)
             
             # DNN cuts
@@ -149,20 +142,16 @@ class controlPlotter(NanoBaseHHWWbb):
             ]
 
         #############################################################################
-        #                                 Skims                                     #
-        #############################################################################
-        if self.args.mvaSkim and self.channel == 'DL':
-            plots.extend([
-                Skim("DL_resolved_ee", mvaVars_DL_resolved_ee, DL_resolved_ee),
-            ])
-            
-
-        #############################################################################
         #                                 Plots                                     #
         #############################################################################
         
-        if self.args.controlPlots and self.channel == 'DL':
+        if self.channel == 'DL':
             plots.extend([
+                #########################################
+                #                 Skims                 #
+                #########################################
+                
+                Skim("DL_resolved_ee", mvaVars_DL_resolved, DL_resolved_ee),
                 
                 #########################################
                 ######                             ######
@@ -472,7 +461,7 @@ class controlPlotter(NanoBaseHHWWbb):
                 Plot.make1D("DL_resolved_nMuons_emu", op.rng_len(self.tightMuons), DL_resolved_emu, EqBin(
                     3, 0, 3), title="N(el)", xTitle="Number of electrons", plotopts=DLresolvedEMu_label),
             ])
-        if self.args.controlPlots and self.channel == "SL":
+        if self.channel == "SL":
             plots.extend([
                 #########################################
                 ######                             ######
