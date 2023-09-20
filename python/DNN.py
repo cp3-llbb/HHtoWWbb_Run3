@@ -32,6 +32,10 @@ parser.add_option('-s', '--skimFile',
                     dest='skimFile',
                     help='path to the skim file',
                     type='string')
+parser.add_option('-o',
+                    dest='outputDir',
+                    help='path to the output directory',
+                    type='string')
 
 (opt, args) = parser.parse_args()
 
@@ -584,9 +588,10 @@ print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
 
 
 # save model and architecture to a single file
+outputDir = opt.outputDir
 modelName = f"model_{suffix}_{split}"
-model.save(modelName)
-print(f"Saved model to disk as {modelName}")
+model.save(outputDir+modelName)
+print(f"Saved model to {outputDir} as {modelName}")
 
 
 # In[ ]:
