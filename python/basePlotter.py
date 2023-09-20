@@ -17,18 +17,10 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                             type=str,
                             required=True,
                             help='Channel to be selected between SL and DL')
-        parser.add_argument("--mvaSkim",
-                            dest="mvaSkim",
-                            action="store_true",
-                            help="Produce skims for MVA")
         parser.add_argument("--mvaModels",
                             dest="mvaModels",
                             type=str,
                             help="Path to MVA models and Evaluate DNN")
-        parser.add_argument("--controlPlots", "-p",
-                            dest="controlPlots",
-                            action="store_true",
-                            help="Produce control plots")
 
     def prepareTree(self, tree, sample=None, sampleCfg=None, backend=None):
         def isMC():
@@ -200,7 +192,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         from bamboo.analysisutils import loadPlotIt
         p_config, samples, _, systematics, legend = loadPlotIt(config, [], eras=self.args.eras[1], workdir=workdir, resultsdir=resultsdir, readCounters=self.readCounters, vetoFileAttributes=self.__class__.CustomSampleAttributes)
         
-        if self.args.mvaSkim and skims:
+        if skims:
             from bamboo.analysisutils import loadPlotIt
             from bamboo.root import gbl
             import pandas as pd
