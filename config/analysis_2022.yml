@@ -17,7 +17,6 @@ samples:
   HH:
     era: "2022"
     type: "signal"
-    group: "HH"
     db: das:/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
     cross-section: 1
     branching-ratio: 0.027669886574221
@@ -28,7 +27,6 @@ samples:
   HH_EE: # using the same dataset
     era: "2022EE"
     type: "signal"
-    group: "HH"
     db: das:/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
     cross-section: 1
     branching-ratio: 0.027669886574221
