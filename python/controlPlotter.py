@@ -15,7 +15,7 @@ class controlPlotter(NanoBaseHHWWbb):
     def __init__(self, args):
         super(controlPlotter, self).__init__(args)
         self.channel = self.args.channel
-        self.mvaSkim = self.args.mvaSkim
+        self.mvaModels = self.args.mvaModels
 
     def definePlots(self, tree, noSel, sample=None, sampleCfg=None):
         plots = []
@@ -55,7 +55,12 @@ class controlPlotter(NanoBaseHHWWbb):
             DLresolvedEE_label = defs.labeler('DL resolved EE')
             DLresolvedMuMu_label = defs.labeler('DL resolved MuMu')
             DLresolvedEMu_label = defs.labeler('DL resolved EMu')
-
+            
+            DLresolvedEEdnnCat1_label = defs.labeler('DL resolved EE DNN cat. 1')
+            DLresolvedEEdnnCat2_label = defs.labeler('DL resolved EE DNN cat. 2')
+            DLresolvedEEdnnCat3_label = defs.labeler('DL resolved EE DNN cat. 3')
+            DLresolvedEEdnnCat4_label = defs.labeler('DL resolved EE DNN cat. 4')
+            
         if self.channel == 'SL':
             # get SL selections
             SL_resolved, SL_resolved_e,\
@@ -75,34 +80,66 @@ class controlPlotter(NanoBaseHHWWbb):
             SLboostedMu_label = defs.labeler('SL boosted Mu')
             SLresolvedE_label = defs.labeler('SL resolved E')
             SLresolvedMu_label = defs.labeler('SL resolved Mu')
+        
+        # mva variables
+        mvaVars_DL_resolved = {
+            "weight": noSel.weight,
+            "ak4bjet1_pt": self.ak4BJets[0].pt,
+            "ak4bjet1_eta": self.ak4BJets[0].eta,
+            "ak4bjet1_phi": self.ak4BJets[0].phi,
+            # 'ak4jet1_pt': self.ak4Jets[0].pt,
+            # 'ak4jet1_eta': self.ak4Jets[0].eta,
+            # 'ak4jet1_phi': self.ak4Jets[0].phi,
+            # 'ak4jet2_pt': self.ak4Jets[1].pt,
+            # 'ak4jet2_eta': self.ak4Jets[1].eta,
+            # 'ak4jet2_phi': self.ak4Jets[1].phi,
+            "leadingLepton_pt": self.tightElectrons[0].pt,
+            "leadingLepton_eta": self.tightElectrons[0].eta,
+            "leadingLepton_phi": self.tightElectrons[0].phi,
+            "subleadingLepton_pt": self.tightElectrons[1].pt,
+            "subleadingLepton_eta": self.tightElectrons[1].eta,
+            "subleadingLepton_phi": self.tightElectrons[1].phi
+        }
 
         #############################################################################
-        #                                 Skims                                     #
+        #                            MVA evaluation                                 #
         #############################################################################
-        if self.args.mvaSkim and self.channel == 'DL':
-            mvaVars_DL_resolved_ee = {
-                "weight": noSel.weight,
-                "ak4bjet1_pt": self.ak4BJets[0].pt,
-                "ak4bjet1_eta": self.ak4BJets[0].eta,
-                "ak4bjet1_phi": self.ak4BJets[0].phi,
-                'ak4jet1_pt': self.ak4Jets[0].pt,
-                'ak4jet1_eta': self.ak4Jets[0].eta,
-                'ak4jet1_phi': self.ak4Jets[0].phi,
-                'ak4jet2_pt': self.ak4Jets[1].pt,
-                'ak4jet2_eta': self.ak4Jets[1].eta,
-                'ak4jet2_phi': self.ak4Jets[1].phi,
-                "leadingLepton_pt": self.tightElectrons[0].pt,
-                "leadingLepton_eta": self.tightElectrons[0].eta,
-                "leadingLepton_phi": self.tightElectrons[0].phi,
-                "subleadingLepton_pt": self.tightElectrons[1].pt,
-                "subleadingLepton_eta": self.tightElectrons[1].eta,
-                "subleadingLepton_phi": self.tightElectrons[1].phi
-            }
+        if self.args.mvaModels and self.channel == 'DL':
+            mvaVars_DL_resolved.pop("weight", None)
             
-            plots.extend([
-                Skim("DL_resolved_ee", mvaVars_DL_resolved_ee, DL_resolved_ee),
-            ])
+            # import random
+            # split_var = random.randint(0,1)
+            split_var = 1
+
+            if split_var == 0:
+                model = self.args.mvaModels + "/model_test1_even/model.onnx"
+            elif split_var == 1:
+                model = self.args.mvaModels + "/model_test1_odd/model.onnx"
+            else:
+                print("ERROR: split_var is not 0 or 1")
+                exit(1)
             
+            dnn = op.mvaEvaluator(model, otherArgs = ("predictions"))
+            inputs = op.array('float', *[op.c_float(val) for val in mvaVars_DL_resolved.values()])
+            output = dnn(inputs)
+            
+            # DNN cuts
+            DNNcat1 = DL_resolved_ee.refine("DNNcat1", cut = op.in_range(0.1, output[0], 0.6))
+            DNNcat2 = DL_resolved_ee.refine("DNNcat2", cut = op.in_range(0.6, output[0], 0.8))
+            DNNcat3 = DL_resolved_ee.refine("DNNcat3", cut = op.in_range(0.8, output[0], 0.92))
+            DNNcat4 = DL_resolved_ee.refine("DNNcat4", cut = op.in_range(0.92, output[0], 1.0))
+            
+            plots = [
+                Plot.make1D("dnn_score", output[0], DL_resolved_ee, EqBin(40, 0, 1.)),
+                Plot.make1D("DL_resolved_InvM_ee_DNNcat1", op.invariant_mass(self.firstOSElEl[0].p4, self.firstOSElEl[1].p4), DNNcat1, EqBin(
+                    100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electrons (GeV/c^{2})", plotopts=DLresolvedEEdnnCat1_label),
+                Plot.make1D("DL_resolved_InvM_ee_DNNcat2", op.invariant_mass(self.firstOSElEl[0].p4, self.firstOSElEl[1].p4), DNNcat2, EqBin(
+                    100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electrons (GeV/c^{2})", plotopts=DLresolvedEEdnnCat2_label),
+                Plot.make1D("DL_resolved_InvM_ee_DNNcat3", op.invariant_mass(self.firstOSElEl[0].p4, self.firstOSElEl[1].p4), DNNcat3, EqBin(
+                    100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electrons (GeV/c^{2})", plotopts=DLresolvedEEdnnCat3_label),
+                Plot.make1D("DL_resolved_InvM_ee_DNNcat4", op.invariant_mass(self.firstOSElEl[0].p4, self.firstOSElEl[1].p4), DNNcat4, EqBin(
+                    100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electrons (GeV/c^{2})", plotopts=DLresolvedEEdnnCat4_label),
+            ]
 
         #############################################################################
         #                                 Plots                                     #
@@ -110,6 +147,11 @@ class controlPlotter(NanoBaseHHWWbb):
         
         if self.channel == 'DL':
             plots.extend([
+                #########################################
+                #                 Skims                 #
+                #########################################
+                
+                Skim("DL_resolved_ee", mvaVars_DL_resolved, DL_resolved_ee),
                 
                 #########################################
                 ######                             ######
