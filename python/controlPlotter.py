@@ -87,18 +87,34 @@ class controlPlotter(NanoBaseHHWWbb):
             "ak4bjet1_pt": self.ak4BJets[0].pt,
             "ak4bjet1_eta": self.ak4BJets[0].eta,
             "ak4bjet1_phi": self.ak4BJets[0].phi,
-            # 'ak4jet1_pt': self.ak4Jets[0].pt,
-            # 'ak4jet1_eta': self.ak4Jets[0].eta,
-            # 'ak4jet1_phi': self.ak4Jets[0].phi,
-            # 'ak4jet2_pt': self.ak4Jets[1].pt,
-            # 'ak4jet2_eta': self.ak4Jets[1].eta,
-            # 'ak4jet2_phi': self.ak4Jets[1].phi,
+            'ak4jet1_pt': self.ak4Jets[0].pt,
+            'ak4jet1_eta': self.ak4Jets[0].eta,
+            'ak4jet1_phi': self.ak4Jets[0].phi,
+            'ak4jet2_pt': self.ak4Jets[1].pt,
+            'ak4jet2_eta': self.ak4Jets[1].eta,
+            'ak4jet2_phi': self.ak4Jets[1].phi,
             "leadingLepton_pt": self.tightElectrons[0].pt,
             "leadingLepton_eta": self.tightElectrons[0].eta,
             "leadingLepton_phi": self.tightElectrons[0].phi,
             "subleadingLepton_pt": self.tightElectrons[1].pt,
             "subleadingLepton_eta": self.tightElectrons[1].eta,
             "subleadingLepton_phi": self.tightElectrons[1].phi
+        }
+        
+        mvaVars_SL_resolved = {
+            "weight": noSel.weight,
+            "ak4bjet1_pt": self.ak4BJets[0].pt,
+            "ak4bjet1_eta": self.ak4BJets[0].eta,
+            "ak4bjet1_phi": self.ak4BJets[0].phi,
+            'ak4jet1_pt': self.ak4Jets[0].pt,
+            'ak4jet1_eta': self.ak4Jets[0].eta,
+            'ak4jet1_phi': self.ak4Jets[0].phi,
+            'ak4jet2_pt': self.ak4Jets[1].pt,
+            'ak4jet2_eta': self.ak4Jets[1].eta,
+            'ak4jet2_phi': self.ak4Jets[1].phi,
+            "leadingLepton_pt": self.tightElectrons[0].pt,
+            "leadingLepton_eta": self.tightElectrons[0].eta,
+            "leadingLepton_phi": self.tightElectrons[0].phi,
         }
 
         #############################################################################
@@ -463,6 +479,13 @@ class controlPlotter(NanoBaseHHWWbb):
             ])
         if self.channel == "SL":
             plots.extend([
+                
+                #########################################
+                #                 Skims                 #
+                #########################################
+                
+                Skim("SL_resolved_e", mvaVars_SL_resolved, SL_resolved_e),
+                
                 #########################################
                 ######                             ######
                 ######       SL boosted plots      ######
