@@ -192,28 +192,32 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         from bamboo.analysisutils import loadPlotIt
         p_config, samples, _, systematics, legend = loadPlotIt(config, [], eras=self.args.eras[1], workdir=workdir, resultsdir=resultsdir, readCounters=self.readCounters, vetoFileAttributes=self.__class__.CustomSampleAttributes)
         
-        if skims:
-            from bamboo.analysisutils import loadPlotIt
-            from bamboo.root import gbl
-            import pandas as pd
-            import os.path
-            
+        if skims:            
             for skim in skims:
-                frames = []
-                for smp in samples:
-                    for cb in (smp.files if hasattr(smp, "files") else [smp]):
-                        tree = cb.tFile.Get(skim.treeName)
-                        if not tree:
-                            print("WARNING: tree %s not found in file %s" % (skim.treeName, cb.tFile.GetName()))
-                            print("         skipping...")
-                        else:
-                            N = tree.GetEntries()
-                            cols = gbl.ROOT.RDataFrame(tree).AsNumpy()
-                            cols["weight"] *= cb.scale
-                            cols["process"] = [smp.name]*len(cols["weight"])
-                            frames.append(pd.DataFrame(cols))
-                df = pd.concat(frames)
-                df["process"] = pd.Categorical(df["process"], categories=pd.unique(df["process"]))
-                pqoutname = os.path.join(resultsdir, f"{skim.name}.parquet")
-                df.to_parquet(pqoutname)
-                print(f"Saved dataframe for skim {skim.name} to {pqoutname}")
+                if os.path.join(resultsdir, f"{skim.name}.parquet"):
+                    print(f"WARNING: dataframe for skim {skim.name} already exists in {resultsdir}")
+                    print("         skipping...")
+                    return
+                else:
+                    from bamboo.analysisutils import loadPlotIt
+                    from bamboo.root import gbl
+                    import pandas as pd
+                    import os.path
+                    frames = []
+                    for smp in samples:
+                        for cb in (smp.files if hasattr(smp, "files") else [smp]):
+                            tree = cb.tFile.Get(skim.treeName)
+                            if not tree:
+                                print("WARNING: tree %s not found in file %s" % (skim.treeName, cb.tFile.GetName()))
+                                print("         skipping...")
+                            else:
+                                N = tree.GetEntries()
+                                cols = gbl.ROOT.RDataFrame(tree).AsNumpy()
+                                cols["weight"] *= cb.scale
+                                cols["process"] = [smp.name]*len(cols["weight"])
+                                frames.append(pd.DataFrame(cols))
+                    df = pd.concat(frames)
+                    df["process"] = pd.Categorical(df["process"], categories=pd.unique(df["process"]))
+                    pqoutname = os.path.join(resultsdir, f"{skim.name}.parquet")
+                    df.to_parquet(pqoutname)
+                    print(f"Saved dataframe for skim {skim.name} to {pqoutname}")
