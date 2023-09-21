@@ -12,27 +12,31 @@ eras:
   #   luminosity: 18423 # pb^-1
   # "2022G":
   #   luminosity: 3247 # pb^-1
+  "2022all":
+    luminosity: 28540 # 7875 + 20665 pb^-1
 dbcache: dascache
 samples:
-  HH:
-    era: "2022"
-    type: "signal"
+
+  GluGluToHHTo2B2VTo2L2Nu_node_SM:
+    era: "2022all"
+    type: signal
     db: das:/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
     cross-section: 1
     branching-ratio: 0.027669886574221
     generated-events: genEventSumw
-    line-type: 1
+    legend: 'HH#rightarrow bbl#nu l#nu'
     split: 9
 
-  HH_EE: # using the same dataset
-    era: "2022EE"
-    type: "signal"
-    db: das:/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+  GluGluToHHTo2B2WToLNu2J_node_SM:
+    era: "2022all"
+    type: signal
+    db: das:/GluGluToHHTo2B2WToLNu2J_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
     cross-section: 1
-    branching-ratio: 0.027669886574221
+    branching-ratio: 0.109369082142029
     generated-events: genEventSumw
-    line-type: 1
-    split: 9
+    legend: 'HH#rightarrow bbqql#nu'
+    # line-color: 4
+    split: 6
 
   Muon_C:
     era: "2022"
@@ -388,20 +392,18 @@ plotIt:
     margin-bottom: 0.15
     luminosity-label: '%1$.2f fb^{-1} (13.6 TeV)'
     experiment: CMS
-    extra-label: Run 3 (2022 Era D) - Work in progress
+    extra-label: Run 3 (2022) - Work in progress
     error-fill-style: 3154
     error-fill-color: "#ee556270"
     ratio-fit-error-fill-style: 1001
     ratio-fit-error-fill-color: "#aa556270"
     ratio-fit-line-color: "#0B486B"
-    yields-table-align: v
+    yields-table-align: h
   legend:
     position: [0.7, 0.6, 0.91, 0.91]
   groups:
     data:
       legend: data
-    HH:
-      legend: signal
     TTbar:
       legend: TTbar
       fill-color: "#99ccff"
