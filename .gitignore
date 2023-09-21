@@ -3,4 +3,4 @@ output*
 
 # ignore some others
 __pycache__/
-config/dascache/*txt
+config/dascache/
