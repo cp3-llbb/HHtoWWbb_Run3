@@ -194,21 +194,20 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         
         if skims:            
             for skim in skims:
-                if os.path.join(resultsdir, f"{skim.name}.parquet"):
+                pqoutname = os.path.join(resultsdir, f"{skim.name}.parquet")
+                if os.path.isfile(pqoutname):
                     print(f"WARNING: dataframe for skim {skim.name} already exists in {resultsdir}")
                     print("         skipping...")
                     return
                 else:
-                    from bamboo.analysisutils import loadPlotIt
                     from bamboo.root import gbl
                     import pandas as pd
-                    import os.path
                     frames = []
                     for smp in samples:
                         for cb in (smp.files if hasattr(smp, "files") else [smp]):
                             tree = cb.tFile.Get(skim.treeName)
                             if not tree:
-                                print("WARNING: tree %s not found in file %s" % (skim.treeName, cb.tFile.GetName()))
+                                print("WARNING: skim tree %s not found in file %s" % (skim.treeName, cb.tFile.GetName()))
                                 print("         skipping...")
                             else:
                                 N = tree.GetEntries()
@@ -218,6 +217,5 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                                 frames.append(pd.DataFrame(cols))
                     df = pd.concat(frames)
                     df["process"] = pd.Categorical(df["process"], categories=pd.unique(df["process"]))
-                    pqoutname = os.path.join(resultsdir, f"{skim.name}.parquet")
                     df.to_parquet(pqoutname)
                     print(f"Saved dataframe for skim {skim.name} to {pqoutname}")
