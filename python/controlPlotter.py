@@ -61,10 +61,8 @@ class controlPlotter(NanoBaseHHWWbb):
             SL_boosted_e, SL_boosted_mu = makeSLSelection(self, noSel)
 
             # cutflow report for SL channel
-            yields.add(SL_boosted, 'SL boosted')
             yields.add(SL_boosted_e, 'SL boosted e')
             yields.add(SL_boosted_mu, 'SL boosted mu')
-            yields.add(SL_resolved, 'SL resolved')
             yields.add(SL_resolved_e, 'SL resolved e')
             yields.add(SL_resolved_mu, 'SL resolved mu')
 
