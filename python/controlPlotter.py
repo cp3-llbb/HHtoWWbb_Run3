@@ -26,19 +26,12 @@ class controlPlotter(NanoBaseHHWWbb):
         # cutflow report
         yields = CutFlowReport("yields", printInLog=True, recursive=True)
         plots.append(yields)
-        yields.add(noSel, 'No Selection')
 
         if self.channel == 'DL':
             # get DL selections
             DL_boosted_ee, DL_boosted_mumu,\
             DL_boosted_emu, DL_resolved_ee,\
             DL_resolved_mumu, DL_resolved_emu = makeDLSelection(self, noSel)
-            
-            # DLSel = CategorizedSelection(categories={
-            #     "ee" : (DL_boosted_ee, self.firstOSElEl),
-            #     "mumu" : (DL_boosted_mumu, self.firstOSMuMu),
-            #     "emu" : (DL_boosted_emu, self.firstOSElMu)
-            #     })
 
             # cutflow report for DL channel
             yields.add(DL_boosted_ee, 'DL boosted ee')
