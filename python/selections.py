@@ -1,4 +1,5 @@
 from bamboo import treefunctions as op
+from bamboo.plots import CategorizedSelection
 import definitions as defs
 
 # common variables for DL and SL channels
@@ -133,38 +134,43 @@ def makeSLSelection(self, noSel):
     # low Mll cut : reject events with dilepton mass below 12 GeV
     mllCut = op.AND(lowMllCut(ElElLooseSel), lowMllCut(MuMuLooseSel), lowMllCut(ElMuLooseSel))
     
-    OSoutZelelSel = noSel.refine('OSoutZsel', cut=op.AND(mllCut, outZCut, tau_h_veto(self.cleanedTaus)))    
+    OSoutZelelSel = noSel.refine('OSoutZsel', cut=op.AND(mllCut, outZCut, tau_h_veto(self.cleanedTaus)))
+    
+    # SL Resolved selections    
 
     SL_resolved = OSoutZelelSel.refine('SL_resolved', cut=[
         op.rng_len(self.ak4Jets) >= 3,
         op.rng_len(self.ak4BJets) >= 1,
-        op.rng_len(self.ak8BJets) == 0])
+        op.rng_len(self.ak8BJets) == 0,
+        op.OR(op.AND(op.rng_len(self.tightElectrons) == 1, self.tightMuons == 0, elPtCut(self.tightElectrons)),
+              op.AND(op.rng_len(self.tightElectrons) == 0, self.tightMuons == 1, muPtCut(self.tightMuons)))
+        ])
 
     SL_resolved_e = SL_resolved.refine('SL_resolved_e', cut=[
-        elPtCut(self.tightElectrons),
-        op.rng_len(self.tightElectrons) == 1,
-        op.rng_len(self.tightMuons) == 0])
+        op.rng_len(self.tightElectrons) == 1
+        ])
 
     SL_resolved_mu = SL_resolved.refine('SL_resolved_mu', cut=[
-        muPtCut(self.tightMuons),
-        op.rng_len(self.tightElectrons) == 0,
-        op.rng_len(self.tightMuons) == 1])
+        op.rng_len(self.tightMuons) == 1
+        ])
     
-
+    # SL Boosted selections
+    
     SL_boosted = OSoutZelelSel.refine('SL_boosted', cut=[
         op.rng_len(self.ak8BJets) >= 1,
-        op.rng_len(self.ak4JetsCleanedFromAk8b) >= 1])
+        op.rng_len(self.ak4JetsCleanedFromAk8b) >= 1,
+        op.OR(
+            op.AND(op.rng_len(self.tightElectrons) == 1, self.tightMuons == 0, elPtCut(self.tightElectrons)),
+            op.AND(op.rng_len(self.tightElectrons) == 0, self.tightMuons == 1, muPtCut(self.tightMuons)))
+        ])
     
     SL_boosted_e = SL_boosted.refine('SL_boosted_e', cut=[
-        elPtCut(self.tightElectrons),
-        op.rng_len(self.tightElectrons) == 1,
-        op.rng_len(self.tightMuons) == 0])
+        op.rng_len(self.tightElectrons) == 1])
     
     SL_boosted_mu = SL_boosted.refine('SL_boosted_mu', cut=[
-        muPtCut(self.tightMuons),
-        op.rng_len(self.tightMuons) == 1,
-        op.rng_len(self.tightElectrons) == 0])
+        op.rng_len(self.tightMuons) == 1])
 
     SL_selections = [SL_resolved, SL_resolved_e, SL_resolved_mu, SL_boosted, SL_boosted_e, SL_boosted_mu]
 
     return SL_selections
+
