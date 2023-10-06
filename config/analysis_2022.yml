@@ -2,167 +2,176 @@ tree: Events
 eras:
   "2022":
     luminosity: 7875 # pb^-1
-  # "2022C":
-  #   luminosity: 4953 # pb^-1
-  # "2022D":
-  #   luminosity: 2922 # pb^-1
   "2022EE":
     luminosity: 20665 # pb^-1
-  # "2022F":
-  #   luminosity: 18423 # pb^-1
-  # "2022G":
-  #   luminosity: 3247 # pb^-1
-  "2022all":
-    luminosity: 28540 # 7875 + 20665 pb^-1
 dbcache: dascache
 samples:
 
-  GluGluToHHTo2B2VTo2L2Nu_node_SM:
-    era: "2022all"
-    type: signal
-    db: das:/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-    cross-section: 1
-    branching-ratio: 0.027669886574221
-    generated-events: genEventSumw
-    legend: 'HH#rightarrow bbl#nu l#nu'
-    split: 9
+  # GluGluToHHTo2B2VTo2L2Nu_node_SM:
+  #   era: "2022"
+  #   type: signal
+  #   # group: "signal"
+  #   db: das:/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+  #   cross-section: 1
+  #   branching-ratio: 0.027669886574221
+  #   generated-events: genEventSumw
+  #   split: -1
 
-  GluGluToHHTo2B2WToLNu2J_node_SM:
-    era: "2022all"
-    type: signal
-    db: das:/GluGluToHHTo2B2WToLNu2J_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
-    cross-section: 1
-    branching-ratio: 0.109369082142029
-    generated-events: genEventSumw
-    legend: 'HH#rightarrow bbqql#nu'
-    # line-color: 4
-    split: 6
+  # GluGluToHHTo2B2VTo2L2Nu_node_SM_EE:
+  #   era: "2022EE"
+  #   type: signal
+  #   # group: "signal"
+  #   db: das:/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+  #   cross-section: 1
+  #   branching-ratio: 0.027669886574221
+  #   generated-events: genEventSumw
+  #   split: -1
+
+  # GluGluToHHTo2B2WToLNu2J_node_SM:
+  #   era: "2022"
+  #   type: signal
+  #   # group: "signal"
+  #   db: das:/GluGluToHHTo2B2WToLNu2J_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+  #   cross-section: 1
+  #   branching-ratio: 0.109369082142029
+  #   generated-events: genEventSumw
+  #   split: -1
+
+  # GluGluToHHTo2B2WToLNu2J_node_SM_EE:
+  #   era: "2022EE"
+  #   type: signal
+  #   # group: "signal"
+  #   db: das:/GluGluToHHTo2B2WToLNu2J_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
+  #   cross-section: 1
+  #   branching-ratio: 0.109369082142029
+  #   generated-events: genEventSumw
+  #   split: -1
 
   Muon_C:
     era: "2022"
     type: data
-    group: "data"
+    group: "Data"
     db: das:/Muon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 80
+    split: -1
 
   Muon_D:
     era: "2022"
     type: data
-    group: "data"
+    group: "Data"
     db: ['das:/Muon/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/Muon/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
     run_range: [357487, 358219]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 48
+    split: -1
     
   Muon_F:
     era: "2022EE"
     type: data
-    group: "data"
+    group: "Data"
     db: das:/Muon/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
     run_range: [360332, 362180]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 256
+    split: -1
 
   Muon_G:
     era: "2022EE"
     type: data
-    group: "data"
+    group: "Data"
     db: das:/Muon/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [362181, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 56
+    split: -1
 
   EGamma_C:
     era: "2022"
     type: data
-    group: "data"
+    group: "Data"
     db: das:/EGamma/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 164
+    split: -1
 
   EGamma_D:
     era: "2022"
     type: data
-    group: "data"
+    group: "Data"
     db: ['das:/EGamma/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD','das:/EGamma/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
     run_range: [357487, 358219]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 59
+    split: -1
 
   EGamma_F:
     era: "2022EE"
     type: data
-    group: "data"
+    group: "Data"
     db: das:/EGamma/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
     run_range: [360332, 362180]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 349
+    split: -1
 
   EGamma_G:
     era: "2022EE"
     type: data
-    group: "data"
+    group: "Data"
     db: das:/EGamma/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [362181, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 57
+    split: -1
 
   MuonEG_C:
     era: "2022"
     type: data
-    group: "data"
+    group: "Data"
     db: das:/MuonEG/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 33
+    split: -1
 
   MuonEG_D:
     era: "2022"
     type: data
-    group: "data"
+    group: "Data"
     db: ['das:/MuonEG/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/MuonEG/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
     run_range: [357487, 358219]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 7
+    split: -1
 
   MuonEG_F:
     era: "2022EE"
     type: data
-    group: "data"
+    group: "Data"
     db: das:/MuonEG/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
     run_range: [360332, 362180]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 99
+    split: -1
 
   MuonEG_G:
     era: "2022EE"
     type: data
-    group: "data"
+    group: "Data"
     db: das:/MuonEG/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [362181, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 22
+    split: -1
 
   DoubleMuon:
     era: "2022"
     type: data
-    group: "data"
+    group: "Data"
     db: das:/DoubleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 4
+    split: -1
 
   SingleMuon:
     era: "2022"
     type: data
-    group: "data"
+    group: "Data"
     db: das:/SingleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-    split: 14
+    split: -1
 
   # bkg #
   TTto2L2Nu:
@@ -172,7 +181,7 @@ samples:
     type: mc
     cross-section: 98.02 # 923.6*(BR)
     generated-events: genEventSumw
-    split: 22
+    split: -1
 
   TTto2L2Nu_EE:
     era: "2022EE"
@@ -181,7 +190,7 @@ samples:
     type: mc
     cross-section: 98.02 
     generated-events: genEventSumw
-    split: 70
+    split: -1
   
   TTtoLNu2Q:
     era: "2022"
@@ -190,7 +199,7 @@ samples:
     type: mc
     cross-section: 405.70 # 923.6*(BR)
     generated-events: genEventSumw
-    split: 67
+    split: -1
 
   TTtoLNu2Q_EE:
     era: "2022EE"
@@ -199,7 +208,7 @@ samples:
     type: mc
     cross-section: 405.70
     generated-events: genEventSumw
-    split: 218
+    split: -1
 
   DY:
     era: "2022"
@@ -208,7 +217,7 @@ samples:
     type: mc
     cross-section: 5659
     generated-events: genEventSumw
-    split: 18
+    split: -1
 
   DY_EE:
     era: "2022EE"
@@ -217,7 +226,7 @@ samples:
     type: mc
     cross-section: 5666
     generated-events: genEventSumw
-    split: 55
+    split: -1
 
   DY10to50:
     era: "2022"
@@ -226,7 +235,7 @@ samples:
     type: mc
     cross-section: 21270
     generated-events: genEventSumw
-    split: 39
+    split: -1
 
   DY10to50_EE:
     era: "2022EE"
@@ -235,7 +244,7 @@ samples:
     type: mc
     cross-section: 2.119e+04
     generated-events: genEventSumw
-    split: 110
+    split: -1
 
   WW:
     era: "2022"
@@ -244,7 +253,7 @@ samples:
     type: mc
     cross-section: 80.18
     generated-events: genEventSumw
-    split: 11
+    split: -1
 
   WW_EE:
     era: "2022EE"
@@ -253,7 +262,7 @@ samples:
     type: mc
     cross-section: 80.26
     generated-events: genEventSumw
-    split: 11
+    split: -1
 
   WZ:
     era: "2022"
@@ -262,7 +271,7 @@ samples:
     type: mc
     cross-section: 29.1
     generated-events: genEventSumw
-    split: 6
+    split: -1
 
   WZ_EE:
     era: "2022EE"
@@ -271,7 +280,7 @@ samples:
     type: mc
     cross-section: 29.1
     generated-events: genEventSumw
-    split: 18
+    split: -1
 
   WJets:
     era: "2022"
@@ -280,7 +289,7 @@ samples:
     type: mc
     cross-section: 68160
     generated-events: genEventSumw
-    split: 45
+    split: -1
 
   WJets_EE:
     era: "2022EE"
@@ -289,7 +298,7 @@ samples:
     type: mc
     cross-section: 69080
     generated-events: genEventSumw
-    split: 161
+    split: -1
 
   ZZ:
     era: "2022"
@@ -298,7 +307,7 @@ samples:
     type: mc
     cross-section: 12.75
     generated-events: genEventSumw
-    split: 2
+    split: -1
 
   ZZ_EE:
     era: "2022EE"
@@ -307,7 +316,7 @@ samples:
     type: mc
     cross-section: 12.75
     generated-events: genEventSumw
-    split: 5
+    split: -1
 
   # TW cross section from: https://cms-talk.web.cern.ch/t/new-jecs-for-run3-prompt-fg-eras/26529
   TbarWplusto2l2nu:
@@ -317,7 +326,7 @@ samples:
     type: mc
     cross-section: 4.668 # xsec(TW) / 2 (since t and tbar is included) x BR(W->l nu)^2 x 2 (since there are two W bosons) = 87.9 / 2 x 0.3259^2 x 2
     generated-events: genEventSumw
-    split: 3
+    split: -1
 
   TbarWplusto2l2nu_EE:
     era: "2022EE"
@@ -326,7 +335,7 @@ samples:
     type: mc
     cross-section: 4.668
     generated-events: genEventSumw
-    split: 8
+    split: -1
 
   TbarWplustoLNu2Q:
     era: "2022"
@@ -335,7 +344,7 @@ samples:
     type: mc
     cross-section: 19.31 # xsec(TW) / 2 (since t and tbar is included) x BR(W->l nu) x BR(W->qq) x 2 (since there are two W bosons) = 87.9 / 2 x 0.3259 x 0.6741 
     generated-events: genEventSumw
-    split: 6
+    split: -1
 
   TbarWplustoLNu2Q_EE:
     era: "2022EE"
@@ -344,7 +353,7 @@ samples:
     type: mc
     cross-section: 19.31
     generated-events: genEventSumw
-    split: 15
+    split: -1
 
   TWminusto2l2nu:
     era: "2022"
@@ -353,7 +362,7 @@ samples:
     type: mc
     cross-section: 4.668
     generated-events: genEventSumw
-    split: 4
+    split: -1
 
   TWminusto2l2nu_EE:
     era: "2022EE"
@@ -362,7 +371,7 @@ samples:
     type: mc
     cross-section: 4.668
     generated-events: genEventSumw
-    split: 8
+    split: -1
 
   TWminustoLNu2Q:
     era: "2022"
@@ -371,7 +380,7 @@ samples:
     type: mc
     cross-section: 19.31
     generated-events: genEventSumw
-    split: 6
+    split: -1
 
   TWminustoLNu2Q_EE:
     era: "2022EE"
@@ -380,7 +389,7 @@ samples:
     type: mc
     cross-section: 19.31
     generated-events: genEventSumw
-    split: 15
+    split: -1
 
 plotIt:
   configuration:
@@ -391,33 +400,35 @@ plotIt:
     margin-top: 0.05
     margin-bottom: 0.15
     luminosity-label: '%1$.2f fb^{-1} (13.6 TeV)'
-    experiment: CMS
-    extra-label: Run 3 (2022) - Work in progress
+    experiment: 'CMS'
+    extra-label: 'Run 3 (2022) - Work in progress'
     error-fill-style: 3154
     error-fill-color: "#ee556270"
     ratio-fit-error-fill-style: 1001
     ratio-fit-error-fill-color: "#aa556270"
     ratio-fit-line-color: "#0B486B"
-    yields-table-align: h
+    yields-table-align: v
   legend:
     position: [0.7, 0.6, 0.91, 0.91]
   groups:
-    data:
-      legend: data
+    signal:
+      legend: 'HH#rightarrow bbl#nu(l#nu / qq)'
+    Data:
+      legend: 'data'
     TTbar:
-      legend: TTbar
+      legend: 'TTbar'
       fill-color: "#99ccff"
     DY:
-      legend: DY
+      legend: 'DY'
       fill-color: "#9FFF33"
     WJets:
-      legend: WJets
+      legend: 'WJets'
       fill-color: "#FFC300"
     VV:
-      legend: VV
+      legend: 'VV'
       fill-color: "#C900FF"
     TW:
-      legend: TW
+      legend: 'TW'
       fill-color: "#FF0000"
   plotdefaults:
     normalized: False
@@ -431,3 +442,4 @@ plotIt:
     ratio-y-axis: '#frac{Data}{MC}'
     ratio-y-axis-range: [0.8, 1.2]
     show-overflow: True
+    blinded-range: [0.5, 0.9]

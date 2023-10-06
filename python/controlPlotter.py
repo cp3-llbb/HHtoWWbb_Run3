@@ -2,12 +2,13 @@
 from bamboo.plots import Plot, CutFlowReport, Skim
 from bamboo.plots import EquidistantBinning as EqBin
 from bamboo import treefunctions as op
-
-import definitions as defs
+from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
 
 from basePlotter import NanoBaseHHWWbb
 from selections import makeDLSelection, makeSLSelection
+import definitions as defs
 
+from itertools import chain
 
 class controlPlotter(NanoBaseHHWWbb):
     """ Class to create control plots and skims"""
@@ -26,6 +27,18 @@ class controlPlotter(NanoBaseHHWWbb):
         # cutflow report
         yields = CutFlowReport("yields", printInLog=True, recursive=True)
         plots.append(yields)
+        
+        yields.add(noSel, 'no selection')
+
+        # Gen Weight and Triggers
+        if self.is_MC:
+            noSel = noSel.refine('genWeight', weight=tree.genWeight, cut=(
+                op.OR(*chain.from_iterable(self.triggersPerPrimaryDataset.values()))))
+        else:
+            noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
+                sample, self.triggersPerPrimaryDataset)])
+        
+        yields.add(noSel, 'trigger sel.')
 
         if self.channel == 'DL':
             # get DL selections
@@ -136,8 +149,13 @@ class controlPlotter(NanoBaseHHWWbb):
             DNNcat3 = DL_resolved_ee.refine("DNNcat3", cut = op.in_range(0.8, output[0], 0.92))
             DNNcat4 = DL_resolved_ee.refine("DNNcat4", cut = op.in_range(0.92, output[0], 1.0))
             
+            yields.add(DNNcat1, 'DNNcat1')
+            yields.add(DNNcat2, 'DNNcat2')
+            yields.add(DNNcat3, 'DNNcat3')
+            yields.add(DNNcat4, 'DNNcat4')
+            
             plots = [
-                Plot.make1D("dnn_score", output[0], DL_resolved_ee, EqBin(40, 0, 1.)),
+                Plot.make1D("dnn_score", output[0], DL_resolved_ee, EqBin(40, 0, 1.), xTitle="DNN Score", plotopts=DLresolvedEE_label),
                 Plot.make1D("DL_resolved_InvM_ee_DNNcat1", op.invariant_mass(self.firstOSElEl[0].p4, self.firstOSElEl[1].p4), DNNcat1, EqBin(
                     100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electrons (GeV/c^{2})", plotopts=DLresolvedEEdnnCat1_label),
                 Plot.make1D("DL_resolved_InvM_ee_DNNcat2", op.invariant_mass(self.firstOSElEl[0].p4, self.firstOSElEl[1].p4), DNNcat2, EqBin(
@@ -491,9 +509,9 @@ class controlPlotter(NanoBaseHHWWbb):
 
                 # fatjet pt
                 Plot.make1D("SL_boosted_fatJet_pt_e", self.ak8BJets[0].pt, SL_boosted_e, EqBin(
-                    400, 200, 1000), title="pT(j)", xTitle="Fatjet p_{T} (GeV/c)", plotopts=SLboostedE_label),
+                    400, 200, 1000), title="pT(j)", xTitle="Fat b-jet p_{T} (GeV/c)", plotopts=SLboostedE_label),
                 Plot.make1D("SL_boosted_fatJet_pt_mu", self.ak8BJets[0].pt, SL_boosted_mu, EqBin(
-                    400, 200, 1000), title="pT(j)", xTitle="Fatjet p_{T} (GeV/c)", plotopts=SLboostedMu_label),
+                    400, 200, 1000), title="pT(j)", xTitle="Fat b-jet p_{T} (GeV/c)", plotopts=SLboostedMu_label),
                 
                 # subjet1 pt
                 Plot.make1D("SL_boosted_subjet1_pt_e", self.ak8BJets[0].subJet1.pt, SL_boosted_e, EqBin(
