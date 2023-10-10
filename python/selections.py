@@ -57,10 +57,10 @@ def makeDLSelection(self, noSel):
     self.firstOSMuMu = MuMuTightSel[0]
     self.firstOSElMu = ElMuTightSel[0]
     
-    # minimum pT cut : at least one dilepton pair with leading lepton above 25 GeV
-    elelSel = noSel.refine('elelptSel', cut=[ptCutElEl(self.firstOSElEl)])
-    mumuSel = noSel.refine('mumuptSel', cut=[ptCutMuMu(self.firstOSMuMu)])
-    elmuSel = noSel.refine('elmuptSel', cut=[ptCutElMu(self.firstOSElMu)])
+    # minimum pT cut : at least one lepton pair with leading lepton above 25 GeV
+    elelPtSel = noSel.refine('elelptSel', cut=[ptCutElEl(self.firstOSElEl)])
+    mumuPtSel = noSel.refine('mumuptSel', cut=[ptCutMuMu(self.firstOSMuMu)])
+    elmuPtSel = noSel.refine('elmuptSel', cut=[ptCutElMu(self.firstOSElMu)])
 
     # low Mll cut : reject events with dilepton mass below 12 GeV
     mllCut = op.AND(lowMllCut(ElElLooseSel), lowMllCut(MuMuLooseSel), lowMllCut(ElMuLooseSel))
@@ -68,9 +68,9 @@ def makeDLSelection(self, noSel):
     # Z-veto : reject events with dileptons of same type with mass around Z peak
     outZCut = op.AND(outZ(ElElLooseSel), outZ(MuMuLooseSel))
 
-    OSoutZelelSel = elelSel.refine('OSoutZelelSel', cut=op.AND(mllCut, outZCut))
-    OSoutZmumuSel = mumuSel.refine('OSoutZmumuSel', cut=op.AND(mllCut, outZCut))
-    OSoutZelmuSel = elmuSel.refine('OSoutZelmuSel', cut=op.AND(mllCut, outZCut))
+    OSoutZelelSel = elelPtSel.refine('OSoutZelelSel', cut=op.AND(mllCut, outZCut))
+    OSoutZmumuSel = mumuPtSel.refine('OSoutZmumuSel', cut=op.AND(mllCut, outZCut))
+    OSoutZelmuSel = elmuPtSel.refine('OSoutZelmuSel', cut=op.AND(mllCut, outZCut))
 
     # di-lepton multiplicity cut
     leptonMultiplicityCut_ee = OSoutZelelSel.refine('dileptonCut_ee', cut=[op.AND(
