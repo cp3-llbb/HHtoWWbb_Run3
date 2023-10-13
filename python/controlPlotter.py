@@ -25,18 +25,24 @@ class controlPlotter(NanoBaseHHWWbb):
         defs.defineObjects(self, tree)
         
         # cutflow report
-        yields = CutFlowReport("yields", printInLog=True, recursive=True)
+        yields = CutFlowReport("yields", recursive=True)
         plots.append(yields)
         
         yields.add(noSel, 'no selection')
-
-        # Gen Weight and Triggers
+        
+        # Gen Weight and
         if self.is_MC:
-            noSel = noSel.refine('genWeight', weight=tree.genWeight, cut=(
+            noSel = noSel.refine('genWeight', weight=tree.genWeight)
+
+        yields.add(noSel, 'MC gen weight')
+
+        # Triggers
+        if self.is_MC:
+            noSel = noSel.refine('trigger',  cut=(
                 op.OR(*chain.from_iterable(self.triggersPerPrimaryDataset.values()))))
         else:
-            noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
-                sample, self.triggersPerPrimaryDataset)])
+            noSel = noSel.refine('trigger', cut=makeMultiPrimaryDatasetTriggerSelection(
+                sample, self.triggersPerPrimaryDataset))
         
         yields.add(noSel, 'trigger sel.')
 
