@@ -62,8 +62,7 @@ samples:
 
   Muon_C:
     era: "2022"
-    type: data
-    group: "data"
+    group: data
     db: das:/Muon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -71,8 +70,7 @@ samples:
 
   Muon_D:
     era: "2022"
-    type: data
-    group: "data"
+    group: data
     db: ['das:/Muon/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/Muon/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
     run_range: [357487, 358219]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -80,8 +78,7 @@ samples:
     
   Muon_F:
     era: "2022EE"
-    type: data
-    group: "data"
+    group: data
     db: das:/Muon/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
     run_range: [360332, 362180]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -89,8 +86,7 @@ samples:
 
   Muon_G:
     era: "2022EE"
-    type: data
-    group: "data"
+    group: data
     db: das:/Muon/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [362181, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -98,8 +94,7 @@ samples:
 
   EGamma_C:
     era: "2022"
-    type: data
-    group: "data"
+    group: data
     db: das:/EGamma/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -107,8 +102,7 @@ samples:
 
   EGamma_D:
     era: "2022"
-    type: data
-    group: "data"
+    group: data
     db: ['das:/EGamma/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD','das:/EGamma/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
     run_range: [357487, 358219]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -116,8 +110,7 @@ samples:
 
   EGamma_F:
     era: "2022EE"
-    type: data
-    group: "data"
+    group: data
     db: das:/EGamma/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
     run_range: [360332, 362180]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -125,8 +118,7 @@ samples:
 
   EGamma_G:
     era: "2022EE"
-    type: data
-    group: "data"
+    group: data
     db: das:/EGamma/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [362181, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -134,8 +126,7 @@ samples:
 
   MuonEG_C:
     era: "2022"
-    type: data
-    group: "data"
+    group: data
     db: das:/MuonEG/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -143,8 +134,7 @@ samples:
 
   MuonEG_D:
     era: "2022"
-    type: data
-    group: "data"
+    group: data
     db: ['das:/MuonEG/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/MuonEG/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
     run_range: [357487, 358219]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -152,8 +142,7 @@ samples:
 
   MuonEG_F:
     era: "2022EE"
-    type: data
-    group: "data"
+    group: data
     db: das:/MuonEG/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
     run_range: [360332, 362180]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -161,8 +150,7 @@ samples:
 
   MuonEG_G:
     era: "2022EE"
-    type: data
-    group: "data"
+    group: data
     db: das:/MuonEG/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [362181, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -170,8 +158,7 @@ samples:
 
   DoubleMuon:
     era: "2022"
-    type: data
-    group: "data"
+    group: data
     db: das:/DoubleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -179,8 +166,7 @@ samples:
 
   SingleMuon:
     era: "2022"
-    type: data
-    group: "data"
+    group: data
     db: das:/SingleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -424,8 +410,8 @@ plotIt:
   legend:
     position: [0.7, 0.6, 0.91, 0.91]
   groups:
-    Data:
-      legend: 'data'
+    data:
+      legend: Data
     TTbar:
       legend: 'TTbar'
       fill-color: "#99ccff"
