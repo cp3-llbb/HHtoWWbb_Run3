@@ -161,7 +161,7 @@ class controlPlotter(NanoBaseHHWWbb):
             yields.add(DNNcat4, 'DNNcat4')
             
             plots.extend([
-                Plot.make1D("dnn_score", output[0], DL_resolved_ee, EqBin(40, 0, 1.), xTitle="DNN Score", plotopts=DLresolvedEE_label),
+                Plot.make1D("dnn_score", output[0], DL_resolved_ee, EqBin(40, 0, 1.), xTitle="DNN Score", plotopts={'labels': [{'text': 'DL resolved EE', 'position': [0.23, 0.87], 'size': 25}], 'blinded-range': [0.25, 0.999]}),
                 Plot.make1D("DL_resolved_InvM_ee_DNNcat1", op.invariant_mass(self.firstOSElEl[0].p4, self.firstOSElEl[1].p4), DNNcat1, EqBin(
                     100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electrons (GeV/c^{2})", plotopts=DLresolvedEEdnnCat1_label),
                 Plot.make1D("DL_resolved_InvM_ee_DNNcat2", op.invariant_mass(self.firstOSElEl[0].p4, self.firstOSElEl[1].p4), DNNcat2, EqBin(
