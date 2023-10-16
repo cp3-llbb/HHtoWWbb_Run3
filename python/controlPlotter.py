@@ -25,18 +25,24 @@ class controlPlotter(NanoBaseHHWWbb):
         defs.defineObjects(self, tree)
         
         # cutflow report
-        yields = CutFlowReport("yields", printInLog=True, recursive=True)
+        yields = CutFlowReport("yields", recursive=True)
         plots.append(yields)
         
         yields.add(noSel, 'no selection')
-
-        # Gen Weight and Triggers
+        
+        # Gen Weight and
         if self.is_MC:
-            noSel = noSel.refine('genWeight', weight=tree.genWeight, cut=(
+            noSel = noSel.refine('genWeight', weight=tree.genWeight)
+
+        yields.add(noSel, 'MC gen weight')
+
+        # Triggers
+        if self.is_MC:
+            noSel = noSel.refine('trigger',  cut=(
                 op.OR(*chain.from_iterable(self.triggersPerPrimaryDataset.values()))))
         else:
-            noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
-                sample, self.triggersPerPrimaryDataset)])
+            noSel = noSel.refine('trigger', cut=makeMultiPrimaryDatasetTriggerSelection(
+                sample, self.triggersPerPrimaryDataset))
         
         yields.add(noSel, 'trigger sel.')
 
@@ -154,8 +160,8 @@ class controlPlotter(NanoBaseHHWWbb):
             yields.add(DNNcat3, 'DNNcat3')
             yields.add(DNNcat4, 'DNNcat4')
             
-            plots = [
-                Plot.make1D("dnn_score", output[0], DL_resolved_ee, EqBin(40, 0, 1.), xTitle="DNN Score", plotopts=DLresolvedEE_label),
+            plots.extend([
+                Plot.make1D("dnn_score", output[0], DL_resolved_ee, EqBin(40, 0, 1.), xTitle="DNN Score", plotopts={'labels': [{'text': 'DL resolved EE', 'position': [0.23, 0.87], 'size': 25}], 'blinded-range': [0.25, 0.999]}),
                 Plot.make1D("DL_resolved_InvM_ee_DNNcat1", op.invariant_mass(self.firstOSElEl[0].p4, self.firstOSElEl[1].p4), DNNcat1, EqBin(
                     100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electrons (GeV/c^{2})", plotopts=DLresolvedEEdnnCat1_label),
                 Plot.make1D("DL_resolved_InvM_ee_DNNcat2", op.invariant_mass(self.firstOSElEl[0].p4, self.firstOSElEl[1].p4), DNNcat2, EqBin(
@@ -164,7 +170,7 @@ class controlPlotter(NanoBaseHHWWbb):
                     100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electrons (GeV/c^{2})", plotopts=DLresolvedEEdnnCat3_label),
                 Plot.make1D("DL_resolved_InvM_ee_DNNcat4", op.invariant_mass(self.firstOSElEl[0].p4, self.firstOSElEl[1].p4), DNNcat4, EqBin(
                     100, 0., 300.), title="InvM(ll)", xTitle="Invariant Mass of electrons (GeV/c^{2})", plotopts=DLresolvedEEdnnCat4_label),
-            ]
+            ])
 
         #############################################################################
         #                                 Plots                                     #
