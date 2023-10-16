@@ -98,10 +98,16 @@ def makeDLSelection(self, noSel):
         'DL_boosted_emu', cut=(op.rng_len(self.ak8BJets) >= 1))
 
     # resolved -> and at least two ak4 jets with at least one b-tagged and no ak8 jets
-    DL_resolved_ee = leptonMultiplicityCut_ee.refine('DL_resolved_1b_ee', cut=(op.AND(op.rng_len(self.ak4Jets) >= 2, op.rng_len(self.ak4BJets) >= 1, op.rng_len(self.ak8Jets) == 0)))
-    DL_resolved_mumu = leptonMultiplicityCut_mumu.refine('DL_resolved_1b_mumu', cut=(op.AND(op.rng_len(self.ak4Jets) >= 2, op.rng_len(self.ak4BJets) >= 1, op.rng_len(self.ak8Jets) == 0)))
-    DL_resolved_emu = leptonMultiplicityCut_emu.refine('DL_resolved_1b_emu', cut=(op.AND(op.rng_len(self.ak4Jets) >= 2, op.rng_len(self.ak4BJets) >= 1, op.rng_len(self.ak8Jets) == 0)))
+    DL_resolved_ee = leptonMultiplicityCut_ee.refine('DL_resolved_ee',
+    cut=(op.AND(op.rng_len(self.ak4Jets) >= 2, op.rng_len(self.ak4BJets) >= 1, op.rng_len(self.ak8Jets) == 0)))
 
+    DL_resolved_mumu = leptonMultiplicityCut_mumu.refine('DL_resolved_mumu',
+    cut=(op.AND(op.rng_len(self.ak4Jets) >= 2, op.rng_len(self.ak4BJets) >= 1, op.rng_len(self.ak8Jets) == 0)))
+
+    DL_resolved_emu = leptonMultiplicityCut_emu.refine('DL_resolved_emu',
+    cut=(op.AND(op.rng_len(self.ak4Jets) >= 2, op.rng_len(self.ak4BJets) >= 1, op.rng_len(self.ak8Jets) == 0)))
+    
+    
     DL_selections = [DL_boosted_ee, DL_boosted_mumu, DL_boosted_emu, DL_resolved_ee, DL_resolved_mumu, DL_resolved_emu]
         
     return DL_selections
