@@ -263,12 +263,12 @@ def defineObjects(self, tree):
     
     # clean jets wrt leptons
     if self.channel == 'DL':
-        self.cleanAk4Jets = cleaningWithRespectToLeadingLeptons(self.tightElectrons, self.tightMuons, 0.4)
-        self.cleanAk8Jets = cleaningWithRespectToLeadingLeptons(self.tightElectrons, self.tightMuons, 0.8)
+        self.cleanAk4Jets = cleaningWithRespectToLeadingLeptons(self.fakeElectrons, self.fakeMuons, 0.4)
+        self.cleanAk8Jets = cleaningWithRespectToLeadingLeptons(self.fakeElectrons, self.fakeMuons, 0.8)
         
     if self.channel == 'SL':
-        self.cleanAk4Jets = cleaningWithRespectToLeadingLepton(self.tightElectrons, self.tightMuons, 0.4)
-        self.cleanAk8Jets = cleaningWithRespectToLeadingLepton(self.tightElectrons, self.tightMuons, 0.8)
+        self.cleanAk4Jets = cleaningWithRespectToLeadingLepton(self.fakeElectrons, self.fakeMuons, 0.4)
+        self.cleanAk8Jets = cleaningWithRespectToLeadingLepton(self.fakeElectrons, self.fakeMuons, 0.8)
     
     self.ak4Jets = op.select(ak4JetsPreSel, self.cleanAk4Jets)
     self.ak4JetsByBtagScore = op.sort(self.ak4Jets, lambda j: -j.btagDeepFlavB)
