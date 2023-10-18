@@ -3,7 +3,7 @@ from bamboo import treefunctions as op
 # helper functions
 
 def labeler(label):
-    return {'labels': [{'text': label, 'position': [0.23, 0.87], 'size': 25}]}
+    return {'labels': [{'text': label, 'position': [0.235, 0.9], 'size': 24}]}
 
 # Lepton functions
 

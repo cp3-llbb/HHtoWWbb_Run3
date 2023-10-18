@@ -420,27 +420,29 @@ plotIt:
     ratio-fit-error-fill-style: 1001
     ratio-fit-error-fill-color: "#aa556270"
     ratio-fit-line-color: "#0B486B"
+    blinded-range-fill-style: 1001
+    blinded-range-fill-color: "#29556270"
     yields-table-align: v
   legend:
-    position: [0.7, 0.6, 0.91, 0.91]
+    position: [0.7, 0.75, 0.91, 0.91]
   groups:
     data:
       legend: Data
     TTbar:
-      legend: 'TTbar'
-      fill-color: "#99ccff"
+      legend: 't#bar{t}'
+      fill-color: "#fff3b0"
     DY:
       legend: 'DY'
-      fill-color: "#9FFF33"
+      fill-color: "#9e2a2b"
     WJets:
       legend: 'WJets'
-      fill-color: "#FFC300"
+      fill-color: "#e09f3e"
     VV:
       legend: 'VV'
-      fill-color: "#C900FF"
+      fill-color: "#540B0E"
     TW:
       legend: 'TW'
-      fill-color: "#FF0000"
+      fill-color: "#335c67"
   plotdefaults:
     normalized: False
     y-axis: Events
@@ -449,9 +451,7 @@ plotIt:
     save-extensions: [pdf]
     show-ratio: True
     sort-by-yields: True
-    legend-columns: 2
+    legend-columns: 4
     ratio-y-axis: '#frac{Data}{MC}'
     ratio-y-axis-range: [0.8, 1.2]
     show-overflow: True
-    blinded-range-fill-style: 1001
-    blinded-range-fill-color: "#29556270"
