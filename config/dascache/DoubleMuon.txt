@@ -1,5 +1,0 @@
-# das:/DoubleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
-root://cms-xrd-global.cern.ch//store/data/Run2022C/DoubleMuon/NANOAOD/PromptNanoAODv10_v1-v1/50000/03dbce72-4887-4164-b63a-7b2eea25abbb.root
-root://cms-xrd-global.cern.ch//store/data/Run2022C/DoubleMuon/NANOAOD/PromptNanoAODv10_v1-v1/50000/734b806e-ff93-4d99-b784-0e3164f2dd4e.root
-root://cms-xrd-global.cern.ch//store/data/Run2022C/DoubleMuon/NANOAOD/PromptNanoAODv10_v1-v1/50000/e3a97f0b-715d-40d3-9763-7a3070a5fe5c.root
-root://cms-xrd-global.cern.ch//store/data/Run2022C/DoubleMuon/NANOAOD/PromptNanoAODv10_v1-v1/50000/aa5a4b71-fd45-45d9-bf26-ea4f2dc42882.root

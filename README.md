@@ -40,8 +40,6 @@ bambooRun -m python/controlPlotter.py config/analysis_2022.yml -o ./outputDir/ -
 ```
 Instead of passing everytime `--envConfig config/cern.ini`, you can copy the content of that file to `~/.config/bamboorc`.
 
-Pass `--mvaSkim` to produce skims for MVA. as well.
-
 then to produce plots, just execute:
 
 ```sh

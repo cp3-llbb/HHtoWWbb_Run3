@@ -1,5 +1,5 @@
 from bamboo.analysismodules import NanoAODModule, HistogramsModule
-from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection, configureJets, configureType1MET
+from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection, configureJets
 from bamboo import treefunctions as op
 from bamboo import treedecorators as td
 
@@ -80,14 +80,6 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         addHLTPath('SingleMuon', 'IsoMu27')
         # DoubleMuon
         addHLTPath('DoubleMuon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
-
-        # Gen Weight and Triggers
-        if self.is_MC:
-            noSel = noSel.refine('genWeight', weight=tree.genWeight, cut=(
-                op.OR(*chain.from_iterable(self.triggersPerPrimaryDataset.values()))))
-        else:
-            noSel = noSel.refine('trigger', cut=[makeMultiPrimaryDatasetTriggerSelection(
-                sample, self.triggersPerPrimaryDataset)])
 
         sources = ["Total"]
         
@@ -192,28 +184,30 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         from bamboo.analysisutils import loadPlotIt
         p_config, samples, _, systematics, legend = loadPlotIt(config, [], eras=self.args.eras[1], workdir=workdir, resultsdir=resultsdir, readCounters=self.readCounters, vetoFileAttributes=self.__class__.CustomSampleAttributes)
         
-        if skims:
-            from bamboo.analysisutils import loadPlotIt
-            from bamboo.root import gbl
-            import pandas as pd
-            import os.path
-            
+        if skims and not self.args.mvaModels:            
             for skim in skims:
-                frames = []
-                for smp in samples:
-                    for cb in (smp.files if hasattr(smp, "files") else [smp]):
-                        tree = cb.tFile.Get(skim.treeName)
-                        if not tree:
-                            print("WARNING: tree %s not found in file %s" % (skim.treeName, cb.tFile.GetName()))
-                            print("         skipping...")
-                        else:
-                            N = tree.GetEntries()
-                            cols = gbl.ROOT.RDataFrame(tree).AsNumpy()
-                            cols["weight"] *= cb.scale
-                            cols["process"] = [smp.name]*len(cols["weight"])
-                            frames.append(pd.DataFrame(cols))
-                df = pd.concat(frames)
-                df["process"] = pd.Categorical(df["process"], categories=pd.unique(df["process"]))
                 pqoutname = os.path.join(resultsdir, f"{skim.name}.parquet")
-                df.to_parquet(pqoutname)
-                print(f"Saved dataframe for skim {skim.name} to {pqoutname}")
+                if os.path.isfile(pqoutname):
+                    print(f"WARNING: dataframe for skim {skim.name} already exists in {resultsdir}")
+                    print("         skipping...")
+                    return
+                else:
+                    from bamboo.root import gbl
+                    import pandas as pd
+                    frames = []
+                    for smp in samples:
+                        for cb in (smp.files if hasattr(smp, "files") else [smp]):
+                            tree = cb.tFile.Get(skim.treeName)
+                            if not tree:
+                                print("WARNING: skim tree %s not found in file %s" % (skim.treeName, cb.tFile.GetName()))
+                                print("         skipping...")
+                            else:
+                                N = tree.GetEntries()
+                                cols = gbl.ROOT.RDataFrame(tree).AsNumpy()
+                                cols["weight"] *= cb.scale
+                                cols["process"] = [smp.name]*len(cols["weight"])
+                                frames.append(pd.DataFrame(cols))
+                    df = pd.concat(frames)
+                    df["process"] = pd.Categorical(df["process"], categories=pd.unique(df["process"]))
+                    df.to_parquet(pqoutname)
+                    print(f"Saved dataframe for skim {skim.name} to {pqoutname}")

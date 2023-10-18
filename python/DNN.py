@@ -1,12 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[17]:
-
-
-import os
 import optparse
-import yaml
 import importlib
 import matplotlib
 import matplotlib.pyplot as plt
@@ -20,9 +15,6 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
-
-
-# In[18]:
 
 
 usage = 'usage: %prog [options]'
@@ -45,8 +37,8 @@ parser.add_option('-o',
 
 ### Parameters of the training ###
 
-#split = "even" 
-split = "odd" 
+split = "even" 
+# split = "odd" 
 # split = even | odd -> on what split to train the model (will be in the name)
 # -> you need one "odd" and one "even" models to be put inside bamboo
 
@@ -77,6 +69,12 @@ input_vars=[
     "ak4bjet1_pt",
     "ak4bjet1_eta",
     "ak4bjet1_phi",
+    'ak4jet1_pt',
+    'ak4jet1_eta',
+    'ak4jet1_phi',
+    'ak4jet2_pt',
+    'ak4jet2_eta',
+    'ak4jet2_phi',
     "leadingLepton_pt",
     "leadingLepton_eta",
     "leadingLepton_phi",
@@ -216,7 +214,7 @@ for irow,tag in enumerate(tags):
         axs[irow,icol].set_title(f"Category = {tag}")
         axs[irow,icol].set_xlabel(column)
         axs[irow,icol].set_yscale('log')
-fig.savefig("event_weights_A.pdf", dpi = 300)
+fig.savefig(f"event_weights_A_{split}.pdf", dpi = 300)
 
 
 # In[33]:
@@ -336,8 +334,8 @@ print (f'Total set      = {df.shape[0]}')
 inputs = keras.Input(shape=(len(input_vars),), name="particles")
 # Preprocessing layer
 from tensorflow.keras.layers.experimental import preprocessing
-normalizer = preprocessing.Normalization(mean     = train_df[input_vars].mean(axis=0),
-                                        variance = train_df[input_vars].var(axis=0),
+normalizer = preprocessing.Normalization(mean     = train_df[input_vars].mean(axis=0).to_numpy(),
+                                        variance = train_df[input_vars].var(axis=0).to_numpy(),
                                         name     = 'Normalization')(inputs)
     # this layer does the preprocessing (x-mu)/std for each input
 # Dense (hidden) layers #
