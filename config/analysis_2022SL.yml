@@ -14,7 +14,7 @@ samples:
     cross-section: 1
     branching-ratio: 0.109369082142029
     generated-events: genEventSumw
-    legend: 'HH#rightarrow bbl#nu qq'
+    legend: 'HH#rightarrow bbqql#nu'
     split: -1
 
   Muon_C:
