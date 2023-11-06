@@ -11,11 +11,12 @@ jobs:
     runs-on: ubuntu-latest
   steps:
     - name: install cvmfs
-      run: wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb &&
-      dpkg -i cvmfs-release-latest_all.deb &&
-      rm -f cvmfs-release-latest_all.deb &&
-      sudo apt-get update &&
-      sudo apt-get install cvmfs
+      run:
+        - wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb &&
+        - dpkg -i cvmfs-release-latest_all.deb &&
+        - rm -f cvmfs-release-latest_all.deb &&
+        - sudo apt-get update &&
+        - sudo apt-get install cvmfs
   test:
     runs-on: ubuntu-latest
 
