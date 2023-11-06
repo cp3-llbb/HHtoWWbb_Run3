@@ -17,6 +17,15 @@ jobs:
          rm -f cvmfs-release-latest_all.deb &&
          sudo apt-get update &&
          sudo apt-get install cvmfs
+         yum install -y libgfortran make atlas
+         source /cvmfs/sft.cern.ch/lcg/views/LCG_102/x86_64-centos7-gcc11-opt/setup.sh
+         python -m venv venv102
+         source venv102/bin/activate
+         python -m pip install flake8 flake8-bugbear
+         flake8 --exclude=venv102/
+         python -m pip install scikit-build
+         python -m pip install git+https://gitlab.cern.ch/cp3-cms/CMSJMECalculators.git
+         python -m pip install . --no-build-isolation # with libtorch
   test:
     runs-on: ubuntu-latest
 
