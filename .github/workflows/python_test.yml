@@ -23,7 +23,7 @@ jobs:
          source venv102/bin/activate
          python -m pip install scikit-build
          python -m pip install git+https://gitlab.cern.ch/cp3-cms/CMSJMECalculators.git
-         python -m pip install . --no-build-isolation # with libtorch
+         python -m pip install .
   test:
     runs-on: ubuntu-latest
 
