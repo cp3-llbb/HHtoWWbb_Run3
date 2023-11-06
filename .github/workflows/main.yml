@@ -1,9 +1,34 @@
-- name: First interaction
-  uses: actions/first-interaction@v1.2.0
-  with:
-    # Token for the repository. Can be passed in using {{ secrets.GITHUB_TOKEN }}
-    repo-token: 
-    # Comment to post on an individual's first issue
-    issue-message: # optional
-    # Comment to post on an individual's first pull request
-    pr-message: # optional
+build_102: # LCG_102, ROOT 6.26, newest version
+  tags: [k8s-cvmfs]
+  stage: build
+  before_script:
+    - yum install -y libgfortran make atlas
+    - source /cvmfs/sft.cern.ch/lcg/views/LCG_102/x86_64-centos7-gcc11-opt/setup.sh
+    - python -m venv venv102
+    - source venv102/bin/activate
+  artifacts:
+    paths: [venv102]
+    expire_in: 30min
+  script:
+    # NOTE 'pre-commit -a' can be used (with all the checks) from LCG_102 on
+    # NOTE see https://sft.its.cern.ch/jira/browse/SPI-1978
+    - python -m pip install flake8 flake8-bugbear
+    - flake8 --exclude=venv102/
+    - python -m pip install scikit-build
+    - python -m pip install git+https://gitlab.cern.ch/cp3-cms/CMSJMECalculators.git
+    - python -m pip install . --no-build-isolation # with libtorch
+test_102:
+  tags: [k8s-cvmfs]
+  stage: test
+  needs: [build_102]
+  before_script:
+    - source /cvmfs/sft.cern.ch/lcg/views/LCG_102/x86_64-centos7-gcc11-opt/setup.sh
+    - source venv102/bin/activate
+  script:
+    - cd tests
+    - pytest --junitxml=report_102.xml
+  artifacts:
+    paths: [tests/report_102.xml]
+    reports:
+      junit: tests/report_102.xml
+
