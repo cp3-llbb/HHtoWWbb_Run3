@@ -23,7 +23,8 @@ jobs:
          source venv102/bin/activate
          python -m pip install scikit-build
          python -m pip install git+https://gitlab.cern.ch/cp3-cms/CMSJMECalculators.git
-         python -m pip install .
+         git clone https://gitlab.cern.ch/cms-analysis/general/bamboo.git
+         python -m pip install ./bamboo
   test:
     runs-on: ubuntu-latest
 
