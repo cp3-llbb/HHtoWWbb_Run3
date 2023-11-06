@@ -1,3 +1,18 @@
+image: gitlab-registry.cern.ch/ci-tools/ci-worker:cc7
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+cache:
+  paths:
+    - .cache/pip
+    - tests/data/JECDatabase
+    - tests/data/JRDatabase
+
 build_102: # LCG_102, ROOT 6.26, newest version
   tags: [k8s-cvmfs]
   stage: build
