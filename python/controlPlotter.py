@@ -630,9 +630,9 @@ class controlPlotter(NanoBaseHHWWbb):
                 
                 # lepton eta
                 Plot.make1D("SL_resolved_lepton_eta_e", self.tightElectrons[0].eta, SL_resolved_e, EqBin(
-                    30, -3, 3), title="lepton pT", xTitle="p_{T} of the lepton (GeV/c)", plotopts=SLresolvedE_label),
+                    30, -3, 3), title="lepton pT", xTitle="\eta of the lepton (GeV/c)", plotopts=SLresolvedE_label),
                 Plot.make1D("SL_resolved_lepton_eta_mu", self.tightMuons[0].eta, SL_resolved_mu, EqBin(
-                    30, -3, 3), title="lepton pT", xTitle="p_{T} of the lepton (GeV/c)", plotopts=SLresolvedMu_label),
+                    30, -3, 3), title="lepton pT", xTitle="\eta of the lepton (GeV/c)", plotopts=SLresolvedMu_label),
             ])
 
         return plots
