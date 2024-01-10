@@ -78,7 +78,7 @@ def elDef(electrons):
         op.abs(el.dz) <= 0.1,
         el.sip3d <= 8,
         el.miniPFRelIso_all <= 0.4,
-        el.mvaNoIso_Fall17V2_WPL,
+        # el.mvaNoIso > < VALUE TO BE DETERMINED >,
         el.lostHits <= 1
     ))
 
