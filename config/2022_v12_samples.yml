@@ -127,7 +127,8 @@ SingleMuon_Run2022C:
   certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
   split: -1
 
-## BKG ###
+
+## MC ###
 
 TTto2L2Nu:
   era: "2022"
