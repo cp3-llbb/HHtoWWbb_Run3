@@ -325,6 +325,14 @@ class controlPlotter(NanoBaseHHWWbb):
                     3, 0, 3), title="N(el)", xTitle="Number of electrons", plotopts=DLboostedMuMu_label),
                 Plot.make1D("DL_boosted_nMuons_emu", op.rng_len(self.tightMuons), DL_boosted_emu, EqBin(
                     3, 0, 3), title="N(el)", xTitle="Number of electrons", plotopts=DLboostedEMU_label),
+
+                # pt difference between leading and subleading lepton
+                Plot.make1D("DL_boosted_leadingLepton_pt_minus_subleadingLepton_pt_ee", self.firstOSElEl[0].pt - self.firstOSElEl[1].pt, DL_boosted_ee, EqBin(
+                    100, -50, 200), title="pT(l1)-pT(l2)", xTitle="p_{T} difference between leading and subleading lepton (GeV/c)", plotopts=DLboostedEE_label),
+                Plot.make1D("DL_boosted_leadingLepton_pt_minus_subleadingLepton_pt_mumu", self.firstOSMuMu[0].pt - self.firstOSMuMu[1].pt, DL_boosted_mumu, EqBin(
+                    100, -50, 200), title="pT(l1)-pT(l2)", xTitle="p_{T} difference between leading and subleading lepton (GeV/c)", plotopts=DLboostedMuMu_label),
+                Plot.make1D("DL_boosted_leadingLepton_pt_minus_subleadingLepton_pt_emu", op.switch((self.firstOSElMu[0].pt >= self.firstOSElMu[1].pt), self.firstOSElMu[0].pt - self.firstOSElMu[1].pt, self.firstOSElMu[1].pt - self.firstOSElMu[0].pt), DL_boosted_emu, EqBin(
+                    100, -50, 200), title="pT(l1)-pT(l2)", xTitle="p_{T} difference between leading and subleading lepton (GeV/c)", plotopts=DLboostedEMU_label),
                 
                 #########################################
                 ######                             ######
@@ -630,9 +638,9 @@ class controlPlotter(NanoBaseHHWWbb):
                 
                 # lepton eta
                 Plot.make1D("SL_resolved_lepton_eta_e", self.tightElectrons[0].eta, SL_resolved_e, EqBin(
-                    30, -3, 3), title="lepton pT", xTitle="p_{T} of the lepton (GeV/c)", plotopts=SLresolvedE_label),
+                    30, -3, 3), title="lepton pT", xTitle="\eta of the lepton (GeV/c)", plotopts=SLresolvedE_label),
                 Plot.make1D("SL_resolved_lepton_eta_mu", self.tightMuons[0].eta, SL_resolved_mu, EqBin(
-                    30, -3, 3), title="lepton pT", xTitle="p_{T} of the lepton (GeV/c)", plotopts=SLresolvedMu_label),
+                    30, -3, 3), title="lepton pT", xTitle="\eta of the lepton (GeV/c)", plotopts=SLresolvedMu_label),
             ])
 
         return plots

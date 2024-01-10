@@ -7,6 +7,24 @@ on:
     branches:
       - "main"
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install cvmfs
+        run:
+         wget https://ecsft.cern.ch/dist/cvmfs/cvmfs-release/cvmfs-release-latest_all.deb &&
+         sudo dpkg -i cvmfs-release-latest_all.deb &&
+         rm -f cvmfs-release-latest_all.deb &&
+         sudo apt-get update &&
+         sudo apt-get install cvmfs
+         yum install -y libgfortran make atlas
+         source /cvmfs/sft.cern.ch/lcg/views/LCG_102/x86_64-centos7-gcc11-opt/setup.sh
+         python -m venv venv102
+         source venv102/bin/activate
+         python -m pip install scikit-build
+         python -m pip install git+https://gitlab.cern.ch/cp3-cms/CMSJMECalculators.git
+         git clone https://gitlab.cern.ch/cms-analysis/general/bamboo.git
+         python -m pip install ./bamboo
   test:
     runs-on: ubuntu-latest
 

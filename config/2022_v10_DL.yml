@@ -13,9 +13,9 @@ samples:
     # group: "signal"
     # db: das:/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
     files: # dataset above is split half between pre/post EE acc. to Nevents. 200k events here
-      - root://cms-xrd-global.cern.ch///store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/130000/411D311B-B83F-CB45-AE96-695E98944F7C.root
-      - root://cms-xrd-global.cern.ch///store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/120000/5976729F-96C0-174E-9E88-F76379ED6F0F.root
-      - root://cms-xrd-global.cern.ch///store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/120000/1DC1E8EF-B7D9-9C48-92B5-EE14557BD8A1.root
+      - /storage/data/cms/store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/130000/411D311B-B83F-CB45-AE96-695E98944F7C.root
+      - /storage/data/cms/store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/120000/5976729F-96C0-174E-9E88-F76379ED6F0F.root
+      - /storage/data/cms/store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/120000/1DC1E8EF-B7D9-9C48-92B5-EE14557BD8A1.root
     cross-section: 1
     branching-ratio: 0.027669886574221
     generated-events: genEventSumw
@@ -28,12 +28,12 @@ samples:
   #   # group: "signal"
   #   # db: das:/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/RunIIAutumn18NanoAODv7-Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/NANOAODSIM
   #   files: # 180k events here
-  #     - root://cms-xrd-global.cern.ch///store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/110000/50A82A39-B4DB-794D-A722-20C74AD25416.root
-  #     - root://cms-xrd-global.cern.ch///store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/260000/800190D8-C654-8548-91CE-9A317DB8D0A2.root
-  #     - root://cms-xrd-global.cern.ch///store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/250000/443D3E2B-D577-3D4B-9711-DA99C5D397E7.root
-  #     - root://cms-xrd-global.cern.ch///store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/250000/BC04AEB3-45BC-9E43-9987-4F6DBCB3F497.root
-  #     - root://cms-xrd-global.cern.ch///store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/120000/B3456819-5134-794D-BEA1-D988D2DD9F85.root
-  #     - root://cms-xrd-global.cern.ch///store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/260000/6E58E1EC-D66D-EB4C-BBFB-36BB33ABFC70.root
+  #     - /storage/data/cms/store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/120000/B3456819-5134-794D-BEA1-D988D2DD9F85.root
+  #     - /storage/data/cms/store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/110000/50A82A39-B4DB-794D-A722-20C74AD25416.root
+  #     - /storage/data/cms/store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/260000/800190D8-C654-8548-91CE-9A317DB8D0A2.root
+  #     - /storage/data/cms/store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/250000/443D3E2B-D577-3D4B-9711-DA99C5D397E7.root
+  #     - /storage/data/cms/store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/250000/BC04AEB3-45BC-9E43-9987-4F6DBCB3F497.root
+  #     - /storage/data/cms/store/mc/RunIIAutumn18NanoAODv7/GluGluToHHTo2B2VTo2L2Nu_node_SM_TuneCP5_PSWeights_13TeV-madgraph-pythia8/NANOAODSIM/Nano02Apr2020_102X_upgrade2018_realistic_v21-v1/260000/6E58E1EC-D66D-EB4C-BBFB-36BB33ABFC70.root
   #   cross-section: 1
   #   branching-ratio: 0.027669886574221
   #   generated-events: genEventSumw
@@ -62,8 +62,8 @@ samples:
 
   Muon_C:
     era: "2022"
-    group: data
     type: data
+    group: "data"
     db: das:/Muon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -71,8 +71,8 @@ samples:
 
   Muon_D:
     era: "2022"
-    group: data
     type: data
+    group: "data"
     db: ['das:/Muon/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/Muon/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
     run_range: [357487, 358219]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -80,8 +80,8 @@ samples:
     
   Muon_F:
     era: "2022EE"
-    group: data
     type: data
+    group: "data"
     db: das:/Muon/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
     run_range: [360332, 362180]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -89,8 +89,8 @@ samples:
 
   Muon_G:
     era: "2022EE"
-    group: data
     type: data
+    group: "data"
     db: das:/Muon/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [362181, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -98,8 +98,8 @@ samples:
 
   EGamma_C:
     era: "2022"
-    group: data
     type: data
+    group: "data"
     db: das:/EGamma/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -107,8 +107,8 @@ samples:
 
   EGamma_D:
     era: "2022"
-    group: data
     type: data
+    group: "data"
     db: ['das:/EGamma/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD','das:/EGamma/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
     run_range: [357487, 358219]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -116,8 +116,8 @@ samples:
 
   EGamma_F:
     era: "2022EE"
-    group: data
     type: data
+    group: "data"
     db: das:/EGamma/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
     run_range: [360332, 362180]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -125,8 +125,8 @@ samples:
 
   EGamma_G:
     era: "2022EE"
-    group: data
     type: data
+    group: "data"
     db: das:/EGamma/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [362181, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -134,8 +134,8 @@ samples:
 
   MuonEG_C:
     era: "2022"
-    group: data
     type: data
+    group: "data"
     db: das:/MuonEG/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -143,8 +143,8 @@ samples:
 
   MuonEG_D:
     era: "2022"
-    group: data
     type: data
+    group: "data"
     db: ['das:/MuonEG/Run2022D-PromptNanoAODv10_v1-v1/NANOAOD', 'das:/MuonEG/Run2022D-PromptNanoAODv10_v2-v1/NANOAOD']
     run_range: [357487, 358219]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -152,8 +152,8 @@ samples:
 
   MuonEG_F:
     era: "2022EE"
-    group: data
     type: data
+    group: "data"
     db: das:/MuonEG/Run2022F-PromptNanoAODv10_v1-v2/NANOAOD
     run_range: [360332, 362180]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -161,8 +161,8 @@ samples:
 
   MuonEG_G:
     era: "2022EE"
-    group: data
     type: data
+    group: "data"
     db: das:/MuonEG/Run2022G-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [362181, 362760]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -170,8 +170,8 @@ samples:
 
   DoubleMuon:
     era: "2022"
-    group: data
     type: data
+    group: "data"
     db: das:/DoubleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -179,8 +179,8 @@ samples:
 
   SingleMuon:
     era: "2022"
-    group: data
     type: data
+    group: "data"
     db: das:/SingleMuon/Run2022C-PromptNanoAODv10_v1-v1/NANOAOD
     run_range: [355794, 357486]
     certified_lumi_file: https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
@@ -426,8 +426,8 @@ plotIt:
   legend:
     position: [0.7, 0.75, 0.91, 0.91]
   groups:
-    data:
-      legend: Data
+    Data:
+      legend: 'data'
     TTbar:
       legend: 't#bar{t}'
       fill-color: "#fff3b0"

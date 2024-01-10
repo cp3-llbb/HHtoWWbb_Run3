@@ -78,7 +78,7 @@ def elDef(electrons):
         op.abs(el.dz) <= 0.1,
         el.sip3d <= 8,
         el.miniPFRelIso_all <= 0.4,
-        # el.mvaNoIso >= 0.5,  # this should mean loose WP # commented out for Run-2 HH signal
+        # el.mvaNoIso > < VALUE TO BE DETERMINED >,
         el.lostHits <= 1
     ))
 
@@ -108,7 +108,7 @@ def elFakeSel(electrons):
         ),
         el.hoe <= 0.10,
         el.eInvMinusPInv >= -0.04,
-        # op.OR(el.mvaTTH >= 0.30, op.AND(el.jetRelIso < 0.7, el.mvaNoIso_WP90)), # commented out for Run-2 HH signal
+        op.OR(el.mvaTTH >= 0.30, op.AND(el.jetRelIso < 0.7, el.mvaNoIso_WP90)),
         op.switch(
             el.mvaTTH < 0.30,
             lepton_associatedJetLessThanTightBtag(el),
@@ -241,7 +241,7 @@ def defineObjects(self, tree):
     
     # lepton definitions sorted by their cone-pt
     self.muons = op.sort(muonDef(tree.Muon), lambda mu: -self.muon_conept[mu.idx])
-    self.electrons = op.sort(elDef(tree.Electron), lambda el: -self.electron_conept[el.idx])
+    self.electrons = op.sort(elDef(tree.Electron), lambda el: -self.electron_conept[el.idx]) # can be liberated from 'self' ?
 
     # cleaning electrons wrt muons
     self.clElectrons = cleanElectrons(self.electrons, self.muons)
