@@ -7,7 +7,7 @@ Muon_Run2022C:
   db: das:/Muon/Run2022C-22Sep2023-v1/NANOAOD
   run_range: &runs_22C [355794, 357486]
   certified_lumi_file: &lumi_cert_22 https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-  split: -20
+  split: &nsplit -2
 
 Muon_Run2022D:
   era: "2022"
@@ -16,7 +16,7 @@ Muon_Run2022D:
   db: das:/Muon/Run2022D-22Sep2023-v1/NANOAOD
   run_range: &runs_22D [357487, 359021]
   certified_lumi_file: *lumi_cert_22
-  split: -20
+  split: *nsplit
 
 Muon_Run2022F:
   era: "2022EE"
@@ -25,7 +25,7 @@ Muon_Run2022F:
   db: das:/Muon/Run2022F-22Sep2023-v2/NANOAOD
   run_range: &runs_22F [360332, 362180]
   certified_lumi_file: *lumi_cert_22
-  split: -20
+  split: *nsplit
 
 Muon_Run2022G:
   era: "2022EE"
@@ -34,7 +34,7 @@ Muon_Run2022G:
   db: das:/Muon/Run2022G-22Sep2023-v1/NANOAOD
   run_range: &runs_22G [362350, 362760]
   certified_lumi_file: *lumi_cert_22
-  split: -20
+  split: *nsplit
 
 EGamma_Run2022C:
   era: "2022"
@@ -43,7 +43,7 @@ EGamma_Run2022C:
   db: das:/EGamma/Run2022C-22Sep2023-v1/NANOAOD
   run_range: *runs_22C
   certified_lumi_file: *lumi_cert_22
-  split: -20
+  split: *nsplit
 
 EGamma_Run2022D:
   era: "2022"
@@ -52,7 +52,7 @@ EGamma_Run2022D:
   db: das:/EGamma/Run2022D-22Sep2023-v1/NANOAOD
   run_range: *runs_22D
   certified_lumi_file: *lumi_cert_22
-  split: -20
+  split: *nsplit
 
 EGamma_Run2022F:
   era: "2022EE"
@@ -61,7 +61,7 @@ EGamma_Run2022F:
   db: das:/EGamma/Run2022F-22Sep2023-v1/NANOAOD
   run_range: *runs_22F
   certified_lumi_file: *lumi_cert_22
-  split: -20
+  split: *nsplit
 
 EGamma_Run2022G:
   era: "2022EE"
@@ -70,7 +70,7 @@ EGamma_Run2022G:
   db: das:/EGamma/Run2022G-22Sep2023-v2/NANOAOD
   run_range: *runs_22G
   certified_lumi_file: *lumi_cert_22
-  split: -20
+  split: *nsplit
 
 MuonEG_Run2022C:
   era: "2022"
@@ -79,7 +79,7 @@ MuonEG_Run2022C:
   db: das:/MuonEG/Run2022C-22Sep2023-v1/NANOAOD
   run_range: *runs_22C
   certified_lumi_file: *lumi_cert_22
-  split: -20
+  split: *nsplit
 
 MuonEG_Run2022D:
   era: "2022"
@@ -88,7 +88,7 @@ MuonEG_Run2022D:
   db: das:/MuonEG/Run2022D-22Sep2023-v1/NANOAOD
   run_range: *runs_22D
   certified_lumi_file: *lumi_cert_22
-  split: -20
+  split: *nsplit
 
 MuonEG_Run2022F:
   era: "2022EE"
@@ -97,7 +97,7 @@ MuonEG_Run2022F:
   db: das:/MuonEG/Run2022F-22Sep2023-v1/NANOAOD
   run_range: *runs_22F
   certified_lumi_file: *lumi_cert_22
-  split: -20
+  split: *nsplit
 
 MuonEG_Run2022G:
   era: "2022EE"
@@ -106,7 +106,7 @@ MuonEG_Run2022G:
   db: das:/MuonEG/Run2022G-22Sep2023-v1/NANOAOD
   run_range: *runs_22G
   certified_lumi_file: *lumi_cert_22
-  split: -20
+  split: *nsplit
 
 DoubleMuon_Run2022C:
   era: "2022"
@@ -115,7 +115,7 @@ DoubleMuon_Run2022C:
   db: das:/DoubleMuon/Run2022C-22Sep2023-v1/NANOAOD
   run_range: *runs_22C
   certified_lumi_file: *lumi_cert_22
-  split: -20
+  split: *nsplit
 
 SingleMuon_Run2022C:
   era: "2022"
@@ -124,7 +124,7 @@ SingleMuon_Run2022C:
   db: das:/SingleMuon/Run2022C-22Sep2023-v1/NANOAOD
   run_range: *runs_22C
   certified_lumi_file: *lumi_cert_22
-  split: -20
+  split: *nsplit
 
 ## MC ###
 
@@ -144,7 +144,7 @@ TTto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8:
   group: "TTbar"
   cross-section: 98.036113
   generated-events: genEventSumw
-  split: -20
+  split: *nsplit
 
 TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8:
   dbs:
@@ -162,7 +162,7 @@ TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8:
   group: "TTbar"
   cross-section: 405.74553
   generated-events: genEventSumw
-  split: -20
+  split: *nsplit
 
 DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8:
   dbs:
@@ -172,7 +172,7 @@ DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8:
   group: "DY"
   cross-section: 5659
   generated-events: genEventSumw
-  split: -20
+  split: *nsplit
 
 DYto2L-2Jets_MLL-10to50_TuneCP5_13p6TeV_amcatnloFXFX-pythia8:
   dbs:
@@ -192,7 +192,7 @@ WW_TuneCP5_13p6TeV_pythia8:
   group: "VV"
   cross-section: 80.18
   generated-events: genEventSumw
-  split: -20
+  split: *nsplit
 
 WZ_TuneCP5_13p6TeV_pythia8:
   dbs:
@@ -202,7 +202,7 @@ WZ_TuneCP5_13p6TeV_pythia8:
   group: "VV"
   cross-section: 29.1
   generated-events: genEventSumw
-  split: -20
+  split: *nsplit
 
 WtoLNu-2Jets_TuneCP5_13p6TeV_amcatnloFXFX-pythia8:
   dbs:
@@ -222,7 +222,7 @@ ZZ_TuneCP5_13p6TeV_pythia8:
   group: "VV"
   cross-section: 12.75
   generated-events: genEventSumw
-  split: -20
+  split: *nsplit
 
 # TW cross section from: https://cms-talk.web.cern.ch/t/new-jecs-for-run3-prompt-fg-eras/26529
 TbarWplusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8:
@@ -241,7 +241,7 @@ TbarWplusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8:
   group: "TW"
   cross-section: 4.6651009 # xsec(TW) / 2 (since t and tbar is included) x BR(W->l nu)^2 x 2 (since there are two W bosons) = 87.9 / 2 x 0.3259^2 x 2
   generated-events: genEventSumw
-  split: -20
+  split: *nsplit
 
 TbarWplustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8:
   dbs:
@@ -259,7 +259,7 @@ TbarWplustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8:
   group: "TW"
   cross-section: 19.307618 # xsec(TW) / 2 (since t and tbar is included) x BR(W->l nu) x BR(W->qq) x 2 (since there are two W bosons) = 87.9 / 2 x 0.3259 x 0.6741
   generated-events: genEventSumw
-  split: -20
+  split: *nsplit
 
 TWminusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8:
   dbs:
@@ -277,7 +277,7 @@ TWminusto2L2Nu_TuneCP5_13p6TeV_powheg-pythia8:
   group: "TW"
   cross-section: 4.6651009
   generated-events: genEventSumw
-  split: -20
+  split: *nsplit
 
 TWminustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8:
   dbs:
@@ -295,4 +295,4 @@ TWminustoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8:
   group: "TW"
   cross-section: 19.307618
   generated-events: genEventSumw
-  split: -20
+  split: *nsplit
