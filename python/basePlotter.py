@@ -3,8 +3,12 @@ from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection, config
 from bamboo import treefunctions as op
 from bamboo import treedecorators as td
 
-from itertools import chain
 import os
+import yaml
+from itertools import chain
+
+import utils
+
 
 class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
     def __init__(self, args):
@@ -21,6 +25,21 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                             dest="mvaModels",
                             type=str,
                             help="Path to MVA models and Evaluate DNN")
+        parser.add_argument("--samples", nargs='*',
+                            required=True, help="Sample template YML file")
+
+    def customizeAnalysisCfg(self, analysisCfg):
+        # fill sample template using JSON files
+        if self.args.samples:
+            eras = self.args.eras[1]
+            samples = {}
+            # make sure we use absolute paths as this argument will be used by the worker jobs
+            self.args.samples = [os.path.abspath(p) for p in self.args.samples]
+            for tmpPath in self.args.samples:
+                with open(tmpPath) as f_:
+                    template = yaml.load(f_, Loader=yaml.SafeLoader)
+                    samples.update(utils.fillSampleTemplate(template, eras))
+            analysisCfg["samples"] = samples
 
     def prepareTree(self, tree, sample=None, sampleCfg=None, backend=None):
         def isMC():
@@ -49,12 +68,15 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             groups = ["HLT_", "MET_", "RawMET_"]
             collections = ["nElectron", "nJet",
                            "nMuon", "nFatJet", "nSubJet", "nTau"]
-            mcCollections = ["nGenDressedLepton", "nGenJet", "nGenPart", "nGenJetAK8", "nSubGenJetAK8"]
+            mcCollections = ["nGenDressedLepton", "nGenJet",
+                             "nGenPart", "nGenJetAK8", "nSubGenJetAK8"]
             varReaders = []
             if isMC:
                 varReaders.append(td.CalcCollectionsGroups(Jet=("pt", "mass")))
-                varReaders.append(td.CalcCollectionsGroups(FatJet=("pt", "mass")))
-                varReaders.append(td.CalcCollectionsGroups(GenJet=("pt", "mass")))
+                varReaders.append(
+                    td.CalcCollectionsGroups(FatJet=("pt", "mass")))
+                varReaders.append(
+                    td.CalcCollectionsGroups(GenJet=("pt", "mass")))
                 varReaders.append(td.CalcCollectionsGroups(MET=("pt", "phi")))
                 return td.NanoAODDescription(groups=groups, collections=collections + mcCollections, systVariations=varReaders)
             else:
@@ -82,7 +104,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         addHLTPath('DoubleMuon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
 
         sources = ["Total"]
-        
+
         if sampleCfg['type'] == 'mc':
             JECTagDatabase = {"2022": "Winter22Run3_V2_MC",
                               "2022EE": "Summer22EEPrompt22_V1_MC"}
@@ -90,29 +112,29 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                               "2022EE": "Summer22EEPrompt22_JRV1_MC"}
             if era in JECTagDatabase.keys():
                 configureJets(
-                    variProxy               = tree._Jet,
-                    jetType                 = "AK4PFPuppi",
-                    jec                     = JECTagDatabase[era],
-                    smear                   = JERTagDatabase[era], # only for MC
-                    jecLevels               = "default",
-                    jesUncertaintySources   = sources,
-                    mayWriteCache           = self.args.distributed != "worker",
-                    isMC                    = self.is_MC,
-                    backend                 = backend,
-                    uName                   = sample
-                    )
+                    variProxy=tree._Jet,
+                    jetType="AK4PFPuppi",
+                    jec=JECTagDatabase[era],
+                    smear=JERTagDatabase[era],  # only for MC
+                    jecLevels="default",
+                    jesUncertaintySources=sources,
+                    mayWriteCache=self.args.distributed != "worker",
+                    isMC=self.is_MC,
+                    backend=backend,
+                    uName=sample
+                )
                 configureJets(
-                    variProxy               = tree._FatJet,
-                    jetType                 = "AK8PFPuppi",
-                    jec                     = JECTagDatabase[era],
-                    smear                   = JERTagDatabase[era], # only for MC
-                    jecLevels               = "default",
-                    jesUncertaintySources   = sources,
-                    mayWriteCache           = self.args.distributed != "worker",
-                    isMC                    = self.is_MC,
-                    backend                 = backend,
-                    uName                   = sample
-                    )
+                    variProxy=tree._FatJet,
+                    jetType="AK8PFPuppi",
+                    jec=JECTagDatabase[era],
+                    smear=JERTagDatabase[era],  # only for MC
+                    jecLevels="default",
+                    jesUncertaintySources=sources,
+                    mayWriteCache=self.args.distributed != "worker",
+                    isMC=self.is_MC,
+                    backend=backend,
+                    uName=sample
+                )
         if sampleCfg['type'] == 'data':
             JECTagDatabase = {"2022C": "Winter22Run3_RunC_V2_DATA",
                               "2022D": "Winter22Run3_RunD_V2_DATA",
@@ -121,29 +143,29 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             for era in JECTagDatabase.keys():
                 if era in sampleCfg['db'] or era in sampleCfg['db'][0]:
                     configureJets(
-                        variProxy               = tree._Jet,
-                        jetType                 = "AK4PFPuppi",
-                        jec                     = JECTagDatabase[era],
-                        jecLevels               = "default",
-                        jesUncertaintySources   = sources,
-                        mayWriteCache           = self.args.distributed != "worker",
-                        isMC                    = self.is_MC,
-                        backend                 = backend,
-                        uName                   = sample
-                        )
+                        variProxy=tree._Jet,
+                        jetType="AK4PFPuppi",
+                        jec=JECTagDatabase[era],
+                        jecLevels="default",
+                        jesUncertaintySources=sources,
+                        mayWriteCache=self.args.distributed != "worker",
+                        isMC=self.is_MC,
+                        backend=backend,
+                        uName=sample
+                    )
                     configureJets(
-                        variProxy               = tree._FatJet,
-                        jetType                 = "AK8PFPuppi",
-                        jec                     = JECTagDatabase[era],
-                        jecLevels               = "default",
-                        jesUncertaintySources   = sources,
-                        mayWriteCache           = self.args.distributed != "worker",
-                        isMC                    = self.is_MC,
-                        backend                 = backend,
-                        uName                   = sample
-                        )
+                        variProxy=tree._FatJet,
+                        jetType="AK8PFPuppi",
+                        jec=JECTagDatabase[era],
+                        jecLevels="default",
+                        jesUncertaintySources=sources,
+                        mayWriteCache=self.args.distributed != "worker",
+                        isMC=self.is_MC,
+                        backend=backend,
+                        uName=sample
+                    )
         return tree, noSel, backend, lumiArgs
-        
+
     def postProcess(self, taskList, config=None, workdir=None, resultsdir=None):
         """ Postprocess: run plotIt
 
@@ -152,9 +174,11 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         and then plotIt is executed
         """
         if not self.plotList:
-            self.plotList = self.getPlotList(resultsdir=resultsdir, config=config)
+            self.plotList = self.getPlotList(
+                resultsdir=resultsdir, config=config)
         from bamboo.plots import Plot, DerivedPlot, CutFlowReport
-        plotList_cutflowreport = [ap for ap in self.plotList if isinstance(ap, CutFlowReport)]
+        plotList_cutflowreport = [
+            ap for ap in self.plotList if isinstance(ap, CutFlowReport)]
         plotList_plotIt = [ap for ap in self.plotList
                            if (isinstance(ap, Plot) or isinstance(ap, DerivedPlot))
                            and len(ap.binnings) == 1]
@@ -175,20 +199,23 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 readCounters=self.readCounters, plotDefaults=self.plotDefaults,
                 vetoFileAttributes=self.__class__.CustomSampleAttributes)
             runPlotIt(
-                cfgName, workdir=workdir, plotIt=self.args.plotIt, eras=(eraMode, eras),
+                cfgName, workdir=workdir, plotIt=self.args.plotIt, eras=(
+                    eraMode, eras),
                 verbose=self.args.verbose)
-        
+
         from bamboo.plots import Skim
         skims = [ap for ap in self.plotList if isinstance(ap, Skim)]
 
         from bamboo.analysisutils import loadPlotIt
-        p_config, samples, _, systematics, legend = loadPlotIt(config, [], eras=self.args.eras[1], workdir=workdir, resultsdir=resultsdir, readCounters=self.readCounters, vetoFileAttributes=self.__class__.CustomSampleAttributes)
-        
-        if skims and not self.args.mvaModels:            
+        p_config, samples, _, systematics, legend = loadPlotIt(
+            config, [], eras=self.args.eras[1], workdir=workdir, resultsdir=resultsdir, readCounters=self.readCounters, vetoFileAttributes=self.__class__.CustomSampleAttributes)
+
+        if skims and not self.args.mvaModels:
             for skim in skims:
                 pqoutname = os.path.join(resultsdir, f"{skim.name}.parquet")
                 if os.path.isfile(pqoutname):
-                    print(f"WARNING: dataframe for skim {skim.name} already exists in {resultsdir}")
+                    print(
+                        f"WARNING: dataframe for skim {skim.name} already exists in {resultsdir}")
                     print("         skipping...")
                     return
                 else:
@@ -199,15 +226,19 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                         for cb in (smp.files if hasattr(smp, "files") else [smp]):
                             tree = cb.tFile.Get(skim.treeName)
                             if not tree:
-                                print("WARNING: skim tree %s not found in file %s" % (skim.treeName, cb.tFile.GetName()))
+                                print("WARNING: skim tree %s not found in file %s" % (
+                                    skim.treeName, cb.tFile.GetName()))
                                 print("         skipping...")
                             else:
                                 N = tree.GetEntries()
                                 cols = gbl.ROOT.RDataFrame(tree).AsNumpy()
                                 cols["weight"] *= cb.scale
-                                cols["process"] = [smp.name]*len(cols["weight"])
+                                cols["process"] = [smp.name] * \
+                                    len(cols["weight"])
                                 frames.append(pd.DataFrame(cols))
                     df = pd.concat(frames)
-                    df["process"] = pd.Categorical(df["process"], categories=pd.unique(df["process"]))
+                    df["process"] = pd.Categorical(
+                        df["process"], categories=pd.unique(df["process"]))
                     df.to_parquet(pqoutname)
-                    print(f"Saved dataframe for skim {skim.name} to {pqoutname}")
+                    print(
+                        f"Saved dataframe for skim {skim.name} to {pqoutname}")
