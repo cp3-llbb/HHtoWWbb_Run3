@@ -7,6 +7,7 @@ from itertools import chain
 import utils
 
 from bamboo import treefunctions as op
+from bamboo import treedecorators as td
 from bamboo.analysismodules import NanoAODModule, HistogramsModule
 from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
 
@@ -28,15 +29,20 @@ JERTagDatabase = {
     "2022EE": "Summer22EEPrompt22_JRV1_MC",
 }
 
-jsonFilePathBase = "/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/JME/"
+jsonPathBase = "/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/"
 
 JSONFiles = {
     "2022": {
-        "AK4": jsonFilePathBase + "2022_Summer22/jet_jerc.json.gz",
-        "AK8": jsonFilePathBase + "2022_Summer22/fatJet_jerc.json.gz"},
+        "AK4": jsonPathBase + "JME/2022_Summer22/jet_jerc.json.gz",
+        "AK8": jsonPathBase + "JME/2022_Summer22/fatJet_jerc.json.gz"},
     "2022EE": {
-        "AK4": jsonFilePathBase + "2022_Summer22EE/jet_jerc.json.gz",
-        "AK8": jsonFilePathBase + "2022_Summer22EE/fatJet_jerc.json.gz"},
+        "AK4": jsonPathBase + "JME/2022_Summer22EE/jet_jerc.json.gz",
+        "AK8": jsonPathBase + "JME/2022_Summer22EE/fatJet_jerc.json.gz"},
+}
+
+BTV_SF_JSONFiles = {
+    "2022": jsonPathBase + "BTV/2022_Summer22/btagging.json.gz",
+    "2022EE": jsonPathBase + "BTV/2022_Summer22EE/btagging.json.gz",
 }
 
 
@@ -174,6 +180,13 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         cmJMEArgs.update({"jecSubjet": jecTag, })
         cmJMEArgs.update({"jsonFileSubjet": JSONFiles[era]["AK4"], })
         configureJets(tree._FatJet, jetType="AK8PFPuppi", **cmJMEArgs)
+
+        # btagging SF
+        from bamboo.scalefactors import get_bTagSF_itFit, makeBtagWeightItFit
+        def btvSF(flav): return get_bTagSF_itFit(
+            BTV_SF_JSONFiles[era], "particleNet", "btagDeepFlavB", flav, noSel)
+        btvWeight = makeBtagWeightItFit(tree._Jet, btvSF)
+        noSel = noSel.refine("btag", weight=btvWeight)
 
         return tree, noSel, be, lumiArgs
 
