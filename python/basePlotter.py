@@ -92,9 +92,6 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
     def prepare_ondemand(self, tree, sample=None, sampleCfg=None, backend=None):
         era = sampleCfg["era"] if sampleCfg else None
         isMC = self.isMC(sample)
-        
-        if isMC:
-            noSel = noSel.refine('genWeight', weight=tree.genWeight)
 
         metName = "PuppiMET"
         # Decorate the tree
@@ -112,6 +109,9 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             description=NanoAODDescription.get(
                 "v12", year=era[:4], isMC=isMC, systVariations=systVars),
             backend=self.args.backend or backend)
+        
+        if isMC:
+            noSel = noSel.refine('genWeight', weight=tree.genWeight)
 
         self.triggersPerPrimaryDataset = {}
 
@@ -138,7 +138,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         addHLTPath('SingleMuon', 'IsoMu27')
         # DoubleMuon
         addHLTPath('DoubleMuon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
-            
+
         # Triggers
         if isMC:
             noSel = noSel.refine('trigger',  cut=(
