@@ -147,9 +147,6 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         }
         from bamboo.analysisutils import configureJets, configureType1MET
         configureJets(tree._Jet, jetType="AK4PFPuppi", **cmJMEArgs)
-        if isMC:
-            configureType1MET(
-                getattr(tree, f"_{metName}T1Smear"), isT1Smear=True, **cmJMEArgs)
         configureType1MET(
             getattr(tree, f"_{metName}T1"),
             enableSystematics=(
