@@ -106,8 +106,8 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         sources = ["Total"]
 
         if sampleCfg['type'] == 'mc':
-            JECTagDatabase = {"2022": "Winter22Run3_V2_MC",
-                              "2022EE": "Summer22EEPrompt22_V1_MC"}
+            JECTagDatabase = {"2022": "Summer22_22Sep2023_V2_MC",
+                              "2022EE": "Summer22EE_22Sep2023_V2_MC"}
             JERTagDatabase = {"2022": "JR_Winter22Run3_V1_MC",
                               "2022EE": "Summer22EEPrompt22_JRV1_MC"}
             if era in JECTagDatabase.keys():
@@ -136,10 +136,10 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                     uName=sample
                 )
         if sampleCfg['type'] == 'data':
-            JECTagDatabase = {"2022C": "Winter22Run3_RunC_V2_DATA",
-                              "2022D": "Winter22Run3_RunD_V2_DATA",
-                              "2022F": "Summer22EEPrompt22_RunF_V1_DATA",
-                              "2022G": "Summer22EEPrompt22_RunG_V1_DATA"}
+            JECTagDatabase = {"2022C": "Summer22_22Sep2023_RunCD_V2_DATA",
+                              "2022D": "Summer22_22Sep2023_RunCD_V2_DATA",
+                              "2022F": "Summer22EE_22Sep2023_RunF_V2_DATA",
+                              "2022G": "Summer22EE_22Sep2023_RunG_V2_DATA"}
             for era in JECTagDatabase.keys():
                 if era in sampleCfg['db'] or era in sampleCfg['db'][0]:
                     configureJets(
