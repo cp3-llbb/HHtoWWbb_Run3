@@ -2,13 +2,10 @@
 from bamboo.plots import Plot, CutFlowReport, Skim
 from bamboo.plots import EquidistantBinning as EqBin
 from bamboo import treefunctions as op
-from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
 
 from basePlotter import NanoBaseHHWWbb
 from selections import makeDLSelection, makeSLSelection
 import definitions as defs
-
-from itertools import chain
 
 
 class controlPlotter(NanoBaseHHWWbb):
@@ -30,23 +27,6 @@ class controlPlotter(NanoBaseHHWWbb):
         plots.append(yields)
 
         yields.add(noSel, 'no selection')
-
-        is_MC = self.isMC(sample)
-        # Gen Weight and
-        if is_MC:
-            noSel = noSel.refine('genWeight', weight=tree.genWeight)
-
-        yields.add(noSel, 'MC gen weight')
-
-        # Triggers
-        if is_MC:
-            noSel = noSel.refine('trigger',  cut=(
-                op.OR(*chain.from_iterable(self.triggersPerPrimaryDataset.values()))))
-        else:
-            noSel = noSel.refine('trigger', cut=makeMultiPrimaryDatasetTriggerSelection(
-                sample, self.triggersPerPrimaryDataset))
-
-        yields.add(noSel, 'trigger sel.')
 
         if self.channel == 'DL':
             # get DL selections

@@ -2,9 +2,13 @@ import os
 import re
 import yaml
 import logging
+from itertools import chain
 
 import utils
+
+from bamboo import treefunctions as op
 from bamboo.analysismodules import NanoAODModule, HistogramsModule
+from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
 
 logger = logging.getLogger(__name__)
 
@@ -88,6 +92,9 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
     def prepare_ondemand(self, tree, sample=None, sampleCfg=None, backend=None):
         era = sampleCfg["era"] if sampleCfg else None
         isMC = self.isMC(sample)
+        
+        if isMC:
+            noSel = noSel.refine('genWeight', weight=tree.genWeight)
 
         metName = "PuppiMET"
         # Decorate the tree
@@ -131,6 +138,14 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         addHLTPath('SingleMuon', 'IsoMu27')
         # DoubleMuon
         addHLTPath('DoubleMuon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
+            
+        # Triggers
+        if isMC:
+            noSel = noSel.refine('trigger',  cut=(
+                op.OR(*chain.from_iterable(self.triggersPerPrimaryDataset.values()))))
+        else:
+            noSel = noSel.refine('trigger', cut=makeMultiPrimaryDatasetTriggerSelection(
+                sample, self.triggersPerPrimaryDataset))
 
         runEra = getRunEra(sample)
         jecTag = JECTagDatabase[era]["MC" if isMC else runEra]
