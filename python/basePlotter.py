@@ -93,9 +93,9 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         era = sampleCfg["era"] if sampleCfg else None
         isMC = self.isMC(sample)
 
-        metName = "PuppiMET"
         # Decorate the tree
         from bamboo.treedecorators import NanoAODDescription, nanoFatJetCalc, CalcCollectionsGroups
+        metName = "PuppiMET"
         nanoJetMETCalc_both = CalcCollectionsGroups(
             Jet=("pt", "mass"), changes={metName: (f"{metName}T1", f"{metName}T1Smear")},
             **{metName: ("pt", "phi")})
@@ -109,7 +109,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             description=NanoAODDescription.get(
                 "v12", year=era[:4], isMC=isMC, systVariations=systVars),
             backend=self.args.backend or backend)
-        
+
         if isMC:
             noSel = noSel.refine('genWeight', weight=tree.genWeight)
 
@@ -123,7 +123,9 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                     getattr(tree.HLT, HLT))
             except AttributeError:
                 print("Couldn't find branch tree.HLT.%s, cross check!" % HLT)
-        ### Triggers ###
+
+        # Triggers
+
         # Muon
         addHLTPath('Muon', 'IsoMu24')
         addHLTPath('Muon', 'IsoMu27')
@@ -139,7 +141,6 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         # DoubleMuon
         addHLTPath('DoubleMuon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
 
-        # Triggers
         if isMC:
             noSel = noSel.refine('trigger',  cut=(
                 op.OR(*chain.from_iterable(self.triggersPerPrimaryDataset.values()))))
@@ -147,6 +148,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             noSel = noSel.refine('trigger', cut=makeMultiPrimaryDatasetTriggerSelection(
                 sample, self.triggersPerPrimaryDataset))
 
+        # JEC/JER
         runEra = getRunEra(sample)
         jecTag = JECTagDatabase[era]["MC" if isMC else runEra]
         smearTag = JERTagDatabase[era] if isMC else None
@@ -172,6 +174,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         cmJMEArgs.update({"jecSubjet": jecTag, })
         cmJMEArgs.update({"jsonFileSubjet": JSONFiles[era]["AK4"], })
         configureJets(tree._FatJet, jetType="AK8PFPuppi", **cmJMEArgs)
+
         return tree, noSel, be, lumiArgs
 
     def postProcess(self, taskList, config=None, workdir=None, resultsdir=None):
