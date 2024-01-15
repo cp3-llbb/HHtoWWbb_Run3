@@ -11,12 +11,12 @@ logger = logging.getLogger(__name__)
 JECTagDatabase = {
     "2022": {
         "MC": "Summer22_22Sep2023_V2_MC",
-        "C": "Summer22_22Sep2023_RunCD_V1_DATA",
-        "D": "Summer22_22Sep2023_RunCD_V1_DATA"},
+        "C": "Summer22_22Sep2023_RunCD_V2_DATA",
+        "D": "Summer22_22Sep2023_RunCD_V2_DATA"},
     "2022EE": {
         "MC": "Summer22EE_22Sep2023_V2_MC",
-        "F": "Summer22EEPrompt22_RunF_V1_DATA",
-        "G": "Summer22EEPrompt22_RunG_V1_DATA"},
+        "F": "Summer22EE_22Sep2023_RunF_V2_DATA",
+        "G": "Summer22EE_22Sep2023_RunG_V2_DATA"},
 }
 
 JERTagDatabase = {
@@ -98,7 +98,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         nanoJetMETCalc_data = CalcCollectionsGroups(
             Jet=("pt", "mass"), changes={metName: (f"{metName}T1",)},
             **{metName: ("pt", "phi")})
-        systVars = (([nanoFatJetCalc] if era == "2022EE" else [])
+        systVars = (([nanoFatJetCalc])
                     + [nanoJetMETCalc_both if isMC else nanoJetMETCalc_data])
         tree, noSel, be, lumiArgs = super().prepareTree(
             tree, sample=sample, sampleCfg=sampleCfg,
@@ -139,16 +139,27 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         cmJMEArgs = {
             "jsonFile": JSONFiles[era]["AK4"],
             "jec": jecTag,
-            "smear": smearTag,
-            "splitJER": True,
+            # "smear": smearTag,
+            # "splitJER": True,
             "jesUncertaintySources": (["Total"] if isMC else None),
             "isMC": isMC,
             "backend": be,
         }
-        from bamboo.analysisutils import configureJets
+        from bamboo.analysisutils import configureJets, configureType1MET
         configureJets(tree._Jet, jetType="AK4PFPuppi", **cmJMEArgs)
-        # configureJets(tree._FatJet, jetType="AK8PFPuppi", **cmJMEArgs)
-
+        if isMC:
+            configureType1MET(
+                getattr(tree, f"_{metName}T1Smear"), isT1Smear=True, **cmJMEArgs)
+        configureType1MET(
+            getattr(tree, f"_{metName}T1"),
+            enableSystematics=(
+                (lambda v: not v.startswith("jer")) if isMC else None),
+            **cmJMEArgs)
+        cmJMEArgs.update({"jsonFile": JSONFiles[era]["AK8"], })
+        cmJMEArgs.update({"jetAlgoSubjet": "AK4PFPuppi", })
+        cmJMEArgs.update({"jecSubjet": jecTag, })
+        cmJMEArgs.update({"jsonFileSubjet": JSONFiles[era]["AK4"], })
+        configureJets(tree._FatJet, jetType="AK8PFPuppi", **cmJMEArgs)
         return tree, noSel, be, lumiArgs
 
     def postProcess(self, taskList, config=None, workdir=None, resultsdir=None):

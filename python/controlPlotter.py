@@ -31,14 +31,15 @@ class controlPlotter(NanoBaseHHWWbb):
 
         yields.add(noSel, 'no selection')
 
+        is_MC = self.isMC(sample)
         # Gen Weight and
-        if self.is_MC:
+        if is_MC:
             noSel = noSel.refine('genWeight', weight=tree.genWeight)
 
         yields.add(noSel, 'MC gen weight')
 
         # Triggers
-        if self.is_MC:
+        if is_MC:
             noSel = noSel.refine('trigger',  cut=(
                 op.OR(*chain.from_iterable(self.triggersPerPrimaryDataset.values()))))
         else:
