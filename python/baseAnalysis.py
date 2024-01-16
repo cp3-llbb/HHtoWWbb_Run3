@@ -1,21 +1,66 @@
-from bamboo.analysismodules import NanoAODModule, HistogramsModule
-from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection, configureJets
-from bamboo import treefunctions as op
-from bamboo import treedecorators as td
-
 import os
+import re
 import yaml
+import logging
 from itertools import chain
 
 import utils
+import definitions as defs
+
+from bamboo import treefunctions as op
+from bamboo import treedecorators as td
+from bamboo.analysismodules import NanoAODModule, HistogramsModule
+from bamboo.analysisutils import makeMultiPrimaryDatasetTriggerSelection
+
+logger = logging.getLogger(__name__)
+
+JECTagDatabase = {
+    "2022": {
+        "MC": "Summer22_22Sep2023_V2_MC",
+        "C": "Summer22_22Sep2023_RunCD_V2_DATA",
+        "D": "Summer22_22Sep2023_RunCD_V2_DATA"},
+    "2022EE": {
+        "MC": "Summer22EE_22Sep2023_V2_MC",
+        "F": "Summer22EE_22Sep2023_RunF_V2_DATA",
+        "G": "Summer22EE_22Sep2023_RunG_V2_DATA"},
+}
+
+JERTagDatabase = {
+    "2022": "Summer22EEPrompt22_JRV1_MC",
+    "2022EE": "Summer22EEPrompt22_JRV1_MC",
+}
+
+jsonPathBase = "/cvmfs/cms.cern.ch/rsync/cms-nanoAOD/jsonpog-integration/POG/"
+
+JSONFiles = {
+    "2022": {
+        "AK4": jsonPathBase + "JME/2022_Summer22/jet_jerc.json.gz",
+        "AK8": jsonPathBase + "JME/2022_Summer22/fatJet_jerc.json.gz"},
+    "2022EE": {
+        "AK4": jsonPathBase + "JME/2022_Summer22EE/jet_jerc.json.gz",
+        "AK8": jsonPathBase + "JME/2022_Summer22EE/fatJet_jerc.json.gz"},
+}
+
+BTV_SF_JSONFiles = {
+    "2022": jsonPathBase + "BTV/2022_Summer22/btagging.json.gz",
+    "2022EE": jsonPathBase + "BTV/2022_Summer22EE/btagging.json.gz",
+}
+
+
+def getRunEra(sample):
+    """Return run era (A/B/...) for data sample"""
+    result = re.search(r'Run20..([A-Z]?)', sample)
+    if result is None:
+        return "MC"
+    else:
+        return result.group(1)
 
 
 class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
-    def __init__(self, args):
-        super(NanoBaseHHWWbb, self).__init__(args)
+    """ Base module for HH->WWbb analysis """
 
     def addArgs(self, parser):
-        super(NanoBaseHHWWbb, self).addArgs(parser)
+        super().addArgs(parser)
         parser.add_argument("-c", "--channel",
                             dest="channel",
                             type=str,
@@ -27,6 +72,10 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                             help="Path to MVA models and Evaluate DNN")
         parser.add_argument("--samples", nargs='*',
                             required=True, help="Sample template YML file")
+        parser.add_argument("--backend", type=str, default="dataframe",
+                            help="Backend to use, 'dataframe' (default), 'lazy', or 'compiled'")
+        parser.add_argument("--postprocessed", action="store_true",
+                            help="Run on postprocessed NanoAOD")
 
     def customizeAnalysisCfg(self, analysisCfg):
         # fill sample template using JSON files
@@ -42,17 +91,37 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
             analysisCfg["samples"] = samples
 
     def prepareTree(self, tree, sample=None, sampleCfg=None, backend=None):
-        def isMC():
-            if sampleCfg['type'] == 'data':
-                return False
-            elif sampleCfg['type'] in ['mc', 'signal']:
-                return True
-            else:
-                raise RuntimeError(
-                    f"The type '{sampleCfg['type']}' of {sample} dataset not understood.")
+        if self.args.postprocessed:
+            return self.prepare_postprocessed(tree, sample=sample, sampleCfg=sampleCfg, backend=backend)
+        else:
+            return self.prepare_ondemand(tree, sample=sample, sampleCfg=sampleCfg, backend=backend)
 
-        era = sampleCfg['era']
-        self.is_MC = isMC()
+    def prepare_ondemand(self, tree, sample=None, sampleCfg=None, backend=None):
+        era = sampleCfg["era"] if sampleCfg else None
+        isMC = self.isMC(sample)
+
+        # Decorate the tree
+        from bamboo.treedecorators import NanoAODDescription, nanoFatJetCalc, CalcCollectionsGroups
+        metName = "PuppiMET"
+        nanoJetMETCalc_both = CalcCollectionsGroups(
+            Jet=("pt", "mass"), changes={metName: (f"{metName}T1", f"{metName}T1Smear")},
+            **{metName: ("pt", "phi")})
+        nanoJetMETCalc_data = CalcCollectionsGroups(
+            Jet=("pt", "mass"), changes={metName: (f"{metName}T1",)},
+            **{metName: ("pt", "phi")})
+        systVars = (([nanoFatJetCalc])
+                    + [nanoJetMETCalc_both if isMC else nanoJetMETCalc_data])
+        tree, noSel, be, lumiArgs = super().prepareTree(
+            tree, sample=sample, sampleCfg=sampleCfg,
+            description=NanoAODDescription.get(
+                "v12", year=era[:4], isMC=isMC, systVariations=systVars),
+            backend=self.args.backend or backend)
+
+        # MC weight
+        if isMC:
+            noSel = noSel.refine('genWeight', weight=tree.genWeight)
+
+        # Triggers
         self.triggersPerPrimaryDataset = {}
 
         def addHLTPath(PD, HLT):
@@ -62,32 +131,8 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 self.triggersPerPrimaryDataset[PD].append(
                     getattr(tree.HLT, HLT))
             except AttributeError:
-                print("Couldn't find branch tree.HLT.%s, will omit it!" % HLT)
+                print("Couldn't find branch tree.HLT.%s, cross check!" % HLT)
 
-        def getNanoAODDescription():
-            groups = ["HLT_", "MET_", "RawMET_"]
-            collections = ["nElectron", "nJet",
-                           "nMuon", "nFatJet", "nSubJet", "nTau"]
-            mcCollections = ["nGenDressedLepton", "nGenJet",
-                             "nGenPart", "nGenJetAK8", "nSubGenJetAK8"]
-            varReaders = []
-            if isMC:
-                varReaders.append(td.CalcCollectionsGroups(Jet=("pt", "mass")))
-                varReaders.append(
-                    td.CalcCollectionsGroups(FatJet=("pt", "mass")))
-                varReaders.append(
-                    td.CalcCollectionsGroups(GenJet=("pt", "mass")))
-                varReaders.append(td.CalcCollectionsGroups(MET=("pt", "phi")))
-                return td.NanoAODDescription(groups=groups, collections=collections + mcCollections, systVariations=varReaders)
-            else:
-                return td.NanoAODDescription(groups=groups, collections=collections, systVariations=varReaders)
-
-        tree, noSel, backend, lumiArgs = super(NanoBaseHHWWbb, self).prepareTree(tree=tree,
-                                                                                 sample=sample,
-                                                                                 sampleCfg=sampleCfg,
-                                                                                 description=getNanoAODDescription(),
-                                                                                 backend=backend)
-        ### Triggers ###
         # Muon
         addHLTPath('Muon', 'IsoMu24')
         addHLTPath('Muon', 'IsoMu27')
@@ -103,68 +148,52 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         # DoubleMuon
         addHLTPath('DoubleMuon', 'Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ_Mass3p8')
 
-        sources = ["Total"]
+        if isMC:
+            noSel = noSel.refine('trigger',  cut=(
+                op.OR(*chain.from_iterable(self.triggersPerPrimaryDataset.values()))))
+        else:
+            noSel = noSel.refine('trigger', cut=makeMultiPrimaryDatasetTriggerSelection(
+                sample, self.triggersPerPrimaryDataset))
 
-        if sampleCfg['type'] == 'mc':
-            JECTagDatabase = {"2022": "Winter22Run3_V2_MC",
-                              "2022EE": "Summer22EEPrompt22_V1_MC"}
-            JERTagDatabase = {"2022": "JR_Winter22Run3_V1_MC",
-                              "2022EE": "Summer22EEPrompt22_JRV1_MC"}
-            if era in JECTagDatabase.keys():
-                configureJets(
-                    variProxy=tree._Jet,
-                    jetType="AK4PFPuppi",
-                    jec=JECTagDatabase[era],
-                    smear=JERTagDatabase[era],  # only for MC
-                    jecLevels="default",
-                    jesUncertaintySources=sources,
-                    mayWriteCache=self.args.distributed != "worker",
-                    isMC=self.is_MC,
-                    backend=backend,
-                    uName=sample
-                )
-                configureJets(
-                    variProxy=tree._FatJet,
-                    jetType="AK8PFPuppi",
-                    jec=JECTagDatabase[era],
-                    smear=JERTagDatabase[era],  # only for MC
-                    jecLevels="default",
-                    jesUncertaintySources=sources,
-                    mayWriteCache=self.args.distributed != "worker",
-                    isMC=self.is_MC,
-                    backend=backend,
-                    uName=sample
-                )
-        if sampleCfg['type'] == 'data':
-            JECTagDatabase = {"2022C": "Winter22Run3_RunC_V2_DATA",
-                              "2022D": "Winter22Run3_RunD_V2_DATA",
-                              "2022F": "Summer22EEPrompt22_RunF_V1_DATA",
-                              "2022G": "Summer22EEPrompt22_RunG_V1_DATA"}
-            for era in JECTagDatabase.keys():
-                if era in sampleCfg['db'] or era in sampleCfg['db'][0]:
-                    configureJets(
-                        variProxy=tree._Jet,
-                        jetType="AK4PFPuppi",
-                        jec=JECTagDatabase[era],
-                        jecLevels="default",
-                        jesUncertaintySources=sources,
-                        mayWriteCache=self.args.distributed != "worker",
-                        isMC=self.is_MC,
-                        backend=backend,
-                        uName=sample
-                    )
-                    configureJets(
-                        variProxy=tree._FatJet,
-                        jetType="AK8PFPuppi",
-                        jec=JECTagDatabase[era],
-                        jecLevels="default",
-                        jesUncertaintySources=sources,
-                        mayWriteCache=self.args.distributed != "worker",
-                        isMC=self.is_MC,
-                        backend=backend,
-                        uName=sample
-                    )
-        return tree, noSel, backend, lumiArgs
+        # JEC/JER
+        runEra = getRunEra(sample)
+        jecTag = JECTagDatabase[era]["MC" if isMC else runEra]
+        smearTag = JERTagDatabase[era] if isMC else None
+
+        cmJMEArgs = {
+            "jsonFile": JSONFiles[era]["AK4"],
+            "jec": jecTag,
+            # "smear": smearTag,
+            # "splitJER": True,
+            "jesUncertaintySources": (["Total"] if isMC else None),
+            "isMC": isMC,
+            "backend": be,
+        }
+        from bamboo.analysisutils import configureJets, configureType1MET
+        configureJets(tree._Jet, jetType="AK4PFPuppi", **cmJMEArgs)
+        configureType1MET(
+            getattr(tree, f"_{metName}T1"),
+            enableSystematics=(
+                (lambda v: not v.startswith("jer")) if isMC else None),
+            **cmJMEArgs)
+        cmJMEArgs.update({"jsonFile": JSONFiles[era]["AK8"], })
+        cmJMEArgs.update({"jetAlgoSubjet": "AK4PFPuppi", })
+        cmJMEArgs.update({"jecSubjet": jecTag, })
+        cmJMEArgs.update({"jsonFileSubjet": JSONFiles[era]["AK4"], })
+        configureJets(tree._FatJet, jetType="AK8PFPuppi", **cmJMEArgs)
+
+        # define objects
+        defs.defineObjects(self, tree)
+
+        # btagging SF
+        if isMC:
+            from bamboo.scalefactors import get_bTagSF_itFit, makeBtagWeightItFit
+            def btvSF(flav): return get_bTagSF_itFit(
+                BTV_SF_JSONFiles[era], "particleNet", "btagDeepFlavB", flav, noSel)
+            btvWeight = makeBtagWeightItFit(self.ak4Jets, btvSF)
+            noSel = noSel.refine("btag", weight=btvWeight)
+
+        return tree, noSel, be, lumiArgs
 
     def postProcess(self, taskList, config=None, workdir=None, resultsdir=None):
         """ Postprocess: run plotIt
