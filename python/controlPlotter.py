@@ -3,13 +3,13 @@ from bamboo.plots import Plot, CutFlowReport, Skim
 from bamboo.plots import EquidistantBinning as EqBin
 from bamboo import treefunctions as op
 
-from basePlotter import NanoBaseHHWWbb
+from baseAnalysis import NanoBaseHHWWbb
 from selections import makeDLSelection, makeSLSelection
 import definitions as defs
 
 
 class controlPlotter(NanoBaseHHWWbb):
-    """ Class to create control plots and skims"""
+    """ Class to create control plots, cutflow reports and skims"""
 
     def __init__(self, args):
         super(controlPlotter, self).__init__(args)
@@ -18,9 +18,6 @@ class controlPlotter(NanoBaseHHWWbb):
 
     def definePlots(self, tree, noSel, sample=None, sampleCfg=None):
         plots = []
-
-        # call object definitions
-        defs.defineObjects(self, tree)
 
         # cutflow report
         yields = CutFlowReport("yields", recursive=True)

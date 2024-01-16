@@ -1,5 +1,4 @@
 from bamboo import treefunctions as op
-import definitions as defs
 
 # common variables for DL and SL channels
 

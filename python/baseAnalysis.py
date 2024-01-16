@@ -5,6 +5,7 @@ import logging
 from itertools import chain
 
 import utils
+import definitions as defs
 
 from bamboo import treefunctions as op
 from bamboo import treedecorators as td
@@ -116,9 +117,11 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 "v12", year=era[:4], isMC=isMC, systVariations=systVars),
             backend=self.args.backend or backend)
 
+        # MC weight
         if isMC:
             noSel = noSel.refine('genWeight', weight=tree.genWeight)
 
+        # Triggers
         self.triggersPerPrimaryDataset = {}
 
         def addHLTPath(PD, HLT):
@@ -129,8 +132,6 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                     getattr(tree.HLT, HLT))
             except AttributeError:
                 print("Couldn't find branch tree.HLT.%s, cross check!" % HLT)
-
-        # Triggers
 
         # Muon
         addHLTPath('Muon', 'IsoMu24')
@@ -181,12 +182,16 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         cmJMEArgs.update({"jsonFileSubjet": JSONFiles[era]["AK4"], })
         configureJets(tree._FatJet, jetType="AK8PFPuppi", **cmJMEArgs)
 
+        # define objects
+        defs.defineObjects(self, tree)
+
         # btagging SF
-        from bamboo.scalefactors import get_bTagSF_itFit, makeBtagWeightItFit
-        def btvSF(flav): return get_bTagSF_itFit(
-            BTV_SF_JSONFiles[era], "particleNet", "btagDeepFlavB", flav, noSel)
-        btvWeight = makeBtagWeightItFit(tree._Jet, btvSF)
-        noSel = noSel.refine("btag", weight=btvWeight)
+        if isMC:
+            from bamboo.scalefactors import get_bTagSF_itFit, makeBtagWeightItFit
+            def btvSF(flav): return get_bTagSF_itFit(
+                BTV_SF_JSONFiles[era], "particleNet", "btagDeepFlavB", flav, noSel)
+            btvWeight = makeBtagWeightItFit(self.ak4Jets, btvSF)
+            noSel = noSel.refine("btag", weight=btvWeight)
 
         return tree, noSel, be, lumiArgs
 
