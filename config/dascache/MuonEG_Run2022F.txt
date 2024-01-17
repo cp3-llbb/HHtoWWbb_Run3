@@ -1,5 +1,5 @@
 # das:/MuonEG/Run2022F-22Sep2023-v1/NANOAOD
-/storage/data/cms/store/data/Run2022F/MuonEG/NANOAOD/22Sep2023-v1/50000/4d76213a-ef14-411a-9558-559a6df3f978.root
+# file with no events in it /storage/data/cms/store/data/Run2022F/MuonEG/NANOAOD/22Sep2023-v1/50000/4d76213a-ef14-411a-9558-559a6df3f978.root
 /storage/data/cms/store/data/Run2022F/MuonEG/NANOAOD/22Sep2023-v1/50000/9337d1ce-bde9-496f-8545-cd2cb9c48f24.root
 /storage/data/cms/store/data/Run2022F/MuonEG/NANOAOD/22Sep2023-v1/2520000/1c81df54-08fa-4081-8d17-70b6f656cbab.root
 /storage/data/cms/store/data/Run2022F/MuonEG/NANOAOD/22Sep2023-v1/2520000/5097f05a-1ce2-49d7-8118-2a0865d25fe7.root

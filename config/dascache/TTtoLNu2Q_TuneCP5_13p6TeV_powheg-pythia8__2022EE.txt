@@ -391,7 +391,7 @@
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/2530000/22d59736-6395-4fad-a22a-6264b9a2ce3e.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/2530000/6aab2cfa-50c1-490d-b8a5-7b91e3531091.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/2530000/e456a6d0-5a5a-4b0e-a773-9e65f47a71a0.root
-/storage/data/cms/store/mc/Run3Summer22EENanoAODv12/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/2540000/43b1cdcb-6acd-4b10-bb18-3e3678791031.root
+# faulty file - has an issue with btagging SF, crashes in the middle of the run /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/2540000/43b1cdcb-6acd-4b10-bb18-3e3678791031.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/2540000/876d3fd2-b1ae-43ac-ae9f-c183e7c985b1.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/2540000/b8383e1b-8d27-4a1c-85e2-b2d24cc7eb49.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/2540000/f168ea64-fb93-4a60-872a-bf51b01c4f4b.root
