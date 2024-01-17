@@ -167,7 +167,7 @@ def tauDef(taus):
         op.abs(tau.eta) < 2.3,
         op.abs(tau.dxy) <= 1000.0,
         op.abs(tau.dz) <= 0.2,
-        # tau.idDecayModeOldDMs, # commented out for Run-2 HH signal
+        tau.idDecayModeOldDMs,
         op.OR(tau.decayMode == 0,
               tau.decayMode == 1,
               tau.decayMode == 2,
