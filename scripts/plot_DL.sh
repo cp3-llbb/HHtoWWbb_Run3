@@ -6,4 +6,4 @@ pdflatex controlPlotter_DL.tex
 cp controlPlotter_DL.pdf ..
 cd ..
 pdflatex yields.tex
-cd ..
+cd ../..
