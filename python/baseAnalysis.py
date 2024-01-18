@@ -188,6 +188,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         # btagging SF
         if isMC:
             from bamboo.scalefactors import get_bTagSF_itFit, makeBtagWeightItFit
+            logger.info("Applying btagging SF")
 
             def btvSF(flav): return get_bTagSF_itFit(
                 BTV_SF_JSONFiles[era], "particleNet", "btagDeepFlavB", flav, noSel)
@@ -211,7 +212,7 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
                 return weight
 
             logger.info(
-                "Applying Top Pt reweighting everywhere, with a 'noTopPt' variation without it")
+                "Applying Top Pt reweighting (only for TTbar samples)")
 
             noSel = noSel.refine("topPt", weight=op.systematic(
                 getTopPtWeight(tree), noTopPt=op.c_float(1.)))
