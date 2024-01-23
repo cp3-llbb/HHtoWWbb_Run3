@@ -3,7 +3,7 @@
 /storage/data/cms/store/data/Run2022F/MuonEG/NANOAOD/22Sep2023-v1/50000/9337d1ce-bde9-496f-8545-cd2cb9c48f24.root
 /storage/data/cms/store/data/Run2022F/MuonEG/NANOAOD/22Sep2023-v1/2520000/1c81df54-08fa-4081-8d17-70b6f656cbab.root
 /storage/data/cms/store/data/Run2022F/MuonEG/NANOAOD/22Sep2023-v1/2520000/5097f05a-1ce2-49d7-8118-2a0865d25fe7.root
-/storage/data/cms/store/data/Run2022F/MuonEG/NANOAOD/22Sep2023-v1/50000/4fb72196-3b02-4499-8f6c-a54e15692b32.root
+# /storage/data/cms/store/data/Run2022F/MuonEG/NANOAOD/22Sep2023-v1/50000/4fb72196-3b02-4499-8f6c-a54e15692b32.root # faulty file
 /storage/data/cms/store/data/Run2022F/MuonEG/NANOAOD/22Sep2023-v1/50000/d1f1107d-bef8-4fc3-a7a2-e6818fe6bb8a.root
 /storage/data/cms/store/data/Run2022F/MuonEG/NANOAOD/22Sep2023-v1/50000/ef058380-4eee-4088-9232-526fe0ebbc2b.root
 /storage/data/cms/store/data/Run2022F/MuonEG/NANOAOD/22Sep2023-v1/50000/3cb0f11a-68d2-4e59-93db-7ab5c719ea8a.root
