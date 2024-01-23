@@ -162,7 +162,7 @@ TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8:
   group: "TTbar"
   cross-section: 405.74553
   generated-events: genEventSumw
-  split: -2
+  split: -3
 
 DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8:
   dbs:
