@@ -10,6 +10,7 @@
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/40000/d95ed84d-6592-42f9-92e0-d31176e97de8.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/40000/fed7e8bb-3586-4297-8129-0515c5d4f42c.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/40000/75011fa2-d675-4960-8fe2-100776545cee.root
+/storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/30000/34586c10-fc2a-4ece-a325-67f95c4529c7.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/50000/ddc6d412-92e7-4032-b016-a0a7ba465eb1.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/30000/11959a2a-a8b9-4cff-8c12-aa5c2fa2b163.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/30000/583c9d5e-a4fd-4123-a285-13c329e94704.root
@@ -29,11 +30,10 @@
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/2540000/e6faeec8-3e04-43fd-a843-08db4937fb10.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/2540000/e23d0af6-8e02-4233-b546-65611ab781cb.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/2530000/6e730612-945b-4063-8daa-ef7778250eb9.root
+/storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/40000/037b8e7e-b4bb-4d45-8a5a-acf41e5a30bf.root
+/storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/40000/dd9b4bc4-059d-494a-b78f-682e4a4250a0.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/30000/afe6f93f-c034-4243-9919-52f332e5653a.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/30000/731a7a73-7cf5-4989-b7b2-d6ab940d7365.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/2520000/7b191621-cd46-477b-9ef1-842449d22eec.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/30000/c1f74d88-2064-43a5-a9f8-2a5efeb58c47.root
 /storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/30000/06c83f4c-22fc-4de6-bfd6-cb86ae654418.root
-/storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/40000/dd9b4bc4-059d-494a-b78f-682e4a4250a0.root
-/storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/30000/34586c10-fc2a-4ece-a325-67f95c4529c7.root
-/storage/data/cms/store/mc/Run3Summer22EENanoAODv12/ZZ_TuneCP5_13p6TeV_pythia8/NANOAODSIM/130X_mcRun3_2022_realistic_postEE_v6-v2/40000/037b8e7e-b4bb-4d45-8a5a-acf41e5a30bf.root
