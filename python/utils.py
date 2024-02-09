@@ -26,3 +26,7 @@ def fillSampleTemplate(template, selEras=None):
             outTemplate[name] = sample
 
     return outTemplate
+
+
+def labeler(label):
+    return {'labels': [{'text': label, 'position': [0.235, 0.9], 'size': 24}]}

@@ -7,7 +7,7 @@ Muon_Run2022C:
   db: das:/Muon/Run2022C-22Sep2023-v1/NANOAOD
   run_range: &runs_22C [355794, 357486]
   certified_lumi_file: &lumi_cert_22 https://cms-service-dqmdc.web.cern.ch/CAF/certification/Collisions22/Cert_Collisions2022_355100_362760_Golden.json
-  split: &nsplit -2
+  split: &nsplit -1
 
 Muon_Run2022D:
   era: "2022"
@@ -162,7 +162,7 @@ TTtoLNu2Q_TuneCP5_13p6TeV_powheg-pythia8:
   group: "TTbar"
   cross-section: 405.74553
   generated-events: genEventSumw
-  split: *nsplit
+  split: -3
 
 DYJetsToLL_M-50_TuneCP5_13p6TeV-madgraphMLM-pythia8:
   dbs:

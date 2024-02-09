@@ -188,10 +188,34 @@ class NanoBaseHHWWbb(NanoAODModule, HistogramsModule):
         # btagging SF
         if isMC:
             from bamboo.scalefactors import get_bTagSF_itFit, makeBtagWeightItFit
+            logger.info("Applying btagging SF")
+
             def btvSF(flav): return get_bTagSF_itFit(
                 BTV_SF_JSONFiles[era], "particleNet", "btagDeepFlavB", flav, noSel)
             btvWeight = makeBtagWeightItFit(self.ak4Jets, btvSF)
             noSel = noSel.refine("btag", weight=btvWeight)
+
+        # top pt reweighting
+        if isMC and sample.startswith("TT"):
+            def top_pt_weight(pt):
+                return 0.103 * op.exp(-0.0118 * pt) - 0.000134 * pt + 0.973
+
+            def getTopPtWeight(tree):
+                lastCopy = op.select(
+                    tree.GenPart, lambda p: (op.static_cast("int", p.statusFlags) >> 13) & 1)
+                tops = op.select(lastCopy, lambda p: p.pdgId == 6)
+                antitops = op.select(lastCopy, lambda p: p.pdgId == -6)
+                weight = op.switch(op.AND(op.rng_len(tops) >= 1, op.rng_len(antitops) >= 1),
+                                   op.sqrt(top_pt_weight(
+                                       tops[0].pt) * top_pt_weight(antitops[0].pt)),
+                                   1.)
+                return weight
+
+            logger.info(
+                "Applying Top Pt reweighting (only for TTbar samples)")
+
+            noSel = noSel.refine("topPt", weight=op.systematic(
+                getTopPtWeight(tree), noTopPt=op.c_float(1.)))
 
         return tree, noSel, be, lumiArgs
 
